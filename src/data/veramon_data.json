@@ -1,0 +1,18 @@
+{
+    "Froakid": {
+        "name": "Froakid",
+        "type": [
+            "Water"
+        ],
+        "rarity": "common",
+        "catch_rate": 0.8
+    },
+    "Blazimp": {
+        "name": "Blazimp",
+        "type": [
+            "Fire"
+        ],
+        "rarity": "uncommon",
+        "catch_rate": 0.6
+    }
+}

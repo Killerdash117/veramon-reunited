@@ -1,0 +1,1 @@
+print("Welcome to Veramon Reunited - Discord Bot by Killerdash117")

@@ -1,0 +1,117 @@
+{
+    "forest": {
+        "description": "Lush and green with balanced spawns.",
+        "spawn_table": {
+            "common": [
+                "Veramon34",
+                "Veramon36",
+                "Veramon40",
+                "Veramon44",
+                "Veramon49",
+                "Veramon59",
+                "Veramon67",
+                "Veramon74",
+                "Veramon100",
+                "Veramon104",
+                "Veramon108",
+                "Veramon109",
+                "Veramon111",
+                "Veramon117",
+                "Veramon118",
+                "Veramon132",
+                "Veramon134",
+                "Veramon159"
+            ],
+            "uncommon": [
+                "Veramon168",
+                "Veramon171",
+                "Veramon180",
+                "Veramon201",
+                "Veramon208",
+                "Veramon215",
+                "Veramon224",
+                "Veramon232"
+            ],
+            "rare": [
+                "Veramon273",
+                "Veramon278"
+            ]
+        }
+    },
+    "cave": {
+        "description": "Dark, stone-filled area with steel and dark types.",
+        "spawn_table": {
+            "common": [
+                "Veramon1",
+                "Veramon8",
+                "Veramon43",
+                "Veramon60",
+                "Veramon75",
+                "Veramon85",
+                "Veramon86",
+                "Veramon90",
+                "Veramon110",
+                "Veramon116",
+                "Veramon144",
+                "Veramon155",
+                "Veramon157"
+            ],
+            "uncommon": [
+                "Veramon167",
+                "Veramon169",
+                "Veramon175",
+                "Veramon184",
+                "Veramon188",
+                "Veramon192",
+                "Veramon216",
+                "Veramon217",
+                "Veramon219",
+                "Veramon221",
+                "Veramon231",
+                "Veramon233",
+                "Veramon238"
+            ],
+            "rare": [
+                "Veramon242",
+                "Veramon245",
+                "Veramon248",
+                "Veramon249",
+                "Veramon259",
+                "Veramon277"
+            ]
+        }
+    },
+    "volcano": {
+        "description": "Hot and hostile. Home to fire and rock types.",
+        "spawn_table": {
+            "common": [
+                "Veramon15",
+                "Veramon41",
+                "Veramon45",
+                "Veramon56",
+                "Veramon57",
+                "Veramon61",
+                "Veramon65",
+                "Veramon76",
+                "Veramon102",
+                "Veramon105",
+                "Veramon121",
+                "Veramon125",
+                "Veramon149",
+                "Veramon156",
+                "Veramon160"
+            ],
+            "uncommon": [
+                "Veramon190",
+                "Veramon194",
+                "Veramon202",
+                "Veramon237"
+            ],
+            "rare": [
+                "Veramon260",
+                "Veramon268",
+                "Veramon274"
+            ]
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "forest": {
+    "description": "A lush green forest with diverse Veramon life.",
+    "spawn_table": {
+      "common": ["Froakid"],
+      "uncommon": ["Blazimp"],
+      "rare": ["Leafawn"]
+    }
+  },
+  "volcano": {
+    "description": "A dangerous volcanic area brimming with fire.",
+    "spawn_table": {
+      "uncommon": ["Blazimp"]
+    }
+  },
+  "lake": {
+    "description": "A serene lake, home to water-type Veramons.",
+    "spawn_table": {
+      "common": ["Froakid"]
+    }
+  }
+}

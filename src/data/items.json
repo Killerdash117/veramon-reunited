@@ -1,0 +1,20 @@
+{
+  "standard_capsule": {
+    "name": "Standard Capsule",
+    "effect": "catch_rate_boost",
+    "multiplier": 1.0,
+    "description": "A basic capsule with a standard catch rate."
+  },
+  "ultra_capsule": {
+    "name": "Ultra Capsule",
+    "effect": "catch_rate_boost",
+    "multiplier": 1.5,
+    "description": "A high-tech capsule that increases capture chances."
+  },
+  "golden_lure": {
+    "name": "Golden Lure",
+    "effect": "rarity_boost",
+    "multiplier": 2.0,
+    "description": "Temporarily increases the chance of encountering rare Veramons."
+  }
+}

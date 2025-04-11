@@ -1,0 +1,5 @@
+{
+  "spawn_cooldown": 60,
+  "default_catch_item": "standard_capsule",
+  "shiny_rate": 0.0005
+}

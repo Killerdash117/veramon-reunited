@@ -1,18 +1,32 @@
 {
-    "Froakid": {
-        "name": "Froakid",
-        "type": [
-            "Water"
-        ],
-        "rarity": "common",
-        "catch_rate": 0.8
-    },
-    "Blazimp": {
-        "name": "Blazimp",
-        "type": [
-            "Fire"
-        ],
-        "rarity": "uncommon",
-        "catch_rate": 0.6
-    }
+  "Froakid": {
+    "name": "Froakid",
+    "type": ["Water"],
+    "rarity": "common",
+    "catch_rate": 0.8,
+    "shiny_rate": 0.0005,
+    "base_stats": {"hp": 45, "atk": 48, "def": 42},
+    "biomes": ["lake", "forest"],
+    "flavor": "A playful amphibious Veramon thriving near water."
+  },
+  "Blazimp": {
+    "name": "Blazimp",
+    "type": ["Fire"],
+    "rarity": "uncommon",
+    "catch_rate": 0.6,
+    "shiny_rate": 0.0005,
+    "base_stats": {"hp": 52, "atk": 60, "def": 40},
+    "biomes": ["volcano"],
+    "flavor": "Searing hot and full of vigor, a rare sight near lava."
+  },
+  "Leafawn": {
+    "name": "Leafawn",
+    "type": ["Nature"],
+    "rarity": "rare",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.0005,
+    "base_stats": {"hp": 55, "atk": 55, "def": 60},
+    "biomes": ["forest"],
+    "flavor": "Mysterious and graceful, blending with the forest."
+  }
 }

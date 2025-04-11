@@ -2,68 +2,114 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 import sqlite3
-from src.db.db import get_connection  # Assuming get_connection() is defined in src/db/db.py
+from typing import Tuple, List, Dict, Any
+from src.db.db import get_connection  # This should return an SQLite connection object
+
+# Optional: Use a logging framework for production; for demo purposes, we'll use print.
+def log(message: str) -> None:
+    print(f"[ProfileCog] {message}")
+
+def fetch_user_profile(user_id: str) -> Dict[str, Any]:
+    """
+    Fetch the profile data for a given user from the SQLite database.
+    Returns a dictionary containing total captures, shiny count, and recent captures.
+    """
+    profile_data = {
+        "total_captures": 0,
+        "shiny_captures": 0,
+        "recent_captures": []  # List of tuples: (veramon_name, caught_at, shiny, biome)
+    }
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        # Total captures
+        cursor.execute("SELECT COUNT(*) FROM captures WHERE user_id = ?", (user_id,))
+        row = cursor.fetchone()
+        profile_data["total_captures"] = row[0] if row else 0
+
+        # Shiny captures
+        cursor.execute("SELECT COUNT(*) FROM captures WHERE user_id = ? AND shiny = 1", (user_id,))
+        row = cursor.fetchone()
+        profile_data["shiny_captures"] = row[0] if row else 0
+
+        # Recent captures (most recent 5)
+        cursor.execute("""
+            SELECT veramon_name, caught_at, shiny, biome 
+            FROM captures 
+            WHERE user_id = ? 
+            ORDER BY caught_at DESC LIMIT 5
+        """, (user_id,))
+        profile_data["recent_captures"] = cursor.fetchall()
+
+    except Exception as e:
+        log(f"Error in fetch_user_profile: {e}")
+    finally:
+        try:
+            conn.close()
+        except Exception as e:
+            log(f"Error closing connection: {e}")
+    return profile_data
+
+def format_recent_captures(recent: List[Tuple]) -> str:
+    """
+    Format a list of recent captures into a user-friendly string.
+    Each capture tuple should be (veramon_name, caught_at, shiny, biome).
+    """
+    capture_lines = []
+    for veramon_name, caught_at, shiny, biome in recent:
+        shiny_prefix = "✨ " if shiny else ""
+        date_str = caught_at.split("T")[0]  # Display only the date portion
+        capture_lines.append(f"{shiny_prefix}{veramon_name} (Caught on {date_str} in {biome})")
+    return "\n".join(capture_lines) if capture_lines else "No recent captures."
 
 class ProfileCog(commands.Cog):
+    """
+    ProfileCog displays the player’s profile including:
+      - Total captures
+      - Shiny captures
+      - Recent capture history
+      - Additional placeholders for achievements, challenges, tokens, and XP.
+    """
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        log("ProfileCog initialized.")
 
-    @app_commands.command(name="profile", description="Display your profile including capture stats and additional info.")
-    async def profile(self, interaction: discord.Interaction):
+    @app_commands.command(name="profile", description="Display your profile with capture statistics and additional data.")
+    async def profile(self, interaction: discord.Interaction) -> None:
         user_id = str(interaction.user.id)
+        log(f"Fetching profile for user {user_id}")
+        profile = fetch_user_profile(user_id)
 
-        try:
-            # Get a database connection
-            conn = get_connection()
-            cursor = conn.cursor()
-            
-            # Retrieve total number of captures.
-            cursor.execute("SELECT COUNT(*) FROM captures WHERE user_id = ?", (user_id,))
-            total_captures_row = cursor.fetchone()
-            total_captures = total_captures_row[0] if total_captures_row else 0
+        # Format recent captures.
+        recent_text = format_recent_captures(profile.get("recent_captures", []))
 
-            # Retrieve number of shiny captures.
-            cursor.execute("SELECT COUNT(*) FROM captures WHERE user_id = ? AND shiny = 1", (user_id,))
-            shiny_captures_row = cursor.fetchone()
-            shiny_captures = shiny_captures_row[0] if shiny_captures_row else 0
+        # Placeholders; integrate with other systems later.
+        achievements = 0          # e.g., number of achievement badges earned.
+        challenges_completed = 0  # e.g., number of challenges completed.
+        tokens = 0                # e.g., in-game currency.
+        xp = 0                    # e.g., experience points.
 
-            # Retrieve the 5 most recent captures.
-            cursor.execute(
-                "SELECT veramon_name, caught_at, shiny, biome FROM captures WHERE user_id = ? ORDER BY caught_at DESC LIMIT 5",
-                (user_id,)
-            )
-            recent_captures = cursor.fetchall()
-        except Exception as e:
-            await interaction.response.send_message(
-                f"An error occurred while fetching your profile data: {e}", ephemeral=True
-            )
-            return
-        finally:
-            conn.close()
-        
-        # Format recent captures for embed display.
-        recent_list = []
-        for veramon_name, caught_at, shiny, biome in recent_captures:
-            shiny_prefix = "✨ " if shiny else ""
-            date_str = caught_at.split("T")[0]  # Show only the date portion
-            recent_list.append(f"{shiny_prefix}{veramon_name} (Caught on {date_str} in {biome})")
-        recent_text = "\n".join(recent_list) if recent_list else "No recent captures."
-
-        # Create the embed for the profile.
+        # Build the embed.
         embed = discord.Embed(
             title=f"{interaction.user.display_name}'s Profile",
-            color=discord.Color.gold(),
-            description="Here are your capture stats and other profile information."
+            description="Your current stats and achievements in Veramon Reunited.",
+            color=discord.Color.gold()
         )
-        embed.add_field(name="Total Captures", value=str(total_captures), inline=True)
-        embed.add_field(name="Shiny Captures", value=str(shiny_captures), inline=True)
+        embed.add_field(name="Total Captures", value=str(profile["total_captures"]), inline=True)
+        embed.add_field(name="Shiny Captures", value=str(profile["shiny_captures"]), inline=True)
         embed.add_field(name="Recent Captures", value=recent_text, inline=False)
-        # Placeholders for future integration (e.g., economy, XP, etc.)
-        embed.add_field(name="Tokens", value="0", inline=True)
-        embed.add_field(name="XP", value="0", inline=True)
+        embed.add_field(name="Achievements", value=str(achievements), inline=True)
+        embed.add_field(name="Challenges Completed", value=str(challenges_completed), inline=True)
+        embed.add_field(name="Tokens", value=str(tokens), inline=True)
+        embed.add_field(name="XP", value=str(xp), inline=True)
         embed.set_footer(text="Keep training to become the ultimate Veramon Master!")
 
-        await interaction.response.send_message(embed=embed)
+        try:
+            await interaction.response.send_message(embed=embed)
+            log("Profile sent successfully.")
+        except Exception as e:
+            log(f"Error sending profile embed: {e}")
+            await interaction.response.send_message("An error occurred while generating your profile.", ephemeral=True)
 
-async def setup(bot: commands.Bot):
+async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(ProfileCog(bot))

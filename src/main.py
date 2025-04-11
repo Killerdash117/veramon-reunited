@@ -14,7 +14,8 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 
 async def load_extensions():
     await bot.load_extension("cogs.catching_cog")
-    await bot.load_extension("cogs.battle_cog")  # Load the battle system cog
+    await bot.load_extension("cogs.battle_cog")
+    await bot.load_extension("cogs.profile_cog")  # Load the profile system cog
 
 @bot.event
 async def on_ready():

@@ -1,13 +1,14 @@
 import os
 import asyncio
+import sys
 from discord.ext import commands
 from dotenv import load_dotenv
 
-# Veramon Reunited - Version v0.30
+# Veramon Reunited - Version v0.31
 # Created by Killerdash117
 
 # Current version of the bot
-VERSION = "v0.30"
+VERSION = "v0.31"
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
@@ -22,20 +23,28 @@ async def load_extensions():
     """Load all extension cogs."""
     # Add all extension cogs here:
     extensions = [
-        'cogs.enhanced_battle_cog',
+        # Gameplay cogs
+        'cogs.gameplay.battle_cog',  # Enhanced battle system
+        'cogs.gameplay.catching_cog', # Exploration and catching system
+        'cogs.gameplay.trading_cog',  # Trading system
+        
+        # Social cogs
+        'cogs.social.profile_cog',
+        'cogs.social.leaderboard_cog',
+        'cogs.social.guild_cog',
+        'cogs.social.faction_cog',
+        
+        # Admin cogs
+        'cogs.admin.admin_cog',
+        'cogs.admin.developer_cog',
+        'cogs.admin.admin_game_settings',
+        'cogs.admin.admin_battle_system',
+        
+        # Other cogs
         'cogs.economy_cog',
-        'cogs.profile_cog',
-        'cogs.faction_cog',
-        'cogs.trading_cog',
-        'cogs.guild_cog',
         'cogs.web_integration_cog',
-        'cogs.admin_cog',
-        'cogs.admin_game_settings',
-        'cogs.admin_battle_system',
-        'cogs.leaderboard_cog',
         'cogs.tournament_cog',
         'cogs.moderator_cog',   # Moderator commands
-        'cogs.developer_cog',   # Developer commands
         'cogs.vip_cog',         # VIP features and shop
         'cogs.settings_cog',    # User settings and UI themes
         'cogs.interactive_cog',  # Interactive UI system and DM support

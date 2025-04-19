@@ -1,16 +1,14 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
-import json
+from discord.ext import commands
 import os
-import sqlite3
-import sys
+import json
+import datetime
 import traceback
-from datetime import datetime
-from typing import Dict, List, Optional, Union, Literal, Any
+from typing import Optional, List, Dict, Any
 
-from src.db.db import get_connection
-from src.models.permissions import require_permission_level, PermissionLevel, is_dev
+from src.utils.config_manager import get_config, update_config
+from src.models.permissions import is_dev
 
 class DeveloperCog(commands.Cog):
     """
@@ -36,24 +34,25 @@ class DeveloperCog(commands.Cog):
     async def dev_debug(self, interaction: discord.Interaction, module: str):
         """Enable debug mode for a specific module."""
         # Set debug flag in configuration
-        config_file = os.path.join(os.path.dirname(__file__), "..", "data", "config.json")
-        
-        with open(config_file, 'r') as f:
-            config = json.load(f)
+        try:
+            debug_setting = get_config("general", "debug", {})
+            if isinstance(debug_setting, bool):
+                # Convert to dict if it's a boolean
+                debug_setting = {}
+                
+            debug_setting[module.lower()] = True
+            update_config("general", "debug", debug_setting)
             
-        if "debug" not in config:
-            config["debug"] = {}
-            
-        config["debug"][module.lower()] = True
-        
-        with open(config_file, 'w') as f:
-            json.dump(config, f, indent=2)
-            
-        await interaction.response.send_message(
-            f"Debug mode enabled for module: `{module}`\n"
-            f"Debug output will be more verbose in logs.",
-            ephemeral=True
-        )
+            await interaction.response.send_message(
+                f"Debug mode enabled for module: `{module}`\n"
+                f"Debug output will be more verbose in logs.",
+                ephemeral=True
+            )
+        except Exception as e:
+            await interaction.response.send_message(
+                f"Error enabling debug mode: {str(e)}",
+                ephemeral=True
+            )
         
     @app_commands.command(name="dev_error_log", description="View recent error logs (Dev only)")
     @app_commands.describe(
@@ -326,32 +325,15 @@ class DeveloperCog(commands.Cog):
             
     @app_commands.command(name="dev_config", description="Modify configuration values (Dev only)")
     @app_commands.describe(
+        section="Configuration section (e.g., general, exploration, battle)",
         key="Configuration key to modify",
         value="New value for the configuration key"
     )
     @is_dev()
-    async def dev_config(self, interaction: discord.Interaction, key: str, value: str):
+    async def dev_config(self, interaction: discord.Interaction, section: str, key: str, value: str):
         """Modify configuration values."""
         try:
-            config_file = os.path.join(os.path.dirname(__file__), "..", "data", "config.json")
-            
-            with open(config_file, 'r') as f:
-                config = json.load(f)
-                
-            # Parse nested keys (e.g., "spawn.rates.common")
-            key_parts = key.split('.')
-            current = config
-            
-            # Navigate to the nested location
-            for i, part in enumerate(key_parts[:-1]):
-                if part not in current:
-                    current[part] = {}
-                current = current[part]
-                
             # Try to parse the value as appropriate type
-            final_key = key_parts[-1]
-            
-            # Try to interpret value as the right type
             if value.lower() == "true":
                 parsed_value = True
             elif value.lower() == "false":
@@ -364,19 +346,20 @@ class DeveloperCog(commands.Cog):
                 # Keep as string
                 parsed_value = value
                 
-            # Update the value
-            current[final_key] = parsed_value
-            
-            # Save the updated config
-            with open(config_file, 'w') as f:
-                json.dump(config, f, indent=2)
-                
-            await interaction.response.send_message(
-                f"Configuration updated:\n"
-                f"Key: `{key}`\n"
-                f"New Value: `{parsed_value}`",
-                ephemeral=True
-            )
+            # Update the configuration
+            if update_config(section, key, parsed_value):
+                await interaction.response.send_message(
+                    f"Configuration updated:\n"
+                    f"Section: `{section}`\n"
+                    f"Key: `{key}`\n"
+                    f"New Value: `{parsed_value}`",
+                    ephemeral=True
+                )
+            else:
+                await interaction.response.send_message(
+                    f"Error saving configuration",
+                    ephemeral=True
+                )
         except Exception as e:
             await interaction.response.send_message(
                 f"Error updating configuration: {str(e)}",

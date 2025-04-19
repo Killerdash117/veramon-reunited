@@ -4,7 +4,7 @@ This document tracks all notable changes to the Veramon Reunited Discord bot.
 
 <div align="center">
 
-![Version Status](https://img.shields.io/badge/Current%20Version-v0.31.002-brightgreen.svg)
+![Version Status](https://img.shields.io/badge/Current%20Version-v0.31.003-brightgreen.svg)
 ![Updated](https://img.shields.io/badge/Last%20Updated-April%2019%2C%202025-blue.svg)
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg)
 
@@ -27,7 +27,46 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
 
 ## Release History
 
-### 🎮 v0.31.002 (Current) - April 19, 2025
+### 🎮 v0.31.003 - April 19, 2025
+
+> *Codebase Reorganization and Architecture Improvements*
+
+#### 🏗️ Architectural Overhaul
+- Implemented a new directory structure with better separation of concerns
+- Created a dedicated `core/` module to separate game logic from Discord interface
+- Reorganized cogs into logical groupings (gameplay, social, admin)
+- Improved maintainability with proper package initialization files
+
+#### 🔄 Core Systems Extraction
+- Extracted battle logic from UI code into `core/battle.py` for better testing and maintenance
+- Moved trading system core functionality to `core/trading.py` to improve separation of concerns
+- Created dedicated systems for evolution, forms, exploration, and weather
+- Improved integration between systems with cleaner dependencies
+
+#### ⚙️ Configuration Management
+- Implemented centralized configuration system with `config_manager.py`
+- Added support for dynamic configuration updates at runtime
+- Created configuration examples and documentation
+- Improved performance with configuration caching
+
+#### 🧪 Testing Improvements
+- Reorganized test files to match new structure
+- Enhanced test coverage for core systems
+- Improved docstrings and assertions for better test clarity
+
+#### 📚 Documentation
+- Updated README with comprehensive project structure details
+- Added inline documentation for new core systems
+- Improved code comments for better developer onboarding
+- Created example scripts demonstrating configuration usage
+
+#### 🔧 Technical Debt Reduction
+- Removed duplicate files and redundant code
+- Fixed import paths throughout the codebase
+- Standardized file naming conventions
+- Improved overall code organization
+
+### 🎮 v0.31.002 (Previous) - April 19, 2025
 
 > *Enhanced Quest & Achievement System, Seasonal Events, and Evolution Overhaul*
 

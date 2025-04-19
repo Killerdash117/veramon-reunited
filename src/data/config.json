@@ -1,0 +1,64 @@
+{
+  "general": {
+    "version": "0.31.002",
+    "maintenance_mode": false,
+    "debug": false
+  },
+  "exploration": {
+    "base_spawn_cooldown": 60,
+    "vip_spawn_cooldown": 30,
+    "patron_spawn_cooldown": 15,
+    "supporter_spawn_cooldown": 10,
+    "dev_spawn_cooldown": 5,
+    "default_catch_item": "standard_capsule",
+    "shiny_rate": 0.0005,
+    "weather_update_interval": 3600,
+    "event_spawn_boost": 1.5
+  },
+  "battle": {
+    "turn_timeout": 120,
+    "base_xp_gain": 25,
+    "base_token_reward": 10,
+    "win_multiplier": 1.5,
+    "type_advantage_multiplier": 1.5,
+    "critical_hit_chance": 0.0625,
+    "critical_hit_multiplier": 1.5
+  },
+  "evolution": {
+    "base_evolution_xp": 100,
+    "form_unlock_token_cost": 50,
+    "xp_curve_exponent": 1.5
+  },
+  "trading": {
+    "trade_expiry_minutes": 15,
+    "max_trade_items": 6,
+    "min_level_to_trade": 5
+  },
+  "economy": {
+    "daily_token_bonus": 50,
+    "daily_reset_hour": 0,
+    "token_cap": 9999,
+    "starter_tokens": 100
+  },
+  "quest": {
+    "max_active_quests": 5,
+    "daily_quest_count": 3,
+    "weekly_quest_count": 1,
+    "quest_refresh_hour": 0
+  },
+  "events": {
+    "concurrent_events_limit": 2,
+    "seasonal_event_duration_days": 14
+  },
+  "weather": {
+    "thunderstorm_shiny_boost": 2.0,
+    "weather_type_spawn_modifier": 1.5,
+    "min_weather_duration_hours": 3,
+    "max_weather_duration_hours": 24
+  },
+  "forms": {
+    "stat_modifier_cap": 2.0,
+    "evolution_form_reset": false,
+    "retain_forms_in_trades": true
+  }
+}

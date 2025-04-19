@@ -14,6 +14,7 @@ from utils.data_loader import load_all_veramon_data, load_biomes_data, load_item
 from db.db import get_connection
 from src.models.permissions import require_permission_level, PermissionLevel
 from src.models.veramon import Veramon
+from src.utils.config_manager import get_config
 
 # Rarity spawn weights
 RARITY_WEIGHTS = {
@@ -26,11 +27,11 @@ RARITY_WEIGHTS = {
 
 # Experience points gained from catching a Veramon
 CATCH_XP = {
-    "common": 20,
-    "uncommon": 40,
-    "rare": 80,
-    "legendary": 160,
-    "mythic": 320
+    "common": get_config("exploration", "common_xp", 20),
+    "uncommon": get_config("exploration", "uncommon_xp", 40),
+    "rare": get_config("exploration", "rare_xp", 80),
+    "legendary": get_config("exploration", "legendary_xp", 160),
+    "mythic": get_config("exploration", "mythic_xp", 320)
 }
 
 class WeatherType(Enum):
@@ -59,10 +60,10 @@ class CatchingCog(commands.Cog):
         self.items = load_items_data()
         self.last_spawn = {}
         self.spawn_cooldowns = {}
-        self.cooldown_seconds = 30  # 30 seconds between spawns per user
+        self.cooldown_seconds = get_config("exploration", "base_spawn_cooldown", 30)  # 30 seconds between spawns per user
         self.current_weather = {}  # Tracks current weather for each biome
         self.last_weather_update = 0  # Timestamp of last weather update
-        self.weather_update_interval = 3600  # Update weather every hour
+        self.weather_update_interval = get_config("weather", "min_weather_duration_hours", 3) * 3600  # Update weather every hour
         self.unlocked_special_areas = {}  # Tracks unlocked special areas per user
 
     def _get_current_time_of_day(self):
@@ -351,7 +352,7 @@ class CatchingCog(commands.Cog):
         # Increased shiny chance during certain weather
         shiny_modifier = 1.0
         if current_weather == WeatherType.THUNDERSTORM.value:
-            shiny_modifier = 2.0  # Double shiny chance during thunderstorms
+            shiny_modifier = get_config("weather", "thunderstorm_shiny_boost", 2.0)  # Double shiny chance during thunderstorms
         
         shiny = random.random() < (data.get('shiny_rate', 0) * shiny_modifier)
         
@@ -463,7 +464,7 @@ class CatchingCog(commands.Cog):
             rarity = self.veramon_data[spawn['name']].get('rarity', 'common')
             xp_gain = CATCH_XP.get(rarity, 20)
             if spawn['shiny']:
-                xp_gain *= 5  # 5x XP for shiny catches
+                xp_gain *= get_config("exploration", "shiny_xp_multiplier", 5)  # 5x XP for shiny catches
                 
             # Update user XP or create user entry if none exists
             cursor.execute("SELECT xp FROM users WHERE user_id = ?", (str(user_id),))

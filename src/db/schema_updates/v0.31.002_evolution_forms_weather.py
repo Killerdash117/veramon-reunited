@@ -1,16 +1,20 @@
 import os
 import sqlite3
+from datetime import datetime
 
 def update_database():
     """
     Schema update for v0.31.002 - Evolution Paths, Forms, and Weather System.
     
-    Updates:
-    1. Add active_form column to captures table for tracking special forms
-    2. Create biome_weather table for tracking current weather in each biome
-    3. Create special_area_access table for tracking unlocked special areas
-    4. Add accessed_forms column to user_data for tracking form discoveries
-    5. Create evolution_history table to track evolution paths
+    This update adds database support for the following features:
+    1. Special forms for Veramon (via active_form column)
+    2. Dynamic weather system in biomes
+    3. Special exploration areas unlocked via achievements
+    4. Form discovery tracking
+    5. Evolution history tracking
+    
+    Returns:
+        bool: True if update was successful, False otherwise
     """
     
     # Get database path
@@ -115,10 +119,34 @@ def update_database():
         
         print("Created indices for better query performance")
         
+        # Add timestamp for update tracking
+        update_time = datetime.utcnow().isoformat()
+        
+        # Check if schema_versions table exists
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='schema_versions'")
+        if not cursor.fetchone():
+            # Create schema_versions table
+            cursor.execute("""
+            CREATE TABLE schema_versions (
+                version TEXT PRIMARY KEY,
+                applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                description TEXT
+            )
+            """)
+            print("Created schema_versions table")
+            
+        # Record this update in schema_versions
+        cursor.execute("""
+        INSERT OR REPLACE INTO schema_versions (version, applied_at, description)
+        VALUES (?, ?, ?)
+        """, ('v0.31.002', update_time, 'Evolution Paths, Forms, and Weather System'))
+        print("Recorded schema update in version history")
+        
         # Commit changes and close connection
         conn.commit()
         conn.close()
         
+        print(f"Successfully completed schema update v0.31.002 at {update_time}")
         return True
     except sqlite3.Error as e:
         print(f"Database error: {e}")

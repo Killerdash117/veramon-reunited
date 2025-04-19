@@ -305,8 +305,6 @@ All USER and MODERATOR commands plus these administrative tools:
 
 ### Getting Started
 
-To set up this bot for development:
-
 ```bash
 # Clone the repository
 git clone https://github.com/killerdash117/veramon-reunited.git
@@ -315,16 +313,81 @@ cd veramon-reunited
 # Install dependencies
 pip install -r requirements.txt
 
-# Create .env file with your bot token
-echo "DISCORD_TOKEN=your-token-here" > .env
+# Set up environment variables
+cp .env.sample .env
+# Edit .env file with your Discord Bot Token
 
 # Run the bot
-python main.py
+python src/main.py
 ```
 
-### Code Examples
+### Project Structure
 
-#### Adding New Veramon
+The Veramon Reunited codebase is organized for maintainability and separation of concerns:
+
+```
+veramon_reunited/
+├── data/                       # All game data
+│   ├── biomes/                 # Biome definitions
+│   ├── config.json             # Central configuration
+│   ├── events/                 # Event definitions
+│   ├── quests/                 # Quest definitions
+│   └── veramon/                # Veramon definitions
+├── src/                        # Source code
+│   ├── assets/                 # Static assets
+│   ├── cogs/                   # Discord command interfaces
+│   │   ├── admin/              # Admin commands
+│   │   ├── gameplay/           # Core gameplay commands
+│   │   └── social/             # Social features
+│   ├── core/                   # Core game systems 
+│   │   ├── battle.py           # Battle engine
+│   │   ├── evolution.py        # Evolution logic
+│   │   ├── exploration.py      # Exploration mechanics
+│   │   ├── forms.py            # Forms system
+│   │   ├── trading.py          # Trading engine
+│   │   └── weather.py          # Weather system
+│   ├── db/                     # Database
+│   ├── models/                 # Data models
+│   ├── utils/                  # Utility functions
+│   │   ├── ui/                 # UI-related utilities
+│   │   └── [other utils]
+│   └── main.py                 # Main entry point
+├── tests/                      # Test suite
+├── tools/                      # Developer tools
+│   └── examples/               # Example scripts
+└── web/                        # Web interface
+```
+
+### Key Systems
+
+#### Core Systems
+
+The `src/core/` directory contains the game's engine components separated from the Discord interface:
+
+- **Battle System**: Core battle mechanics with move execution, type advantages, and status effects
+- **Trading System**: Trade validation, completion, and item management
+- **Evolution System**: Evolution path management and criteria checking
+- **Forms System**: Special form transformations and stat modifications
+- **Weather System**: Dynamic weather generation and effects on gameplay
+- **Exploration System**: Encounter generation based on biomes, time, and weather
+
+#### Discord Interface
+
+The `src/cogs/` directory contains Discord command handlers organized by function:
+
+- **Gameplay Cogs**: Battle, trading, catching, and evolution commands
+- **Social Cogs**: Profile, guild, faction, and leaderboard commands
+- **Admin Cogs**: Developer tools, moderation, and configuration commands
+
+#### Configuration System
+
+The centralized configuration system (`src/utils/config_manager.py`) provides:
+
+- Easy access to game settings: `get_config("section", "key", default_value)`
+- Admin-controlled configuration updates
+- Performance optimization through caching
+
+### Creating Veramon Data
 
 ```json
 // src/data/veramon_data.json

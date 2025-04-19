@@ -170,7 +170,6 @@ All commands use Discord's slash command system for easy discovery and usage.
 | `/start` | Begin your adventure | `/start` |
 | `/daily` | Claim daily rewards | `/daily` |
 | `/profile` | View your trainer profile | `/profile` |
-| `/profile [user]` | View another trainer's profile | `/profile @Username` |
 | `/settings` | Configure your personal settings | `/settings` |
 
 </details>
@@ -312,9 +311,9 @@ All commands use Discord's slash command system for easy discovery and usage.
 
 </details>
 
----
-
-## 🔒 Permission Levels and Commands
+<details>
+<summary><b>🔒 Permission Levels and Commands</b></summary>
+<br>
 
 Veramon Reunited has 5 permission levels, each with access to different commands:
 
@@ -379,6 +378,8 @@ Complete system control for developers:
 - `/debug_logs` - Access debug logs
 - `/reload` - Reload bot modules
 - `/query` - Execute custom database queries
+
+</details>
 
 ---
 

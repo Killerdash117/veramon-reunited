@@ -1,0 +1,250 @@
+{
+  "Quick Attack": {
+    "type": "Normal",
+    "power": 40,
+    "accuracy": 0.95,
+    "priority": 1,
+    "effect": null,
+    "description": "A quick strike that usually hits first."
+  },
+  "Tackle": {
+    "type": "Normal",
+    "power": 35,
+    "accuracy": 0.95,
+    "priority": 0,
+    "effect": null,
+    "description": "A basic tackle attack."
+  },
+  "Water Gun": {
+    "type": "Water",
+    "power": 45,
+    "accuracy": 0.95,
+    "priority": 0,
+    "effect": null,
+    "description": "Shoots water at the target."
+  },
+  "Bubble": {
+    "type": "Water",
+    "power": 30,
+    "accuracy": 0.9,
+    "priority": 0,
+    "effect": {"type": "speed_down", "chance": 0.1, "stages": 1},
+    "description": "Fires bubbles that may lower the target's speed."
+  },
+  "Hydro Pump": {
+    "type": "Water",
+    "power": 110,
+    "accuracy": 0.8,
+    "priority": 0,
+    "effect": null,
+    "description": "A powerful blast of water."
+  },
+  "Ember": {
+    "type": "Fire",
+    "power": 40,
+    "accuracy": 0.95,
+    "priority": 0,
+    "effect": {"type": "burn", "chance": 0.1},
+    "description": "A weak fire attack that may inflict a burn."
+  },
+  "Flamethrower": {
+    "type": "Fire",
+    "power": 95,
+    "accuracy": 0.9,
+    "priority": 0,
+    "effect": {"type": "burn", "chance": 0.1},
+    "description": "A powerful fire attack that may inflict a burn."
+  },
+  "Fire Blast": {
+    "type": "Fire",
+    "power": 120,
+    "accuracy": 0.85,
+    "priority": 0,
+    "effect": {"type": "burn", "chance": 0.1},
+    "description": "An extremely powerful fire attack that may inflict a burn."
+  },
+  "Vine Whip": {
+    "type": "Nature",
+    "power": 35,
+    "accuracy": 0.95,
+    "priority": 0,
+    "effect": null,
+    "description": "Strikes the target with a vine-like whip."
+  },
+  "Leaf Blade": {
+    "type": "Nature",
+    "power": 90,
+    "accuracy": 0.9,
+    "priority": 0,
+    "effect": null,
+    "description": "Slashes with a sharp leaf. High critical hit ratio."
+  },
+  "Solar Beam": {
+    "type": "Nature",
+    "power": 120,
+    "accuracy": 0.9,
+    "priority": 0,
+    "effect": {"type": "charge", "turns": 1},
+    "description": "Gathers light energy for one turn, then attacks on the next turn."
+  },
+  "Thundershock": {
+    "type": "Electric",
+    "power": 40,
+    "accuracy": 0.95,
+    "priority": 0,
+    "effect": {"type": "paralyze", "chance": 0.1},
+    "description": "A weak electric attack that may paralyze the target."
+  },
+  "Thunderbolt": {
+    "type": "Electric",
+    "power": 95,
+    "accuracy": 0.9,
+    "priority": 0,
+    "effect": {"type": "paralyze", "chance": 0.1},
+    "description": "A powerful electric attack that may paralyze the target."
+  },
+  "Thunder": {
+    "type": "Electric",
+    "power": 120,
+    "accuracy": 0.7,
+    "priority": 0,
+    "effect": {"type": "paralyze", "chance": 0.3},
+    "description": "An extremely powerful electric attack that may paralyze the target."
+  },
+  "Rock Throw": {
+    "type": "Rock",
+    "power": 50,
+    "accuracy": 0.9,
+    "priority": 0,
+    "effect": null,
+    "description": "Throws rocks at the target."
+  },
+  "Rock Slide": {
+    "type": "Rock",
+    "power": 75,
+    "accuracy": 0.9,
+    "priority": 0,
+    "effect": {"type": "flinch", "chance": 0.3},
+    "description": "Causes rocks to slide down on the target. May cause flinching."
+  },
+  "Earthquake": {
+    "type": "Ground",
+    "power": 100,
+    "accuracy": 1.0,
+    "priority": 0,
+    "effect": null,
+    "description": "A powerful ground attack that hits all adjacent targets."
+  },
+  "Shadow Ball": {
+    "type": "Ghost",
+    "power": 80,
+    "accuracy": 0.9,
+    "priority": 0,
+    "effect": {"type": "sp_def_down", "chance": 0.2, "stages": 1},
+    "description": "Throws a shadowy blob that may lower the target's Special Defense."
+  },
+  "Dark Pulse": {
+    "type": "Dark",
+    "power": 80,
+    "accuracy": 0.95,
+    "priority": 0,
+    "effect": {"type": "flinch", "chance": 0.2},
+    "description": "Releases a wave of terrible thoughts. May cause flinching."
+  },
+  "Slam": {
+    "type": "Normal",
+    "power": 80,
+    "accuracy": 0.75,
+    "priority": 0,
+    "effect": null,
+    "description": "Slams the target with a long tail, vine, etc."
+  },
+  "Scratch": {
+    "type": "Normal",
+    "power": 40,
+    "accuracy": 0.95,
+    "priority": 0,
+    "effect": null,
+    "description": "Scratches the target with sharp claws."
+  },
+  "Metal Claw": {
+    "type": "Steel",
+    "power": 50,
+    "accuracy": 0.95,
+    "priority": 0,
+    "effect": {"type": "atk_up", "chance": 0.1, "stages": 1},
+    "description": "Attacks with steel claws. May raise the user's Attack."
+  },
+  "Stone Edge": {
+    "type": "Rock",
+    "power": 100,
+    "accuracy": 0.8,
+    "priority": 0,
+    "effect": null,
+    "description": "Stabs with a sharpened stone. High critical hit ratio."
+  },
+  "Synthesis": {
+    "type": "Nature",
+    "power": 0,
+    "accuracy": 1.0,
+    "priority": 0,
+    "effect": {"type": "heal", "amount": 0.5},
+    "description": "Restores the user's HP. The amount varies with the weather."
+  },
+  "Growth": {
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 1.0,
+    "priority": 0,
+    "effect": {"type": "stats_up", "stats": ["atk", "sp_atk"], "stages": 1},
+    "description": "The user's body grows, raising its Attack and Special Attack."
+  },
+  "Nightmare": {
+    "type": "Ghost",
+    "power": 0,
+    "accuracy": 1.0,
+    "priority": 0,
+    "effect": {"type": "nightmare"},
+    "description": "A sleeping target sees a nightmare that inflicts damage every turn."
+  },
+  "Dream Eater": {
+    "type": "Psychic",
+    "power": 100,
+    "accuracy": 1.0,
+    "priority": 0,
+    "effect": {"type": "drain", "percent": 0.5},
+    "description": "Takes one half the damage inflicted on a sleeping target."
+  },
+  "Harden": {
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 1.0,
+    "priority": 0,
+    "effect": {"type": "def_up", "stages": 1},
+    "description": "Stiffens the user's body to raise Defense."
+  },
+  "Defense Curl": {
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 1.0,
+    "priority": 0,
+    "effect": {"type": "def_up", "stages": 1},
+    "description": "Curls up to conceal weak spots and raise Defense."
+  },
+  "Rollout": {
+    "type": "Rock",
+    "power": 30,
+    "accuracy": 0.9,
+    "priority": 0,
+    "effect": {"type": "multi_turn", "turns": 5, "power_multiplier": 2},
+    "description": "Attacks for five turns with rising power."
+  },
+  "Agility": {
+    "type": "Psychic",
+    "power": 0,
+    "accuracy": 1.0,
+    "priority": 0,
+    "effect": {"type": "speed_up", "stages": 2},
+    "description": "Relaxes the body to sharply boost Speed."
+  }
+}

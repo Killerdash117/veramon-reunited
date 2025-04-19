@@ -2,21 +2,56 @@
   "forest": {
     "description": "A lush green forest with diverse Veramon life.",
     "spawn_table": {
-      "common": ["Froakid"],
-      "uncommon": ["Blazimp"],
-      "rare": ["Leafawn"]
+      "common": ["Froakid", "Leafawn", "Stoneshell"],
+      "uncommon": ["Blazimp", "Froatoad"],
+      "rare": ["Aquafrog", "Voltik"],
+      "legendary": ["Forestag"]
     }
   },
   "volcano": {
     "description": "A dangerous volcanic area brimming with fire.",
     "spawn_table": {
-      "uncommon": ["Blazimp"]
+      "common": ["Stoneshell"],
+      "uncommon": ["Blazimp"],
+      "rare": ["Pyrosim", "Boulderback"],
+      "legendary": ["Inferape"]
     }
   },
   "lake": {
     "description": "A serene lake, home to water-type Veramons.",
     "spawn_table": {
-      "common": ["Froakid"]
+      "common": ["Froakid"],
+      "uncommon": ["Froatoad"],
+      "rare": ["Aquafrog"]
+    }
+  },
+  "mountain": {
+    "description": "Rugged peaks where only the toughest Veramons survive.",
+    "spawn_table": {
+      "common": ["Stoneshell", "Voltik"],
+      "uncommon": ["Boulderback"],
+      "rare": ["Electromouse"]
+    }
+  },
+  "city": {
+    "description": "Urban areas where tech-savvy Veramons have adapted to human civilization.",
+    "spawn_table": {
+      "common": ["Voltik"],
+      "uncommon": ["Electromouse"]
+    }
+  },
+  "cave": {
+    "description": "Dark caverns hiding mysterious and sometimes dangerous Veramons.",
+    "spawn_table": {
+      "common": ["Stoneshell"],
+      "uncommon": ["Boulderback"],
+      "rare": ["Shadowling"]
+    }
+  },
+  "cemetery": {
+    "description": "An eerie place where ghost and dark type Veramons lurk in the shadows.",
+    "spawn_table": {
+      "rare": ["Shadowling"]
     }
   }
 }

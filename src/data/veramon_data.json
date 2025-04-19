@@ -5,9 +5,40 @@
     "rarity": "common",
     "catch_rate": 0.8,
     "shiny_rate": 0.0005,
-    "base_stats": {"hp": 45, "atk": 48, "def": 42},
+    "base_stats": {"hp": 45, "atk": 48, "def": 42, "sp_atk": 50, "sp_def": 45, "speed": 55},
     "biomes": ["lake", "forest"],
-    "flavor": "A playful amphibious Veramon thriving near water."
+    "flavor": "A playful amphibious Veramon thriving near water.",
+    "abilities": ["Bubble", "Water Gun", "Quick Attack", "Tackle"],
+    "evolution": {
+      "evolves_to": "Froatoad",
+      "level_required": 16
+    }
+  },
+  "Froatoad": {
+    "name": "Froatoad",
+    "type": ["Water"],
+    "rarity": "uncommon",
+    "catch_rate": 0.5,
+    "shiny_rate": 0.0005,
+    "base_stats": {"hp": 65, "atk": 63, "def": 60, "sp_atk": 70, "sp_def": 65, "speed": 70},
+    "biomes": ["lake", "forest"],
+    "flavor": "A mid-sized toad with powerful water attacks and acrobatic leaping abilities.",
+    "abilities": ["Bubble", "Water Gun", "Hydro Pump", "Quick Attack", "Slam"],
+    "evolution": {
+      "evolves_to": "Aquafrog",
+      "level_required": 36
+    }
+  },
+  "Aquafrog": {
+    "name": "Aquafrog",
+    "type": ["Water", "Fighting"],
+    "rarity": "rare",
+    "catch_rate": 0.2,
+    "shiny_rate": 0.0005,
+    "base_stats": {"hp": 90, "atk": 95, "def": 85, "sp_atk": 100, "sp_def": 90, "speed": 115},
+    "biomes": ["lake"],
+    "flavor": "A master of water combat, its powerful legs allow it to create massive tidal waves.",
+    "abilities": ["Bubble", "Water Gun", "Hydro Pump", "Tsunami", "Frog Kick", "Water Blade"]
   },
   "Blazimp": {
     "name": "Blazimp",
@@ -15,9 +46,40 @@
     "rarity": "uncommon",
     "catch_rate": 0.6,
     "shiny_rate": 0.0005,
-    "base_stats": {"hp": 52, "atk": 60, "def": 40},
+    "base_stats": {"hp": 52, "atk": 60, "def": 40, "sp_atk": 65, "sp_def": 45, "speed": 65},
     "biomes": ["volcano"],
-    "flavor": "Searing hot and full of vigor, a rare sight near lava."
+    "flavor": "Searing hot and full of vigor, a rare sight near lava.",
+    "abilities": ["Ember", "Flamethrower", "Scratch", "Tackle", "Lava Spew"],
+    "evolution": {
+      "evolves_to": "Pyrosim",
+      "level_required": 18
+    }
+  },
+  "Pyrosim": {
+    "name": "Pyrosim",
+    "type": ["Fire"],
+    "rarity": "rare",
+    "catch_rate": 0.3,
+    "shiny_rate": 0.0005,
+    "base_stats": {"hp": 72, "atk": 85, "def": 60, "sp_atk": 90, "sp_def": 70, "speed": 80},
+    "biomes": ["volcano"],
+    "flavor": "Its body constantly radiates heat that can melt stone. Has a mischievous personality.",
+    "abilities": ["Ember", "Flamethrower", "Fire Blast", "Inferno", "Flame Punch"],
+    "evolution": {
+      "evolves_to": "Inferape",
+      "level_required": 36
+    }
+  },
+  "Inferape": {
+    "name": "Inferape",
+    "type": ["Fire", "Fighting"],
+    "rarity": "legendary",
+    "catch_rate": 0.1,
+    "shiny_rate": 0.0005,
+    "base_stats": {"hp": 95, "atk": 120, "def": 80, "sp_atk": 110, "sp_def": 85, "speed": 110},
+    "biomes": ["volcano"],
+    "flavor": "The ultimate fire warrior, its punches can cause volcanic eruptions and its rage is unmatched.",
+    "abilities": ["Flamethrower", "Fire Blast", "Inferno", "Blaze Kick", "Flame Punch", "Eruption", "Rage"]
   },
   "Leafawn": {
     "name": "Leafawn",
@@ -25,8 +87,87 @@
     "rarity": "rare",
     "catch_rate": 0.4,
     "shiny_rate": 0.0005,
-    "base_stats": {"hp": 55, "atk": 55, "def": 60},
+    "base_stats": {"hp": 55, "atk": 55, "def": 60, "sp_atk": 75, "sp_def": 85, "speed": 60},
     "biomes": ["forest"],
-    "flavor": "Mysterious and graceful, blending with the forest."
+    "flavor": "Mysterious and graceful, blending with the forest.",
+    "abilities": ["Vine Whip", "Leaf Blade", "Synthesis", "Tackle", "Growth"],
+    "evolution": {
+      "evolves_to": "Forestag",
+      "level_required": 24
+    }
+  },
+  "Forestag": {
+    "name": "Forestag",
+    "type": ["Nature", "Light"],
+    "rarity": "legendary",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {"hp": 80, "atk": 85, "def": 90, "sp_atk": 110, "sp_def": 130, "speed": 95},
+    "biomes": ["forest"],
+    "flavor": "A majestic forest guardian with antlers that glow with healing light energy.",
+    "abilities": ["Vine Whip", "Leaf Blade", "Solar Beam", "Forest Blessing", "Nature's Wrath", "Healing Light"]
+  },
+  "Voltik": {
+    "name": "Voltik",
+    "type": ["Electric"],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.0005,
+    "base_stats": {"hp": 40, "atk": 45, "def": 40, "sp_atk": 65, "sp_def": 40, "speed": 70},
+    "biomes": ["mountain", "city"],
+    "flavor": "A small electric rodent that feeds on electricity from power lines.",
+    "abilities": ["Spark", "Thundershock", "Quick Attack", "Tail Whip"],
+    "evolution": {
+      "evolves_to": "Electromouse",
+      "level_required": 14
+    }
+  },
+  "Electromouse": {
+    "name": "Electromouse",
+    "type": ["Electric", "Steel"],
+    "rarity": "rare",
+    "catch_rate": 0.25,
+    "shiny_rate": 0.0005,
+    "base_stats": {"hp": 60, "atk": 90, "def": 65, "sp_atk": 120, "sp_def": 60, "speed": 130},
+    "biomes": ["mountain", "city"],
+    "flavor": "Its body can store massive amounts of electricity, enough to power a small city for hours.",
+    "abilities": ["Thundershock", "Thunderbolt", "Thunder", "Electric Field", "Metal Claw", "Agility"]
+  },
+  "Stoneshell": {
+    "name": "Stoneshell",
+    "type": ["Rock"],
+    "rarity": "common",
+    "catch_rate": 0.8,
+    "shiny_rate": 0.0005,
+    "base_stats": {"hp": 50, "atk": 40, "def": 95, "sp_atk": 30, "sp_def": 45, "speed": 25},
+    "biomes": ["mountain", "cave"],
+    "flavor": "A small but sturdy rock-type that curls into an impenetrable ball when threatened.",
+    "abilities": ["Rock Throw", "Harden", "Defense Curl", "Tackle"],
+    "evolution": {
+      "evolves_to": "Boulderback",
+      "level_required": 20
+    }
+  },
+  "Boulderback": {
+    "name": "Boulderback",
+    "type": ["Rock", "Ground"],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.0005,
+    "base_stats": {"hp": 95, "atk": 75, "def": 140, "sp_atk": 40, "sp_def": 70, "speed": 35},
+    "biomes": ["mountain", "cave"],
+    "flavor": "Its massive rock shell can withstand the most powerful attacks. It's said to sleep for decades at a time.",
+    "abilities": ["Rock Throw", "Rock Slide", "Earthquake", "Rollout", "Stone Edge", "Mountain Crush"]
+  },
+  "Shadowling": {
+    "name": "Shadowling",
+    "type": ["Dark", "Ghost"],
+    "rarity": "mythic",
+    "catch_rate": 0.08,
+    "shiny_rate": 0.002,
+    "base_stats": {"hp": 70, "atk": 65, "def": 65, "sp_atk": 125, "sp_def": 115, "speed": 130},
+    "biomes": ["cemetery", "cave"],
+    "flavor": "A terrifying entity said to be born from the collective fears of humankind. Few have ever seen it and lived to tell the tale.",
+    "abilities": ["Shadow Ball", "Dark Pulse", "Nightmare", "Dream Eater", "Phantom Force", "Fear Inducer", "Soul Drain"]
   }
 }

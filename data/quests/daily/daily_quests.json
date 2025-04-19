@@ -1,0 +1,111 @@
+[
+  {
+    "id": "daily_catch_5",
+    "title": "Daily Catch",
+    "description": "Catch 5 Veramon of any type today.",
+    "quest_type": "DAILY",
+    "requirements": [
+      {
+        "type": "CATCH",
+        "amount": 5,
+        "description": "Catch 5 Veramon"
+      }
+    ],
+    "rewards": [
+      {
+        "type": "TOKENS",
+        "amount": 50,
+        "description": "50 Tokens"
+      },
+      {
+        "type": "ITEMS",
+        "amount": 2,
+        "item": "basic_ball",
+        "description": "2 Basic Balls"
+      }
+    ],
+    "repeatable": true,
+    "cooldown_seconds": 86400,
+    "icon": "🔴"
+  },
+  {
+    "id": "daily_battle_3",
+    "title": "Daily Battles",
+    "description": "Complete 3 battles today (win or lose).",
+    "quest_type": "DAILY",
+    "requirements": [
+      {
+        "type": "BATTLE_COMPLETE",
+        "amount": 3,
+        "description": "Complete 3 battles"
+      }
+    ],
+    "rewards": [
+      {
+        "type": "TOKENS",
+        "amount": 75,
+        "description": "75 Tokens"
+      },
+      {
+        "type": "EXPERIENCE",
+        "amount": 100,
+        "description": "100 XP for your team"
+      }
+    ],
+    "repeatable": true,
+    "cooldown_seconds": 86400,
+    "icon": "⚔️"
+  },
+  {
+    "id": "daily_trade",
+    "title": "Daily Trade",
+    "description": "Complete a trade with another trainer.",
+    "quest_type": "DAILY",
+    "requirements": [
+      {
+        "type": "TRADE",
+        "amount": 1,
+        "description": "Complete 1 trade"
+      }
+    ],
+    "rewards": [
+      {
+        "type": "TOKENS",
+        "amount": 100,
+        "description": "100 Tokens"
+      }
+    ],
+    "repeatable": true,
+    "cooldown_seconds": 86400,
+    "icon": "🔄"
+  },
+  {
+    "id": "daily_exploration",
+    "title": "Daily Explorer",
+    "description": "Explore 3 times in any biome.",
+    "quest_type": "DAILY",
+    "requirements": [
+      {
+        "type": "EXPLORE",
+        "amount": 3,
+        "description": "Explore 3 times"
+      }
+    ],
+    "rewards": [
+      {
+        "type": "TOKENS",
+        "amount": 50,
+        "description": "50 Tokens"
+      },
+      {
+        "type": "ITEMS",
+        "amount": 1,
+        "item": "lure_module",
+        "description": "1 Lure Module"
+      }
+    ],
+    "repeatable": true,
+    "cooldown_seconds": 86400,
+    "icon": "🌍"
+  }
+]

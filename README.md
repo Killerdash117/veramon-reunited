@@ -1,6 +1,6 @@
 # Veramon Reunited
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/killerdash117/veramon-reunited/blob/master/LICENSE)
-[![version](https://img.shields.io/badge/version-v0.30-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
+[![version](https://img.shields.io/badge/version-v0.31.002-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
 [![discord.py](https://img.shields.io/badge/discord.py-2.3.0-blue.svg)](https://github.com/Rapptz/discord.py)
 [![status](https://img.shields.io/badge/status-in%20development-orange.svg)](https://github.com/killerdash117/veramon-reunited)
 
@@ -32,11 +32,15 @@ Veramon Reunited delivers a rich monster-catching RPG experience within Discord.
 ### Creature System
 - **300+ Unique Veramons** with detailed stats, types, evolutions, abilities, and rarities
 - **Shiny Variants** with distinct aesthetics and boosted properties
-- **Evolution Chains** allowing Veramon to transform as they grow stronger
+- **Multiple Evolution Paths** allowing branching evolution choices based on conditions
+- **Special Forms** that modify stats and appearances based on items, time, and achievements
 - **Modular Data Files** making it easy to extend the creature roster
 
 ### Dynamic Exploration
 - **Biome-Based Encounters** across various environments (forests, caves, volcanoes, etc.)
+- **Weather System** with dynamic conditions affecting spawns and battles
+- **Time-Based Encounters** with different creatures appearing at day or night
+- **Special Areas** unlocked through achievements and quests
 - **Advanced Spawn Algorithm** with weighted selection based on rarity and environment
 - **Capture System** with different items affecting catch rates
 - **Persistent Logging** of all captures with detailed metadata
@@ -282,29 +286,6 @@ All USER and MODERATOR commands plus these administrative tools:
 - `/admin_spawn_rate [biome] [rarity] [percentage]` - Adjust spawn rates for a biome
 
 **Note:** Additional admin commands are planned for future releases.
-
-#### Developer Commands
-All USER, MODERATOR, and ADMIN commands plus these development tools:
-
-**Debug Commands**
-- `/dev_debug [module]` - Enable debug mode for a specific module
-- `/dev_error_log [count]` - View recent error logs
-- `/dev_memory_usage` - View memory usage statistics
-
-**Data Management**
-- `/dev_migration [version]` - Run database migrations
-- `/dev_rebuild_indices` - Rebuild database indices
-- `/dev_test_data [amount]` - Generate test data
-
-**System Commands**
-- `/dev_reload [module]` - Reload a specific code module
-- `/dev_config [key] [value]` - Modify configuration values
-
-**Testing Tools**
-- `/dev_simulate_catch [rarity] [shiny_chance] [count]` - Simulate Veramon catches
-- `/dev_simulate_battle [team1] [team2] [iterations]` - Simulate a battle outcome
-
-**Note:** Additional developer commands will be implemented as needed.
 
 ---
 

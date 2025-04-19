@@ -87,9 +87,9 @@ class MainMenuView(NavigableView):
         
         self.add_item(ui.Button(
             style=discord.ButtonStyle.secondary,
-            label="Leaderboard",
-            emoji="🏆",
-            custom_id="leaderboard_button",
+            label="Events",
+            emoji="🎉",
+            custom_id="events_button",
             row=1
         ))
         
@@ -99,6 +99,14 @@ class MainMenuView(NavigableView):
             label="Daily Rewards",
             emoji="🎁",
             custom_id="daily_button",
+            row=2
+        ))
+        
+        self.add_item(ui.Button(
+            style=discord.ButtonStyle.success,
+            label="Weather",
+            emoji="🌤️",
+            custom_id="weather_button",
             row=2
         ))
         
@@ -193,14 +201,105 @@ class MainMenuView(NavigableView):
         """Open the help menu."""
         await interaction.response.defer(ephemeral=True)
         # Create and send help view
-        view = HelpView(user_id=str(interaction.user.id))
         embed = create_themed_embed(
             str(interaction.user.id),
-            title="❓ Help & Information",
-            description="Learn how to play Veramon Reunited!",
-            color_type=ThemeColorType.INFO
+            title="❓ Help",
+            description="Get assistance and learn about commands.",
+            color_type=ThemeColorType.PRIMARY
         )
-        await view.send_to(interaction, embed=embed)
+        await interaction.followup.send(embed=embed, ephemeral=True)
+        
+    @ui.button(custom_id="quests_button")
+    async def quests_button_callback(self, interaction: discord.Interaction, button: ui.Button):
+        """Open the quests menu."""
+        await interaction.response.defer(ephemeral=True)
+        # Run the quests command
+        quests_command = interaction.client.get_application_command("quests")
+        if quests_command:
+            try:
+                # Create a new interaction-like object to run the command
+                await interaction.followup.send("Opening quests menu...", ephemeral=True)
+                # Use client to invoke the command directly
+                await interaction.client.invoke_application_command(interaction, "quests")
+            except Exception as e:
+                # Fall back to a simple embed if command invocation fails
+                embed = create_themed_embed(
+                    str(interaction.user.id),
+                    title="📜 Quests",
+                    description="View and track your quests with the `/quests` command.",
+                    color_type=ThemeColorType.PRIMARY
+                )
+                await interaction.followup.send(embed=embed, ephemeral=True)
+        else:
+            # If command not found, show simple info
+            embed = create_themed_embed(
+                str(interaction.user.id),
+                title="📜 Quests",
+                description="Use the `/quests` command to view your daily, weekly, and story quests!",
+                color_type=ThemeColorType.PRIMARY
+            )
+            await interaction.followup.send(embed=embed, ephemeral=True)
+            
+    @ui.button(custom_id="events_button")
+    async def events_button_callback(self, interaction: discord.Interaction, button: ui.Button):
+        """Open the events menu."""
+        await interaction.response.defer(ephemeral=True)
+        # Run the events command
+        events_command = interaction.client.get_application_command("events")
+        if events_command:
+            try:
+                # Create a new interaction-like object to run the command
+                await interaction.followup.send("Opening events menu...", ephemeral=True)
+                # Use client to invoke the command directly
+                await interaction.client.invoke_application_command(interaction, "events")
+            except Exception as e:
+                # Fall back to a simple embed if command invocation fails
+                embed = create_themed_embed(
+                    str(interaction.user.id),
+                    title="🎉 Events",
+                    description="View active and upcoming events with the `/events` command.",
+                    color_type=ThemeColorType.PRIMARY
+                )
+                await interaction.followup.send(embed=embed, ephemeral=True)
+        else:
+            # If command not found, show simple info
+            embed = create_themed_embed(
+                str(interaction.user.id),
+                title="🎉 Events",
+                description="Use the `/events` command to view active and upcoming special events!",
+                color_type=ThemeColorType.PRIMARY
+            )
+            await interaction.followup.send(embed=embed, ephemeral=True)
+
+    @ui.button(custom_id="weather_button")
+    async def weather_button_callback(self, interaction: discord.Interaction, button: ui.Button):
+        """Open the weather menu."""
+        await interaction.response.defer(ephemeral=True)
+        # Run the weather command
+        weather_command = interaction.client.get_application_command("weather")
+        if weather_command:
+            try:
+                # Use client to invoke the command directly
+                await interaction.followup.send("Checking current weather conditions...", ephemeral=True)
+                await interaction.client.invoke_application_command(interaction, "weather")
+            except Exception as e:
+                # Fall back to a simple embed if command invocation fails
+                embed = create_themed_embed(
+                    str(interaction.user.id),
+                    title="🌤️ Weather",
+                    description="View current weather in all biomes with the `/weather` command.",
+                    color_type=ThemeColorType.PRIMARY
+                )
+                await interaction.followup.send(embed=embed, ephemeral=True)
+        else:
+            # If command not found, show simple info
+            embed = create_themed_embed(
+                str(interaction.user.id),
+                title="🌤️ Weather",
+                description="Use the `/weather` command to view current weather conditions in all biomes!",
+                color_type=ThemeColorType.PRIMARY
+            )
+            await interaction.followup.send(embed=embed, ephemeral=True)
 
 class ExplorationView(NavigableView):
     """

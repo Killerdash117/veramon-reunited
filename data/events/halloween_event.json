@@ -1,0 +1,64 @@
+{
+  "id": "halloween_2025",
+  "name": "Spooky Halloween Event",
+  "description": "Celebrate Halloween with special Ghost and Dark type Veramon encounters, exclusive items, and themed quests!",
+  "event_type": "HOLIDAY",
+  "start_date": "2025-10-25T00:00:00",
+  "end_date": "2025-11-02T23:59:59",
+  "banner_url": "https://i.imgur.com/example_halloween.jpg",
+  "icon": "👻",
+  "theme_color": 15105570,
+  "special_encounters": [
+    {
+      "name": "Ghost Veramon",
+      "description": "A rare Ghost-type Veramon only available during Halloween.",
+      "rarity": "Rare",
+      "location": "Any biome at night",
+      "veramon_id": "ghost_001",
+      "encounter_rate": 0.15
+    },
+    {
+      "name": "Spooky Veramon",
+      "description": "A special Halloween variant with unique appearance.",
+      "rarity": "Very Rare",
+      "location": "Forest biome",
+      "veramon_id": "spooky_001",
+      "encounter_rate": 0.05,
+      "is_shiny": true
+    }
+  ],
+  "special_items": [
+    {
+      "id": "halloween_ball",
+      "name": "Spooky Ball",
+      "description": "A special Poké Ball with higher catch rate for Ghost types.",
+      "price": 150,
+      "quantity": 1
+    },
+    {
+      "id": "candy_basket",
+      "name": "Candy Basket",
+      "description": "Increases XP gained for 30 minutes.",
+      "price": 200,
+      "quantity": 1
+    }
+  ],
+  "quests": [
+    "halloween_catch_ghosts",
+    "halloween_night_exploration",
+    "halloween_battle_challenge",
+    "halloween_trade_spooky"
+  ],
+  "community_goal": {
+    "type": "catch",
+    "target": 10000,
+    "current": 0,
+    "description": "Catch 10,000 Ghost-type Veramon as a community",
+    "reward": "Special Halloween Badge for all participants"
+  },
+  "decorations": {
+    "background": "halloween_bg",
+    "border": "pumpkin_border",
+    "emojis": ["👻", "🎃", "🦇", "💀"]
+  }
+}

@@ -58,6 +58,7 @@ class Battle:
         self.winner_id = None
         self.battle_log = []
         self.expiry_time = (datetime.utcnow() + timedelta(minutes=expiry_minutes)).isoformat()
+        self.weather_effects = {}
         
         # Add host as first participant
         self.add_participant(host_id, team_id=0, is_host=True)
@@ -111,7 +112,7 @@ class Battle:
         self.updated_at = datetime.utcnow().isoformat()
         return True
         
-    def start_battle(self) -> bool:
+    async def start_battle(self) -> bool:
         """Start the battle if all conditions are met."""
         # Check if all participants have joined
         for user_id, participant in self.participants.items():
@@ -152,47 +153,66 @@ class Battle:
             result_data={"turn_order": self.turn_order}
         )
         
+        # Record weather effects if the battle is taking place in a specific biome
+        self.weather_effects = {}
+        
+        if hasattr(self, 'biome') and self.biome:
+            # Get weather from CatchingCog if available
+            catching_cog = self.bot.get_cog('CatchingCog')
+            if catching_cog and hasattr(catching_cog, 'current_weather'):
+                current_weather = catching_cog.current_weather.get(self.biome)
+                
+                if current_weather:
+                    biome_data = catching_cog.biomes.get(self.biome, {})
+                    weather_data = biome_data.get('weather_effects', {}).get(current_weather, {})
+                    
+                    # Store weather effects for use during battle
+                    self.weather_effects = {
+                        'name': current_weather,
+                        'description': weather_data.get('description', f'{current_weather.capitalize()} weather'),
+                        'type_modifiers': weather_data.get('spawn_modifiers', {})
+                    }
+        
         return True
         
-    def _determine_turn_order(self):
-        """Determine the turn order based on active Veramon speed."""
-        speed_order = []
-        for user_id in self.participants:
-            if user_id in self.active_veramon:
-                active_slot = self.active_veramon[user_id]
-                active_veramon = self.veramon[user_id][active_slot]
-                speed = active_veramon.speed
-                speed_order.append((user_id, speed))
-                
-        # Sort by speed (highest first)
-        speed_order.sort(key=lambda x: x[1], reverse=True)
-        
-        # If speeds are tied, randomize the order
-        current_speed = None
-        tied_players = []
-        final_order = []
-        
-        for user_id, speed in speed_order:
-            if speed != current_speed:
-                # Add any previously tied players in random order
-                if tied_players:
-                    random.shuffle(tied_players)
-                    final_order.extend(tied_players)
-                    tied_players = []
-                
-                current_speed = speed
-                tied_players.append(user_id)
-            else:
-                tied_players.append(user_id)
-                
-        # Add any remaining tied players
-        if tied_players:
-            random.shuffle(tied_players)
-            final_order.extend(tied_players)
+    def apply_form_modifiers(self, veramon_obj, battle_veramon):
+        """Apply stat modifiers from active forms."""
+        if not hasattr(veramon_obj, 'active_form') or not veramon_obj.active_form:
+            return
             
-        self.turn_order = final_order
+        # Get form data
+        form_data = None
+        for form in veramon_obj.data.get('forms', []):
+            if form.get('id') == veramon_obj.active_form:
+                form_data = form
+                break
+                
+        if not form_data:
+            return
+            
+        # Apply stat modifiers to battle stats
+        stat_modifiers = form_data.get('stat_modifiers', {})
         
-    def execute_move(self, user_id: str, move_name: str, target_ids: List[str]) -> Dict[str, Any]:
+        if 'hp' in stat_modifiers:
+            battle_veramon['max_hp'] = int(battle_veramon['max_hp'] * stat_modifiers['hp'])
+            battle_veramon['current_hp'] = min(battle_veramon['current_hp'], battle_veramon['max_hp'])
+            
+        if 'atk' in stat_modifiers:
+            battle_veramon['stats']['atk'] = int(battle_veramon['stats']['atk'] * stat_modifiers['atk'])
+            
+        if 'def' in stat_modifiers:
+            battle_veramon['stats']['def'] = int(battle_veramon['stats']['def'] * stat_modifiers['def'])
+            
+        if 'sp_atk' in stat_modifiers:
+            battle_veramon['stats']['sp_atk'] = int(battle_veramon['stats']['sp_atk'] * stat_modifiers['sp_atk'])
+            
+        if 'sp_def' in stat_modifiers:
+            battle_veramon['stats']['sp_def'] = int(battle_veramon['stats']['sp_def'] * stat_modifiers['sp_def'])
+            
+        if 'speed' in stat_modifiers:
+            battle_veramon['stats']['speed'] = int(battle_veramon['stats']['speed'] * stat_modifiers['speed'])
+        
+    async def execute_move(self, user_id: str, move_name: str, target_ids: List[str]) -> Dict[str, Any]:
         """Execute a move and return the results."""
         if self.status != BattleStatus.ACTIVE:
             return {"success": False, "message": "Battle is not active"}
@@ -255,6 +275,29 @@ class Battle:
             action_data={"move_name": move_name},
             result_data={"results": results}
         )
+        
+        # Apply weather effects if applicable
+        if self.weather_effects and 'type_modifiers' in self.weather_effects:
+            move_type = move_name.get('type', 'Normal')
+            if move_type in self.weather_effects['type_modifiers']:
+                type_modifier = self.weather_effects['type_modifiers'][move_type]
+                damage = int(move_result["damage"] * type_modifier)
+                if type_modifier > 1:
+                    self._add_log_entry(
+                        action_type=ActionType.MOVE,
+                        actor_id="system",
+                        target_ids=[],
+                        action_data={"type": "weather_boost"},
+                        result_data={"weather": self.weather_effects['name'], "move_type": move_type}
+                    )
+                elif type_modifier < 1:
+                    self._add_log_entry(
+                        action_type=ActionType.MOVE,
+                        actor_id="system",
+                        target_ids=[],
+                        action_data={"type": "weather_weakness"},
+                        result_data={"weather": self.weather_effects['name'], "move_type": move_type}
+                    )
         
         # Advance to next turn if battle not over
         if self.status == BattleStatus.ACTIVE:
@@ -502,7 +545,8 @@ class Battle:
             "turn_number": self.turn_number,
             "winner_id": self.winner_id,
             "battle_log": self.battle_log,
-            "expiry_time": self.expiry_time
+            "expiry_time": self.expiry_time,
+            "weather_effects": self.weather_effects
         }
         
     @classmethod
@@ -537,5 +581,6 @@ class Battle:
         battle.winner_id = data["winner_id"]
         battle.battle_log = data["battle_log"]
         battle.expiry_time = data["expiry_time"]
+        battle.weather_effects = data.get("weather_effects", {})
         
         return battle

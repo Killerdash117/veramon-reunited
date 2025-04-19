@@ -214,7 +214,7 @@ class TradingCog(commands.Cog):
         
         # Verify the Veramon belongs to the user
         cursor.execute("""
-            SELECT id, veramon_name, shiny, nickname, level 
+            SELECT id, veramon_name, shiny, nickname, level, active_form 
             FROM captures 
             WHERE id = ? AND user_id = ?
         """, (capture_id, user_id))
@@ -262,7 +262,7 @@ class TradingCog(commands.Cog):
         
         # Get all items in the trade to update UI
         cursor.execute("""
-            SELECT ti.capture_id, c.veramon_name, c.shiny, c.nickname, c.level, ti.owner_id
+            SELECT ti.capture_id, c.veramon_name, c.shiny, c.nickname, c.level, c.active_form, ti.owner_id
             FROM trade_items ti
             JOIN captures c ON ti.capture_id = c.id
             WHERE ti.trade_id = ?
@@ -283,10 +283,10 @@ class TradingCog(commands.Cog):
                 return "No Veramon added yet"
                 
             result = ""
-            for capture_id, name, shiny, nickname, level, _ in items:
+            for capture_id, name, shiny, nickname, level, active_form, _ in items:
                 display_name = nickname if nickname else name
                 shiny_star = "✨ " if shiny else ""
-                result += f"• {shiny_star}**{display_name}** (Lvl {level}, ID: {capture_id})\n"
+                result += f"• {shiny_star}**{display_name}** (Lvl {level}, ID: {capture_id}, Form: {active_form})\n"
             return result
         
         # Update the embed
@@ -329,6 +329,24 @@ class TradingCog(commands.Cog):
             embed=embed,
             view=view if view else None
         )
+        
+        # Trigger quest progress update
+        try:
+            quest_cog = self.bot.get_cog("QuestCog")
+            if quest_cog:
+                await quest_cog.update_quest_progress(
+                    user_id, 
+                    "TRADE_ADD", 
+                    1, 
+                    {
+                        "veramon_name": veramon[1],
+                        "shiny": bool(veramon[2]),
+                        "level": veramon[4],
+                        "active_form": veramon[5]
+                    }
+                )
+        except Exception as e:
+            print(f"Error updating quest progress: {e}")
         
     @app_commands.command(name="trade_remove", description="Remove a Veramon from your current trade")
     @app_commands.describe(
@@ -386,7 +404,7 @@ class TradingCog(commands.Cog):
         
         # Get all items in the trade to update UI
         cursor.execute("""
-            SELECT ti.capture_id, c.veramon_name, c.shiny, c.nickname, c.level, ti.owner_id
+            SELECT ti.capture_id, c.veramon_name, c.shiny, c.nickname, c.level, c.active_form, ti.owner_id
             FROM trade_items ti
             JOIN captures c ON ti.capture_id = c.id
             WHERE ti.trade_id = ?
@@ -407,10 +425,10 @@ class TradingCog(commands.Cog):
                 return "No Veramon added yet"
                 
             result = ""
-            for capture_id, name, shiny, nickname, level, _ in items:
+            for capture_id, name, shiny, nickname, level, active_form, _ in items:
                 display_name = nickname if nickname else name
                 shiny_star = "✨ " if shiny else ""
-                result += f"• {shiny_star}**{display_name}** (Lvl {level}, ID: {capture_id})\n"
+                result += f"• {shiny_star}**{display_name}** (Lvl {level}, ID: {capture_id}, Form: {active_form})\n"
             return result
         
         # Update the embed
@@ -680,7 +698,7 @@ class TradingCog(commands.Cog):
             
             # Get traded Veramon details for the success message
             cursor.execute("""
-                SELECT c.id, c.veramon_name, c.shiny, c.nickname, c.level, ti.owner_id
+                SELECT c.id, c.veramon_name, c.shiny, c.nickname, c.level, c.active_form, ti.owner_id
                 FROM trade_items ti
                 JOIN captures c ON ti.capture_id = c.id
                 WHERE ti.trade_id = ?
@@ -697,10 +715,10 @@ class TradingCog(commands.Cog):
             # Format traded Veramon lists
             def format_veramon_list(items):
                 result = ""
-                for capture_id, name, shiny, nickname, level, _ in items:
+                for capture_id, name, shiny, nickname, level, active_form, _ in items:
                     display_name = nickname if nickname else name
                     shiny_star = "✨ " if shiny else ""
-                    result += f"• {shiny_star}**{display_name}** (Lvl {level}, ID: {capture_id})\n"
+                    result += f"• {shiny_star}**{display_name}** (Lvl {level}, ID: {capture_id}, Form: {active_form})\n"
                 return result
             
             # Create success embed

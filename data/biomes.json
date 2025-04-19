@@ -1,0 +1,348 @@
+{
+  "forest": {
+    "name": "Forest",
+    "description": "A lush woodland area with dense trees and undergrowth.",
+    "image": "https://i.imgur.com/example_forest.jpg",
+    "emoji": "🌲",
+    "color": 5025616,
+    "weather_effects": {
+      "sunny": {
+        "description": "Bright sunshine filters through the trees.",
+        "spawn_modifiers": {
+          "Grass": 1.5,
+          "Bug": 1.2,
+          "Normal": 1.1
+        },
+        "encounter_rate": 1.2
+      },
+      "rainy": {
+        "description": "Rain patters on the leaves overhead.",
+        "spawn_modifiers": {
+          "Water": 1.5,
+          "Bug": 0.8,
+          "Grass": 1.3
+        },
+        "encounter_rate": 0.9
+      },
+      "foggy": {
+        "description": "A thick mist hangs between the trees.",
+        "spawn_modifiers": {
+          "Ghost": 1.8,
+          "Dark": 1.4,
+          "Fairy": 1.3
+        },
+        "encounter_rate": 0.8
+      },
+      "windy": {
+        "description": "Strong winds rustle through the branches.",
+        "spawn_modifiers": {
+          "Flying": 1.6,
+          "Normal": 1.2
+        },
+        "encounter_rate": 1.1
+      }
+    },
+    "time_effects": {
+      "morning": {
+        "description": "Dew glistens on the leaves in the early light.",
+        "spawn_modifiers": {
+          "Normal": 1.3,
+          "Bug": 1.5,
+          "Grass": 1.2
+        }
+      },
+      "day": {
+        "description": "Sunlight streams through the forest canopy.",
+        "spawn_modifiers": {}
+      },
+      "evening": {
+        "description": "The forest takes on golden hues as the sun sets.",
+        "spawn_modifiers": {
+          "Flying": 1.4,
+          "Normal": 1.2
+        }
+      },
+      "night": {
+        "description": "Moonlight casts eerie shadows between the trees.",
+        "spawn_modifiers": {
+          "Dark": 1.7,
+          "Ghost": 1.5,
+          "Bug": 1.3
+        }
+      }
+    },
+    "special_areas": [
+      {
+        "id": "ancient_grove",
+        "name": "Ancient Grove",
+        "description": "A secluded part of the forest with ancient trees that seem to hum with energy.",
+        "image": "https://i.imgur.com/example_grove.jpg",
+        "unlock_requirement": {
+          "type": "achievement",
+          "id": "forest_explorer"
+        },
+        "spawn_table": {
+          "rare": ["Eledragon", "AncientTreent", "MysticalFox"],
+          "legendary": ["ForestGuardian"]
+        },
+        "encounter_rate": 1.5
+      },
+      {
+        "id": "mushroom_hollow",
+        "name": "Mushroom Hollow",
+        "description": "A damp depression filled with glowing mushrooms and strange flora.",
+        "image": "https://i.imgur.com/example_mushroom.jpg",
+        "unlock_requirement": {
+          "type": "quest",
+          "id": "mushroom_seeker"
+        },
+        "spawn_table": {
+          "uncommon": ["SporeMouse", "GlowCap"],
+          "rare": ["ToxicToad", "SporeSprite"]
+        },
+        "encounter_rate": 1.2
+      }
+    ],
+    "spawn_table": {
+      "common": ["WoodMouse", "ForestFrog", "Squirrat"],
+      "uncommon": ["LeafMonkey", "BarkBeetle", "Flowerpetal"],
+      "rare": ["Timberwolf", "WoodPecker", "TreeLizard"]
+    }
+  },
+  "mountain": {
+    "name": "Mountain",
+    "description": "Rugged terrain with rocky outcroppings and sparse vegetation.",
+    "image": "https://i.imgur.com/example_mountain.jpg",
+    "emoji": "⛰️",
+    "color": 9868950,
+    "weather_effects": {
+      "sunny": {
+        "description": "Clear skies offer breathtaking views from the peaks.",
+        "spawn_modifiers": {
+          "Flying": 1.5,
+          "Rock": 1.2,
+          "Normal": 1.1
+        },
+        "encounter_rate": 1.1
+      },
+      "rainy": {
+        "description": "Rain makes the rocky paths slippery and dangerous.",
+        "spawn_modifiers": {
+          "Water": 1.3,
+          "Electric": 1.2,
+          "Rock": 0.8
+        },
+        "encounter_rate": 0.7
+      },
+      "foggy": {
+        "description": "Thick fog blankets the mountainside, limiting visibility.",
+        "spawn_modifiers": {
+          "Ghost": 1.6,
+          "Flying": 0.7,
+          "Rock": 1.1
+        },
+        "encounter_rate": 0.8
+      },
+      "snowy": {
+        "description": "Snow covers the peaks in a pristine white blanket.",
+        "spawn_modifiers": {
+          "Ice": 2.0,
+          "Steel": 1.3,
+          "Fire": 0.6
+        },
+        "encounter_rate": 0.9
+      },
+      "thunderstorm": {
+        "description": "Lightning crashes around the mountain peaks.",
+        "spawn_modifiers": {
+          "Electric": 2.0,
+          "Flying": 1.5,
+          "Dragon": 1.8
+        },
+        "encounter_rate": 1.3
+      }
+    },
+    "time_effects": {
+      "morning": {
+        "description": "The rising sun paints the mountainside with soft colors.",
+        "spawn_modifiers": {
+          "Flying": 1.5,
+          "Normal": 1.2
+        }
+      },
+      "day": {
+        "description": "Harsh sunlight reflects off the rocky surfaces.",
+        "spawn_modifiers": {
+          "Rock": 1.3,
+          "Ground": 1.2
+        }
+      },
+      "evening": {
+        "description": "Long shadows stretch across the slopes as the sun sets.",
+        "spawn_modifiers": {
+          "Flying": 1.3,
+          "Normal": 1.1
+        }
+      },
+      "night": {
+        "description": "The mountain is bathed in moonlight, with stars twinkling overhead.",
+        "spawn_modifiers": {
+          "Dark": 1.5,
+          "Rock": 1.1,
+          "Flying": 0.9
+        }
+      }
+    },
+    "special_areas": [
+      {
+        "id": "crystal_cavern",
+        "name": "Crystal Cavern",
+        "description": "A hidden cave system filled with glittering crystals that seem to pulse with energy.",
+        "image": "https://i.imgur.com/example_crystal.jpg",
+        "unlock_requirement": {
+          "type": "achievement",
+          "id": "peak_climber"
+        },
+        "spawn_table": {
+          "rare": ["CrystalGolem", "GeodeCreature", "ShimmerBat"],
+          "legendary": ["AncientCrystalGuardian"]
+        },
+        "encounter_rate": 1.3
+      },
+      {
+        "id": "sky_peak",
+        "name": "Sky Peak",
+        "description": "The highest point of the mountain, where the air is thin and the view is endless.",
+        "image": "https://i.imgur.com/example_peak.jpg",
+        "unlock_requirement": {
+          "type": "level",
+          "value": 30
+        },
+        "spawn_table": {
+          "rare": ["CloudEagle", "SkyDragon", "WindSpirit"],
+          "legendary": ["StormPhoenix"]
+        },
+        "encounter_rate": 0.8
+      }
+    ],
+    "spawn_table": {
+      "common": ["RockMouse", "MountainGoat", "CliffHanger"],
+      "uncommon": ["StoneLizard", "HighlanderDog", "EagleBird"],
+      "rare": ["MountainYeti", "StoneTitan", "AlpineWolf"]
+    }
+  },
+  "beach": {
+    "name": "Beach",
+    "description": "Sandy shores where the land meets the sea.",
+    "image": "https://i.imgur.com/example_beach.jpg",
+    "emoji": "🏖️",
+    "color": 16763904,
+    "weather_effects": {
+      "sunny": {
+        "description": "The sun beats down on the hot sand as waves lap at the shore.",
+        "spawn_modifiers": {
+          "Water": 1.2,
+          "Normal": 1.3,
+          "Fire": 1.1
+        },
+        "encounter_rate": 1.3
+      },
+      "rainy": {
+        "description": "Rain creates ripples in the shallow water as it falls.",
+        "spawn_modifiers": {
+          "Water": 1.7,
+          "Electric": 1.3,
+          "Normal": 0.7
+        },
+        "encounter_rate": 1.1
+      },
+      "windy": {
+        "description": "Strong winds whip up the sand and create larger waves.",
+        "spawn_modifiers": {
+          "Flying": 1.5,
+          "Water": 1.3,
+          "Ground": 0.8
+        },
+        "encounter_rate": 1.0
+      },
+      "stormy": {
+        "description": "Dark clouds and rough seas make the beach wild and dangerous.",
+        "spawn_modifiers": {
+          "Electric": 1.8,
+          "Water": 1.6,
+          "Dark": 1.4
+        },
+        "encounter_rate": 0.9
+      }
+    },
+    "time_effects": {
+      "morning": {
+        "description": "The beach is peaceful in the early light, with gentle waves.",
+        "spawn_modifiers": {
+          "Water": 1.4,
+          "Normal": 1.2
+        }
+      },
+      "day": {
+        "description": "The beach is alive with activity under the bright sun.",
+        "spawn_modifiers": {
+          "Water": 1.2,
+          "Normal": 1.3,
+          "Fire": 1.1
+        }
+      },
+      "evening": {
+        "description": "The setting sun paints the water and sand with golden hues.",
+        "spawn_modifiers": {
+          "Water": 1.3,
+          "Psychic": 1.2
+        }
+      },
+      "night": {
+        "description": "Moonlight shimmers on the waves as the tide comes in.",
+        "spawn_modifiers": {
+          "Water": 1.5,
+          "Dark": 1.4,
+          "Ghost": 1.2
+        }
+      }
+    },
+    "special_areas": [
+      {
+        "id": "tide_pools",
+        "name": "Tide Pools",
+        "description": "Rocky depressions filled with seawater and teeming with small creatures.",
+        "image": "https://i.imgur.com/example_tidepool.jpg",
+        "unlock_requirement": {
+          "type": "quest",
+          "id": "coastal_explorer"
+        },
+        "spawn_table": {
+          "uncommon": ["TidePuddle", "CoralCrab", "SandDollar"],
+          "rare": ["ReefGuardian", "AnemoneAngel"]
+        },
+        "encounter_rate": 1.4
+      },
+      {
+        "id": "hidden_cove",
+        "name": "Hidden Cove",
+        "description": "A secluded beach accessible only through a narrow passage in the cliffs.",
+        "image": "https://i.imgur.com/example_cove.jpg",
+        "unlock_requirement": {
+          "type": "achievement",
+          "id": "beach_comber"
+        },
+        "spawn_table": {
+          "rare": ["PirateCrab", "ShellSpirit", "MermaidTail"],
+          "legendary": ["TidalGuardian"]
+        },
+        "encounter_rate": 1.1
+      }
+    ],
+    "spawn_table": {
+      "common": ["SandCrab", "BeachMouse", "ShellFish"],
+      "uncommon": ["CoralCreature", "TideRunner", "SandDiver"],
+      "rare": ["BeachGuardian", "ShellTurtle", "WaveRider"]
+    }
+  }
+}

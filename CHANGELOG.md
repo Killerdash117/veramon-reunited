@@ -4,7 +4,7 @@ This document tracks all notable changes to the Veramon Reunited Discord bot.
 
 <div align="center">
 
-![Version Status](https://img.shields.io/badge/Current%20Version-v0.30-brightgreen.svg)
+![Version Status](https://img.shields.io/badge/Current%20Version-v0.31.002-brightgreen.svg)
 ![Updated](https://img.shields.io/badge/Last%20Updated-April%2019%2C%202025-blue.svg)
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg)
 
@@ -20,14 +20,64 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
 |----------------|--------|-------------|
 | `0.05+` | 🚀 Major | Significant new features and systems |
 | `0.01+` | 🔧 Minor | Improvements to existing features |
-| `0.0001+` | 🐛 Patch | Bug fixes and small updates |
+| `0.001+` | 🐛 Patch | Bug fixes and small updates |
 | `1.0+` | ✨ Milestone | New generation/evolution of the bot |
 
 ---
 
 ## Release History
 
-### 🎮 v0.30 (Current) - April 19, 2025
+### 🎮 v0.31.002 (Current) - April 19, 2025
+
+> *Enhanced Quest & Achievement System, Seasonal Events, and Evolution Overhaul*
+
+#### 📋 Quest & Achievement System Improvements
+- Fixed storyline quest management with proper sequencing and tracking
+- Enhanced quest data structure with storyline_id and sequence properties
+- Improved quest progress tracking with battle and trading integration
+- Added comprehensive database tables for badges, titles, and quest progress
+- Created example daily quests to showcase the system capabilities
+
+#### 🎉 Seasonal Events System
+- Implemented full seasonal event system with holiday themes
+- Added special encounters that only appear during events
+- Created event shop for limited-time items and rewards
+- Implemented community goals with collaborative rewards
+- Added event contribution tracking connected to battle and trading systems
+- Developed example Halloween event with themed content
+
+#### 🔄 Evolution Paths & Forms
+- Enhanced Veramon model to support multiple evolution paths and special forms
+- Implemented eligibility checks for evolution requirements and form transformations
+- Added active_form column to captures table for tracking special forms
+- Created example Veramon with multiple evolution paths (Eledragon)
+- Fully integrated forms system with battle mechanics (stat modifiers in combat)
+- Ensured proper handling of forms in the trading system
+
+#### 🌦️ Weather & Exploration System
+- Implemented dynamic weather system affecting Veramon spawns
+- Added time-based encounter variations across biomes
+- Created special exploration areas with unique requirements
+- Enhanced main menu UI with weather button for current conditions
+- Added weather effects to battles (type effectiveness modifiers)
+- Developed test suite for exploration and evolution features
+
+#### 🖱️ Interactive UI Enhancements
+- Updated main menu to display active events and quest counts
+- Added dedicated buttons for quest and event access in main menu
+- Added weather information display to the main interface
+- Improved error handling and user feedback in interactive components
+- Enhanced integration between systems for seamless experience
+
+#### 🔧 Technical Improvements
+- Fixed circular imports in event and quest management systems
+- Enhanced database initialization with automatic directory creation
+- Improved data serialization for better cross-system compatibility
+- Added performance indices for database queries
+
+---
+
+### 🎮 v0.30 - April 19, 2025
 
 > *Revolutionizing the user experience with interactive controls*
 

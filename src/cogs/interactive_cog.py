@@ -56,19 +56,59 @@ class InteractiveCog(commands.Cog):
             inline=False
         )
         
-        # Add quick stats if available
-        # In a real implementation, this would fetch from the database
-        embed.add_field(
-            name="📊 Your Stats",
-            value="Veramon Caught: 0\nBattle Record: 0W-0L\nTokens: 0",
-            inline=True
-        )
+        # Get counts for events and quests for the quick stats
+        active_events_count = 0
+        active_quests_count = 0
         
-        embed.add_field(
-            name="📅 Daily Rewards",
-            value="Daily Rewards: Available Now!\nStreak: 0 days",
-            inline=True
-        )
+        # Check if event system is available
+        from src.models.event_manager import event_manager
+        if event_manager:
+            active_events = event_manager.get_active_events()
+            active_events_count = len(active_events)
+        
+        # Check if quest system is available
+        quest_cog = self.bot.get_cog("QuestCog")
+        if quest_cog:
+            try:
+                user_manager = await quest_cog.get_user_quest_manager(user_id)
+                active_quests_count = len(user_manager.get_active_quests())
+            except Exception as e:
+                logger.error(f"Error getting active quests count: {e}")
+        
+        # Query general user stats
+        try:
+            db = Database()
+            stats = await db.fetchone("SELECT COUNT(*) as caught_count, tokens FROM users WHERE user_id = ?", (user_id,))
+            veramon_count = stats['caught_count'] if stats else 0
+            tokens = stats['tokens'] if stats else 0
+            
+            battle_stats = await db.fetchone(
+                "SELECT COUNT(*) as wins FROM battles WHERE winner_id = ?", 
+                (user_id,)
+            )
+            wins = battle_stats['wins'] if battle_stats else 0
+            
+            # Add quick stats
+            embed.add_field(
+                name="📊 Your Stats",
+                value=f"Veramon Caught: {veramon_count}\nBattle Record: {wins}W\nTokens: {tokens}",
+                inline=True
+            )
+            
+            # Add events and quests info
+            embed.add_field(
+                name="📅 Current Activities",
+                value=f"Active Events: {active_events_count}\nActive Quests: {active_quests_count}",
+                inline=True
+            )
+        except Exception as e:
+            logger.error(f"Error fetching user stats: {e}")
+            # Add a generic stats field if we couldn't get the actual data
+            embed.add_field(
+                name="📊 Your Stats",
+                value="Use the buttons below to view your stats, quests, and active events!",
+                inline=True
+            )
         
         # Create a note about DM mode for VIP/Admin users
         if await is_vip().predicate(interaction):

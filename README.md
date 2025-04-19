@@ -381,6 +381,54 @@ Complete system control for developers:
 
 </details>
 
+<details>
+<summary><b>🫂 Social & Profiles</b></summary>
+<br>
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/profile [user]` | View your or another player's profile | `/profile @Username` |
+| `/leaderboard [category] [timeframe]` | View game leaderboards | `/leaderboard tokens all` |
+| `/guild_create [name]` | Create a new guild | `/guild_create PokeExplorers` |
+| `/guild_join [guild_id]` | Join an existing guild | `/guild_join g12345` |
+| `/guild_leave` | Leave your current guild | `/guild_leave` |
+| `/guild_info [guild_id]` | View guild details | `/guild_info g12345` |
+| `/friend [action] [user]` | Manage your friends list | `/friend add @Username` |
+
+</details>
+
+<details>
+<summary><b>💸 Economy & Tokens</b></summary>
+<br>
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/shop` | Browse the item shop | `/shop` |
+| `/shop_buy [item_id] [quantity]` | Purchase items from the shop | `/shop_buy ultra_ball 5` |
+| `/transfer [user] [amount] [message]` | Transfer tokens to another player | `/transfer @Username 100 Thanks for the trade!` |
+| `/transaction_history [type] [limit]` | View your token transaction history | `/transaction_history all 10` |
+| `/inventory` | View your items | `/inventory` |
+| `/daily` | Claim daily tokens and rewards | `/daily` |
+| `/faction_shop` | Browse the faction shop | `/faction_shop` |
+| `/faction_shop_buy [item_id] [quantity]` | Purchase from faction shop | `/faction_shop_buy faction_token_booster 1` |
+| `/faction_contribute [amount]` | Donate tokens to faction treasury | `/faction_contribute 1000` |
+
+</details>
+
+<details>
+<summary><b>🏆 Team Management</b></summary>
+<br>
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/team [action] [team_name]` | Create, view, or manage teams | `/team create MyEliteTeam` |
+| `/team_add [team_name] [capture_id] [position]` | Add a Veramon to a team | `/team_add MyEliteTeam 12345 1` |
+| `/team_remove [team_name] [position]` | Remove a Veramon from a team | `/team_remove MyEliteTeam 2` |
+| `/team_rename [team_name] [new_name]` | Rename an existing team | `/team_rename MyEliteTeam ChampionSquad` |
+| `/battle_pvp [user] [team_name]` | Challenge a player with a specific team | `/battle_pvp @Username MyEliteTeam` |
+
+</details>
+
 ---
 
 ## 🚀 Setup Guide

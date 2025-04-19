@@ -240,9 +240,10 @@ class FactionShopCog(commands.Cog):
         amount="Amount of tokens to contribute"
     )
     async def faction_contribute(self, interaction: discord.Interaction, amount: int):
+        """Contribute tokens to your faction's treasury."""
         if amount <= 0:
             await interaction.response.send_message(
-                "Contribution amount must be greater than 0!",
+                "You must contribute a positive amount of tokens.",
                 ephemeral=True
             )
             return
@@ -254,79 +255,145 @@ class FactionShopCog(commands.Cog):
         cursor = conn.cursor()
         
         cursor.execute("""
-            SELECT f.faction_id, f.name
+            SELECT f.faction_id, f.name, f.color, f.faction_level
             FROM faction_members fm
             JOIN factions f ON fm.faction_id = f.faction_id
             WHERE fm.user_id = ?
         """, (user_id,))
         
-        faction_data = cursor.fetchone()
-        conn.close()
-        
-        if not faction_data:
+        user_faction = cursor.fetchone()
+        if not user_faction:
             await interaction.response.send_message(
-                "You are not in a faction!",
+                "You need to be in a faction to contribute to a treasury!",
                 ephemeral=True
             )
+            conn.close()
             return
             
-        faction_id, faction_name = faction_data
+        faction_id, faction_name, color, faction_level = user_faction
         
         # Process contribution
-        result = await self.faction_economy.contribute_to_treasury(
-            user_id=user_id,
-            faction_id=faction_id,
-            amount=amount
-        )
+        result = await self.faction_economy.contribute_to_treasury(user_id, faction_id, amount)
         
         if not result["success"]:
             await interaction.response.send_message(
-                f"❌ Contribution failed: {result['error']}",
+                f"Contribution failed: {result['error']}",
                 ephemeral=True
             )
+            conn.close()
             return
             
-        # Create success message
+        # Create embed for success message
         embed = discord.Embed(
-            title="Contribution Successful!",
-            description=f"You contributed **{amount:,}** tokens to {faction_name}'s treasury.",
-            color=0x00ff00
+            title="💰 Treasury Contribution",
+            description=f"You've contributed **{amount:,} tokens** to the {faction_name} treasury!",
+            color=int(color, 16) if color else 0x00FF00
         )
         
+        # Add info about new balance
         embed.add_field(
-            name="Your Token Balance",
-            value=f"{result['new_user_balance']:,} tokens",
+            name="Your Balance",
+            value=f"**{result['new_user_balance']:,} tokens** remaining",
             inline=True
         )
         
+        # Add XP info
+        xp_text = f"**+{result['xp_gained']:,} XP** for your faction"
+        if result.get('xp_multiplier', 1.0) > 1.0:
+            xp_text += f" (Boosted by {(result['xp_multiplier']-1)*100:.0f}%)"
+        
         embed.add_field(
-            name="Faction XP Gained",
-            value=f"+{result['xp_gained']} XP",
+            name="Faction XP",
+            value=xp_text,
             inline=True
         )
         
-        await interaction.response.send_message(embed=embed)
+        # Add total contribution
+        embed.add_field(
+            name="Total Contribution",
+            value=f"**{result['total_contribution']:,} tokens** donated overall",
+            inline=False
+        )
         
-        # Try to send notification to faction channel
-        try:
-            # Get faction channel
-            cursor = conn.cursor()
-            cursor.execute("SELECT faction_channel_id FROM factions WHERE faction_id = ?", (faction_id,))
-            channel_id = cursor.fetchone()
-            conn.close()
+        # Add milestone rewards if any
+        if result.get('milestone_reward'):
+            milestone = result['milestone_reward']
+            embed.add_field(
+                name="🎉 Contribution Milestone Reached!",
+                value=(
+                    f"You've reached the **{milestone['threshold']:,} tokens** milestone!\n"
+                    f"Reward: **{milestone['tokens']:,} tokens** added to your balance!"
+                ),
+                inline=False
+            )
             
-            if channel_id and channel_id[0]:
-                channel = self.bot.get_channel(int(channel_id[0]))
-                if channel:
-                    notification_embed = discord.Embed(
-                        title="Treasury Contribution",
-                        description=f"{interaction.user.mention} contributed **{amount:,}** tokens to the faction treasury!",
-                        color=0x00ff00
-                    )
-                    await channel.send(embed=notification_embed)
-        except Exception as e:
-            # Silently fail if notification can't be sent
-            pass
+        # Add rank promotion if any
+        if result.get('rank_promotion'):
+            promotion = result['rank_promotion']
+            embed.add_field(
+                name="⭐ Rank Promotion!",
+                value=f"Your contributions have earned you a promotion to **{promotion['rank_name']}**!",
+                inline=False
+            )
+            
+        # Get current treasury balance
+        cursor.execute("SELECT treasury FROM factions WHERE faction_id = ?", (faction_id,))
+        treasury_balance = cursor.fetchone()[0]
+        
+        # Add faction information
+        embed.add_field(
+            name="Faction Treasury",
+            value=f"Current Balance: **{treasury_balance:,} tokens**",
+            inline=True
+        )
+        
+        # Get next level info to show progression
+        level_info = self.faction_economy.get_faction_level(faction_id)
+        level, current_xp, xp_for_next = level_info
+        
+        # Add level progress 
+        progress_percentage = (current_xp / xp_for_next) * 100 if xp_for_next > 0 else 100
+        progress_bar = self.create_progress_bar(progress_percentage)
+        
+        embed.add_field(
+            name=f"Faction Level: {level}",
+            value=f"{progress_bar} {progress_percentage:.1f}%",
+            inline=True
+        )
+        
+        # Add note about contribution benefits
+        embed.add_field(
+            name="Benefits of Contributing",
+            value=(
+                "• Help your faction level up faster\n"
+                "• Unlock higher-tier faction shop items\n"
+                "• Earn milestone rewards and rank promotions\n"
+                "• Increase your faction's war capabilities"
+            ),
+            inline=False
+        )
+        
+        # Add footer about upcoming milestones
+        next_milestones = [5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000]
+        next_milestone = None
+        for milestone in next_milestones:
+            if result['total_contribution'] < milestone:
+                next_milestone = milestone
+                break
+                
+        if next_milestone:
+            embed.set_footer(text=f"Next milestone: {next_milestone:,} tokens • Use /faction_contributions to see the leaderboard")
+        else:
+            embed.set_footer(text="You've reached all contribution milestones! • Use /faction_contributions to see the leaderboard")
+            
+        await interaction.response.send_message(embed=embed)
+        conn.close()
+        
+    def create_progress_bar(self, percentage, length=10):
+        """Create a visual progress bar."""
+        filled_length = int(length * percentage / 100)
+        bar = '█' * filled_length + '░' * (length - filled_length)
+        return bar
 
     @app_commands.command(name="faction_level", description="View your faction's level and XP progress")
     async def faction_level(self, interaction: discord.Interaction):

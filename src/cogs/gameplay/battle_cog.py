@@ -13,6 +13,7 @@ from src.models.permissions import require_permission_level, PermissionLevel
 from src.models.veramon import Veramon
 from src.models.battle import Battle, BattleType, BattleStatus, ParticipantStatus, ActionType
 from src.utils.data_loader import load_all_veramon_data, load_abilities_data
+from src.core.security_integration import get_security_integration
 
 # Load data using the data loader utility
 VERAMON_DATA = load_all_veramon_data()
@@ -316,13 +317,12 @@ class EnhancedBattleCog(commands.Cog):
             
             active_veramon = cursor.fetchall()
             
-        conn.close()
-        
         if not active_veramon:
             await interaction.response.send_message(
                 "You don't have any Veramon! Catch some with `/explore` and `/catch` first.",
                 ephemeral=True
             )
+            conn.close()
             return
             
         # Create a new battle
@@ -348,10 +348,10 @@ class EnhancedBattleCog(commands.Cog):
             
         # Update battle state for the player
         await self._send_battle_update(interaction.channel, battle)
-        
-    @app_commands.command(name="battle_pvp", description="Challenge another player to a battle")
+
+    @app_commands.command(name="battle_pvp", description="Challenge another player to a Veramon battle")
     @app_commands.describe(
-        player="The player to challenge to a battle"
+        player="Player to challenge"
     )
     @require_permission_level(PermissionLevel.USER)
     async def battle_pvp(self, interaction: discord.Interaction, player: discord.Member):
@@ -359,53 +359,57 @@ class EnhancedBattleCog(commands.Cog):
         user_id = str(interaction.user.id)
         target_id = str(player.id)
         
-        # Check if challenging self
-        if user_id == target_id:
+        # Security validation
+        security = get_security_integration()
+        validation_result = await security.validate_battle_creation(user_id, "pvp", target_id)
+        
+        if not validation_result["valid"]:
             await interaction.response.send_message(
-                "You can't battle yourself!",
+                validation_result["error"],
                 ephemeral=True
             )
             return
+        
+        # Check if user is trying to battle themselves
+        if user_id == target_id:
+            await interaction.response.send_message("You can't battle yourself!", ephemeral=True)
+            return
             
-        # Check if player has Veramon
+        # Check if user has any Veramon
         conn = get_connection()
         cursor = conn.cursor()
         
         cursor.execute("""
-            SELECT COUNT(*)
-            FROM captures
-            WHERE user_id = ?
+            SELECT COUNT(*) FROM captures
+            WHERE user_id = ? AND health > 0
         """, (user_id,))
         
         user_veramon_count = cursor.fetchone()[0]
         
         if user_veramon_count == 0:
             await interaction.response.send_message(
-                "You don't have any Veramon! Catch some with `/explore` and `/catch` first.",
+                "You don't have any battle-ready Veramon. Heal your Veramon at the healing center!",
                 ephemeral=True
             )
             conn.close()
             return
             
-        # Check if target has Veramon
+        # Check if target user has any Veramon
         cursor.execute("""
-            SELECT COUNT(*)
-            FROM captures
-            WHERE user_id = ?
+            SELECT COUNT(*) FROM captures
+            WHERE user_id = ? AND health > 0
         """, (target_id,))
         
         target_veramon_count = cursor.fetchone()[0]
         
         if target_veramon_count == 0:
             await interaction.response.send_message(
-                f"{player.display_name} doesn't have any Veramon!",
+                f"{player.display_name} doesn't have any battle-ready Veramon.",
                 ephemeral=True
             )
             conn.close()
             return
             
-        conn.close()
-        
         # Create a new battle
         battle = await self._create_pvp_battle(user_id, target_id)
         
@@ -1117,42 +1121,45 @@ class EnhancedBattleCog(commands.Cog):
         
     async def execute_move(self, interaction: discord.Interaction, battle_id: int, user_id: str, move_name: str, target_ids: List[str]):
         """Execute a battle move."""
-        user_id_str = str(user_id)
+        # Security validation for battle action
+        security = get_security_integration()
+        action_data = {"move_name": move_name, "targets": target_ids}
+        validation_result = await security.validate_battle_action(
+            user_id, battle_id, "move", action_data
+        )
         
-        # Check if battle exists
-        if battle_id not in self.active_battles:
-            await interaction.response.send_message("Battle not found!")
-            return
+        if not validation_result["valid"]:
+            await interaction.response.send_message(
+                validation_result["error"],
+                ephemeral=True
+            )
+            return False
             
-        battle = self.active_battles[battle_id]
-        
-        # Check if it's user's turn
-        if battle.current_turn != user_id_str:
+        # Get battle
+        battle = self.active_battles.get(battle_id)
+        if not battle:
+            battle = await self.get_battle(battle_id)
+            if not battle:
+                await interaction.response.send_message("Battle not found.", ephemeral=True)
+                return False
+                
+        # Check if it's the user's turn
+        if battle.current_turn != user_id:
             await interaction.response.send_message("It's not your turn!", ephemeral=True)
-            return
-            
+            return False
+        
         # Execute the move
-        result = battle.execute_move(user_id_str, move_name, target_ids)
+        battle.execute_move(user_id, move_name, target_ids)
         
-        if not result["success"]:
-            await interaction.response.send_message(result["message"], ephemeral=True)
-            return
-            
-        # Update battle in database
-        conn = get_connection()
-        cursor = conn.cursor()
+        # Check if the battle is over
+        if battle.status == BattleStatus.COMPLETED.value:
+            channel = interaction.channel
+            await self._handle_battle_end(channel, battle)
+            return True
         
-        cursor.execute("""
-            UPDATE battles
-            SET battle_data = ?, updated_at = ?
-            WHERE battle_id = ?
-        """, (json.dumps(battle.to_dict()), datetime.utcnow().isoformat(), battle_id))
-        
-        conn.commit()
-        conn.close()
-        
-        # Update battle state for all players
+        # Update the battle state
         await self._send_battle_update(interaction.channel, battle)
+        return True
         
     async def switch_veramon(self, interaction: discord.Interaction, battle_id: int, user_id: str, slot: int):
         """Switch active Veramon in battle."""

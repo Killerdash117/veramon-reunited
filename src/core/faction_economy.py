@@ -243,72 +243,111 @@ class FactionEconomy:
         Returns:
             Dict: Result of the purchase
         """
+        # Security checks first
+        if quantity <= 0:
+            return {"success": False, "error": "Quantity must be positive"}
+            
+        if quantity > 10:
+            return {"success": False, "error": "Maximum purchase quantity is 10"}
+            
         conn = get_connection()
         cursor = conn.cursor()
         
         try:
-            # Verify user is in faction and has appropriate permissions
-            cursor.execute("""
-                SELECT fm.rank_id, fr.permissions
-                FROM faction_members fm
-                JOIN faction_ranks fr ON fm.faction_id = fr.faction_id AND fm.rank_id = fr.rank_id
-                WHERE fm.faction_id = ? AND fm.user_id = ?
-            """, (faction_id, user_id))
+            # Get security validator
+            from src.core.faction_economy_security import get_faction_security
+            security = get_faction_security()
             
-            member_data = cursor.fetchone()
-            if not member_data:
-                return {"success": False, "error": "You are not a member of this faction"}
+            # Check purchase validation
+            validation_result = security.validate_purchase(user_id, faction_id, item_id, quantity)
+            if not validation_result["valid"]:
+                return {"success": False, "error": validation_result["error"]}
+            
+            # Check user has proper permissions
+            cursor.execute("""
+                SELECT r.can_manage_treasury
+                FROM faction_members m
+                JOIN faction_ranks r ON m.faction_id = r.faction_id AND m.rank_id = r.rank_id
+                WHERE m.user_id = ? AND m.faction_id = ?
+            """, (user_id, faction_id))
+            
+            rank_data = cursor.fetchone()
+            if not rank_data:
+                return {"success": False, "error": "User is not a member of this faction"}
                 
-            rank_id, permissions = member_data
-            permissions = json.loads(permissions)
+            can_manage_treasury = rank_data[0]
+            if not can_manage_treasury:
+                return {"success": False, "error": "You don't have permission to make purchases"}
             
-            # Check if user can make purchases
-            if "make_purchases" not in permissions and "manage_faction" not in permissions:
-                return {
-                    "success": False, 
-                    "error": "You don't have permission to make faction purchases"
-                }
-            
-            # Get faction level and treasury
+            # Check if item exists and is available
             cursor.execute("""
-                SELECT faction_level, treasury
-                FROM factions
-                WHERE faction_id = ?
-            """, (faction_id,))
-            
-            faction_data = cursor.fetchone()
-            if not faction_data:
-                return {"success": False, "error": "Faction not found"}
-                
-            faction_level, treasury = faction_data
-            
-            # Get item data
-            cursor.execute("""
-                SELECT name, price, required_level, category, effects
-                FROM faction_shop_items
-                WHERE item_id = ?
-            """, (item_id,))
+                SELECT i.item_id, i.name, i.price, i.required_level, i.category, i.effects,
+                       f.faction_level, f.treasury
+                FROM faction_shop_items i
+                JOIN factions f ON f.faction_id = ?
+                WHERE i.item_id = ?
+            """, (faction_id, item_id))
             
             item_data = cursor.fetchone()
             if not item_data:
                 return {"success": False, "error": "Item not found"}
                 
-            name, price, required_level, category, effects = item_data
+            item_id, item_name, price, required_level, category, effects_json, faction_level, treasury = item_data
             
-            # Check level requirement
+            # Check if faction level is high enough
             if faction_level < required_level:
                 return {
                     "success": False, 
-                    "error": f"Faction must be level {required_level} to purchase this item"
+                    "error": f"This item requires faction level {required_level}, but your faction is only level {faction_level}"
                 }
             
-            # Check if treasury has enough funds
+            # Calculate total price
             total_price = price * quantity
+            
+            # Check if faction has enough tokens
             if treasury < total_price:
                 return {
                     "success": False, 
-                    "error": f"Insufficient faction funds. Need {total_price} tokens, have {treasury}"
+                    "error": f"Insufficient treasury funds. You have {treasury:,} tokens, need {total_price:,} tokens"
                 }
+            
+            # Parse effects
+            try:
+                effects = json.loads(effects_json) if effects_json else {}
+            except json.JSONDecodeError:
+                effects = {}
+            
+            # Check if this is a one-time purchase and already purchased
+            if effects.get("one_time_purchase"):
+                cursor.execute("""
+                    SELECT COUNT(*) FROM faction_purchase_history
+                    WHERE faction_id = ? AND item_id = ?
+                """, (faction_id, item_id))
+                
+                if cursor.fetchone()[0] > 0:
+                    return {"success": False, "error": "This item can only be purchased once"}
+            
+            # Check cooldown for buffs and consumables
+            if category in ["buff", "consumable"]:
+                cooldown_hours = get_config("faction", "buff_purchase_cooldown_hours", 6)
+                
+                cursor.execute("""
+                    SELECT COUNT(*) FROM faction_purchase_history
+                    WHERE faction_id = ? AND item_id = ?
+                    AND datetime(purchase_date) > datetime('now', ?)
+                """, (faction_id, item_id, f"-{cooldown_hours} hours"))
+                
+                if cursor.fetchone()[0] > 0:
+                    return {
+                        "success": False, 
+                        "error": f"This item can only be purchased once every {cooldown_hours} hours"
+                    }
+            
+            # Check buff stacking for buffs
+            if category == "buff" and "buff_type" in effects:
+                buff_validation = security.validate_buff_stacking(faction_id, effects["buff_type"])
+                if not buff_validation["valid"]:
+                    return {"success": False, "error": buff_validation["error"]}
             
             # Process the purchase
             if category == "consumable":
@@ -321,7 +360,7 @@ class FactionEconomy:
                 """, (user_id, item_id, quantity, quantity))
             elif category == "buff":
                 # Apply buff to faction
-                effects_dict = json.loads(effects)
+                effects_dict = json.loads(effects_json)
                 buff_type = effects_dict.get("buff_type", "unknown")
                 duration_hours = effects_dict.get("duration", 24)
                 
@@ -379,7 +418,7 @@ class FactionEconomy:
             return {
                 "success": True,
                 "item_id": item_id,
-                "item_name": name,
+                "item_name": item_name,
                 "quantity": quantity,
                 "total_price": total_price,
                 "remaining_treasury": treasury - total_price,
@@ -388,32 +427,6 @@ class FactionEconomy:
         except Exception as e:
             conn.rollback()
             return {"success": False, "error": str(e)}
-        finally:
-            conn.close()
-    
-    @staticmethod
-    def get_faction_treasury(faction_id: int) -> int:
-        """
-        Get the current treasury amount for a faction.
-        
-        Args:
-            faction_id: ID of the faction
-            
-        Returns:
-            int: Current treasury amount
-        """
-        conn = get_connection()
-        cursor = conn.cursor()
-        
-        try:
-            cursor.execute("""
-                SELECT treasury
-                FROM factions
-                WHERE faction_id = ?
-            """, (faction_id,))
-            
-            result = cursor.fetchone()
-            return result[0] if result else 0
         finally:
             conn.close()
     
@@ -434,21 +447,33 @@ class FactionEconomy:
         Returns:
             Dict: Result of the contribution
         """
+        # Security checks first
+        if amount <= 0:
+            return {"success": False, "error": "Contribution amount must be positive"}
+            
         conn = get_connection()
         cursor = conn.cursor()
         
         try:
-            # Verify user is in faction
+            # Rate limiting check
+            from src.core.faction_economy_security import get_faction_security
+            security = get_faction_security()
+            
+            # Check contribution validation
+            validation_result = security.validate_contribution(user_id, faction_id, amount)
+            if not validation_result["valid"]:
+                return {"success": False, "error": validation_result["error"]}
+            
+            # Verify the user is in the faction
             cursor.execute("""
-                SELECT 1
-                FROM faction_members
-                WHERE faction_id = ? AND user_id = ?
-            """, (faction_id, user_id))
+                SELECT COUNT(*) FROM faction_members
+                WHERE user_id = ? AND faction_id = ?
+            """, (user_id, faction_id))
             
-            if not cursor.fetchone():
-                return {"success": False, "error": "You are not a member of this faction"}
+            if cursor.fetchone()[0] == 0:
+                return {"success": False, "error": "User is not a member of this faction"}
             
-            # Check if user has enough tokens
+            # Verify the user has enough tokens
             cursor.execute("""
                 SELECT tokens
                 FROM users
@@ -460,6 +485,22 @@ class FactionEconomy:
                 return {
                     "success": False, 
                     "error": f"Insufficient tokens. You have {user_tokens[0] if user_tokens else 0}, need {amount}"
+                }
+                
+            # Check daily contribution limit
+            cursor.execute("""
+                SELECT SUM(amount) FROM faction_contributions
+                WHERE user_id = ? AND faction_id = ?
+                AND date(timestamp) = date('now')
+            """, (user_id, faction_id))
+            
+            daily_total = cursor.fetchone()[0] or 0
+            daily_limit = get_config("faction", "daily_contribution_limit", 100000)
+            
+            if daily_total + amount > daily_limit:
+                return {
+                    "success": False,
+                    "error": f"Daily contribution limit of {daily_limit:,} tokens reached. Try again tomorrow."
                 }
             
             # Update user tokens
@@ -492,17 +533,167 @@ class FactionEconomy:
                     WHERE faction_id = ?
                 """, (xp_amount, faction_id))
             
+            # Get total contribution amount for this user
+            cursor.execute("""
+                SELECT SUM(amount) FROM faction_contributions
+                WHERE user_id = ? AND faction_id = ?
+            """, (user_id, faction_id))
+            
+            total_contribution = cursor.fetchone()[0] or 0
+            total_contribution += amount  # Include the current contribution
+            
+            # Check for contribution milestone rewards
+            contribution_rewards = {
+                5000: {"tokens": 100, "xp": 50},
+                10000: {"tokens": 250, "xp": 100},
+                25000: {"tokens": 500, "xp": 200},
+                50000: {"tokens": 1000, "xp": 400},
+                100000: {"tokens": 2500, "xp": 1000},
+                250000: {"tokens": 6000, "xp": 2500},
+                500000: {"tokens": 15000, "xp": 5000},
+                1000000: {"tokens": 50000, "xp": 10000}
+            }
+            
+            milestone_reward = None
+            for threshold, reward in sorted(contribution_rewards.items()):
+                # Check if this contribution pushed them over a milestone
+                if total_contribution >= threshold > (total_contribution - amount):
+                    milestone_reward = {
+                        "threshold": threshold,
+                        "tokens": reward["tokens"],
+                        "xp": reward["xp"]
+                    }
+                    
+                    # Grant the token reward
+                    cursor.execute("""
+                        UPDATE users
+                        SET tokens = tokens + ?
+                        WHERE user_id = ?
+                    """, (reward["tokens"], user_id))
+                    
+                    # Record the milestone in faction history
+                    cursor.execute("""
+                        INSERT INTO faction_history (
+                            faction_id, user_id, event_type, description, timestamp
+                        ) VALUES (?, ?, 'contribution_milestone', ?, datetime('now'))
+                    """, (faction_id, user_id, f"Reached {threshold:,} tokens contribution milestone"))
+                    
+                    break
+            
+            # Check for rank promotions based on contributions
+            cursor.execute("""
+                SELECT rank_id, autorank_contribution 
+                FROM faction_ranks
+                WHERE faction_id = ? AND autorank_contribution > 0
+                ORDER BY autorank_contribution DESC
+            """, (faction_id,))
+            
+            potential_ranks = cursor.fetchall()
+            rank_promotion = None
+            
+            if potential_ranks:
+                cursor.execute("""
+                    SELECT rank_id FROM faction_members
+                    WHERE user_id = ? AND faction_id = ?
+                """, (user_id, faction_id))
+                
+                current_rank_id = cursor.fetchone()[0]
+                
+                for rank_id, contribution_requirement in potential_ranks:
+                    if total_contribution >= contribution_requirement and rank_id > current_rank_id:
+                        # Promote the user to this rank
+                        cursor.execute("""
+                            UPDATE faction_members
+                            SET rank_id = ?
+                            WHERE user_id = ? AND faction_id = ?
+                        """, (rank_id, user_id, faction_id))
+                        
+                        # Get rank name
+                        cursor.execute("""
+                            SELECT name FROM faction_ranks
+                            WHERE faction_id = ? AND rank_id = ?
+                        """, (faction_id, rank_id))
+                        
+                        rank_name = cursor.fetchone()[0]
+                        
+                        rank_promotion = {
+                            "rank_id": rank_id,
+                            "rank_name": rank_name
+                        }
+                        
+                        # Record promotion in faction history
+                        cursor.execute("""
+                            INSERT INTO faction_history (
+                                faction_id, user_id, event_type, description, timestamp
+                            ) VALUES (?, ?, 'rank_promotion', ?, datetime('now'))
+                        """, (faction_id, user_id, f"Promoted to {rank_name} due to contributions"))
+                        
+                        break
+            
+            # Check for active boost items that affect contribution rates
+            cursor.execute("""
+                SELECT multiplier FROM faction_shop_purchases
+                WHERE faction_id = ? AND item_id = 'faction_donation_booster'
+                AND timestamp + duration > datetime('now')
+                ORDER BY multiplier DESC
+                LIMIT 1
+            """, (faction_id,))
+            
+            donation_boost = cursor.fetchone()
+            xp_multiplier = donation_boost[0] if donation_boost else 1.0
+            
+            if xp_multiplier > 1.0:
+                bonus_xp = int(xp_amount * (xp_multiplier - 1.0))
+                xp_amount += bonus_xp
+                
+                # Add the boosted XP
+                cursor.execute("""
+                    UPDATE factions
+                    SET faction_xp = faction_xp + ?
+                    WHERE faction_id = ?
+                """, (bonus_xp, faction_id))
+            
             conn.commit()
             
             return {
                 "success": True,
                 "contribution_amount": amount,
                 "new_user_balance": user_tokens[0] - amount if user_tokens else 0,
-                "xp_gained": xp_amount
+                "total_contribution": total_contribution,
+                "xp_gained": xp_amount,
+                "xp_multiplier": xp_multiplier,
+                "milestone_reward": milestone_reward,
+                "rank_promotion": rank_promotion
             }
         except Exception as e:
             conn.rollback()
             return {"success": False, "error": str(e)}
+        finally:
+            conn.close()
+    
+    @staticmethod
+    def get_faction_treasury(faction_id: int) -> int:
+        """
+        Get the current treasury amount for a faction.
+        
+        Args:
+            faction_id: ID of the faction
+            
+        Returns:
+            int: Current treasury amount
+        """
+        conn = get_connection()
+        cursor = conn.cursor()
+        
+        try:
+            cursor.execute("""
+                SELECT treasury
+                FROM factions
+                WHERE faction_id = ?
+            """, (faction_id,))
+            
+            result = cursor.fetchone()
+            return result[0] if result else 0
         finally:
             conn.close()
     

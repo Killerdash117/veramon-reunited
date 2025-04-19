@@ -1,0 +1,213 @@
+{
+  "faction_token_booster": {
+    "name": "Faction Token Booster",
+    "description": "Increases token gains by 10% for all faction members for 24 hours.",
+    "price": 15000,
+    "effect": "faction_token_boost",
+    "multiplier": 1.1,
+    "duration": 86400,
+    "category": "buff",
+    "icon": "💲",
+    "required_level": 1
+  },
+  "faction_xp_booster": {
+    "name": "Faction XP Booster",
+    "description": "Increases XP gains by 10% for all faction members for 24 hours.",
+    "price": 15000,
+    "effect": "faction_xp_boost",
+    "multiplier": 1.1,
+    "duration": 86400,
+    "category": "buff",
+    "icon": "📈",
+    "required_level": 1
+  },
+  "faction_capture_booster": {
+    "name": "Faction Capture Booster",
+    "description": "Increases catch rates by 10% for all faction members for 24 hours.",
+    "price": 20000,
+    "effect": "faction_catch_boost",
+    "multiplier": 1.1,
+    "duration": 86400,
+    "category": "buff",
+    "icon": "🎯",
+    "required_level": 3
+  },
+  "faction_battle_booster": {
+    "name": "Faction Battle Booster",
+    "description": "Increases battle rewards by 15% for all faction members for 24 hours.",
+    "price": 30000,
+    "effect": "faction_battle_boost",
+    "multiplier": 1.15,
+    "duration": 86400,
+    "category": "buff",
+    "icon": "⚔️",
+    "required_level": 5
+  },
+  "faction_shiny_booster": {
+    "name": "Faction Shiny Booster",
+    "description": "Increases shiny encounter rates by 5% for all faction members for 12 hours.",
+    "price": 50000,
+    "effect": "faction_shiny_boost",
+    "multiplier": 1.05,
+    "duration": 43200,
+    "category": "buff",
+    "icon": "✨",
+    "required_level": 8
+  },
+  "faction_territory_banner": {
+    "name": "Territory Banner",
+    "description": "Required to claim a territory for your faction.",
+    "price": 75000,
+    "effect": "territory_claim",
+    "uses": 1,
+    "category": "upgrade",
+    "icon": "🏁",
+    "required_level": 5
+  },
+  "faction_territory_defender": {
+    "name": "Territory Defender",
+    "description": "Increases defense value of a held territory by 25%.",
+    "price": 35000,
+    "effect": "territory_defense",
+    "multiplier": 1.25,
+    "uses": 1,
+    "category": "upgrade",
+    "icon": "🛡️",
+    "required_level": 7
+  },
+  "faction_headquarters_upgrade": {
+    "name": "Headquarters Upgrade",
+    "description": "Upgrades your faction headquarters, increasing token generation by 50 per day.",
+    "price": 150000,
+    "effect": "hq_upgrade",
+    "amount": 50,
+    "category": "upgrade",
+    "icon": "🏰",
+    "required_level": 10
+  },
+  "faction_emblem": {
+    "name": "Faction Emblem",
+    "description": "Unlocks custom emblem display for all faction members.",
+    "price": 60000,
+    "effect": "cosmetic_emblem",
+    "category": "upgrade",
+    "icon": "📛",
+    "required_level": 6
+  },
+  "faction_rare_spawn_booster": {
+    "name": "Rare Spawn Booster",
+    "description": "Increases rare Veramon encounter rates by 20% for all faction members for 12 hours.",
+    "price": 60000,
+    "effect": "faction_rare_boost",
+    "multiplier": 1.2,
+    "duration": 43200,
+    "category": "buff",
+    "icon": "🌟",
+    "required_level": 9
+  },
+  "faction_weekly_challenge_token": {
+    "name": "Weekly Challenge Token",
+    "description": "Registers your faction for the weekly challenge.",
+    "price": 25000,
+    "effect": "weekly_challenge",
+    "uses": 1,
+    "category": "consumable",
+    "icon": "🏆",
+    "required_level": 2
+  },
+  "faction_war_banner": {
+    "name": "War Banner",
+    "description": "Required to declare war on another faction.",
+    "price": 100000,
+    "effect": "war_declaration",
+    "uses": 1,
+    "category": "consumable",
+    "icon": "⚔️",
+    "required_level": 12
+  },
+  "faction_peace_treaty": {
+    "name": "Peace Treaty",
+    "description": "Immediately ends a faction war without determining a winner.",
+    "price": 150000,
+    "effect": "end_war",
+    "uses": 1,
+    "category": "consumable",
+    "icon": "🕊️",
+    "required_level": 12
+  },
+  "faction_training_grounds": {
+    "name": "Training Grounds",
+    "description": "Permanently increases XP gain for all faction members by 5%.",
+    "price": 250000,
+    "effect": "permanent_xp_boost",
+    "multiplier": 1.05,
+    "category": "upgrade",
+    "icon": "🏕️",
+    "required_level": 15,
+    "one_time_purchase": true
+  },
+  "faction_trader_alliance": {
+    "name": "Trader Alliance",
+    "description": "Permanently reduces shop prices for all faction members by 5%.",
+    "price": 250000,
+    "effect": "permanent_shop_discount",
+    "multiplier": 0.95,
+    "category": "upgrade",
+    "icon": "🤝",
+    "required_level": 15,
+    "one_time_purchase": true
+  },
+  "faction_expedition_map": {
+    "name": "Expedition Map",
+    "description": "Unlocks a special expedition area with unique Veramon for 24 hours.",
+    "price": 120000,
+    "effect": "faction_expedition",
+    "duration": 86400,
+    "category": "consumable",
+    "icon": "🗺️",
+    "required_level": 12
+  },
+  "faction_donation_booster": {
+    "name": "Donation Booster",
+    "description": "Increases XP gained from treasury donations by 50% for 24 hours.",
+    "price": 45000,
+    "effect": "donation_boost",
+    "multiplier": 1.5,
+    "duration": 86400,
+    "category": "buff",
+    "icon": "💰",
+    "required_level": 3
+  },
+  "faction_legendary_lure": {
+    "name": "Legendary Lure",
+    "description": "Increases legendary Veramon encounter rate by 2% for all faction members for 3 hours.",
+    "price": 200000,
+    "effect": "legendary_boost",
+    "multiplier": 1.02,
+    "duration": 10800,
+    "category": "buff",
+    "icon": "🌠",
+    "required_level": 20
+  },
+  "faction_raid_pass": {
+    "name": "Raid Pass",
+    "description": "Allows faction members to participate in a coordinated raid against a legendary Veramon.",
+    "price": 400000,
+    "effect": "legendary_raid",
+    "uses": 1,
+    "category": "consumable",
+    "icon": "🎟️",
+    "required_level": 25
+  },
+  "faction_skill_booster": {
+    "name": "Skill Booster",
+    "description": "Increases move effectiveness by 10% for all faction members for 12 hours.",
+    "price": 75000,
+    "effect": "faction_skill_boost",
+    "multiplier": 1.1,
+    "duration": 43200,
+    "category": "buff",
+    "icon": "💫",
+    "required_level": 10
+  }
+}

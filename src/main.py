@@ -4,11 +4,11 @@ import sys
 from discord.ext import commands
 from dotenv import load_dotenv
 
-# Veramon Reunited - Version v0.31
+# Veramon Reunited - Version v0.32.001
 # Created by Killerdash117
 
 # Current version of the bot
-VERSION = "v0.31"
+VERSION = "v0.32.001"
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
@@ -24,15 +24,19 @@ async def load_extensions():
     # Add all extension cogs here:
     extensions = [
         # Gameplay cogs
-        'cogs.gameplay.battle_cog',  # Enhanced battle system
-        'cogs.gameplay.catching_cog', # Exploration and catching system
-        'cogs.gameplay.trading_cog',  # Trading system
+        'cogs.gameplay.battle_cog',    # Enhanced battle system
+        'cogs.gameplay.catching_cog',  # Exploration and catching system
+        'cogs.gameplay.trading_cog',   # Trading system
+        'cogs.gameplay.team_cog',      # Team management system
         
         # Social cogs
         'cogs.social.profile_cog',
         'cogs.social.leaderboard_cog',
         'cogs.social.guild_cog',
         'cogs.social.faction_cog',
+        
+        # Economy cogs
+        'cogs.economy.economy_cog',    # Updated path to economy cog
         
         # Admin cogs
         'cogs.admin.admin_cog',
@@ -41,15 +45,14 @@ async def load_extensions():
         'cogs.admin.admin_battle_system',
         
         # Other cogs
-        'cogs.economy_cog',
         'cogs.web_integration_cog',
         'cogs.tournament_cog',
-        'cogs.moderator_cog',   # Moderator commands
-        'cogs.vip_cog',         # VIP features and shop
-        'cogs.settings_cog',    # User settings and UI themes
-        'cogs.interactive_cog',  # Interactive UI system and DM support
-        'cogs.quest_cog',       # Quest & Achievement system
-        'cogs.event_cog'        # Seasonal Events system
+        'cogs.moderator_cog',      # Moderator commands
+        'cogs.vip_cog',            # VIP features and shop
+        'cogs.settings_cog',       # User settings and UI themes
+        'cogs.interactive_cog',    # Interactive UI system and DM support
+        'cogs.quest_cog',          # Quest & Achievement system
+        'cogs.event_cog'           # Seasonal Events system
     ]
     
     for extension in extensions:

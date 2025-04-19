@@ -15,6 +15,7 @@ from db.db import get_connection
 from src.models.permissions import require_permission_level, PermissionLevel
 from src.models.veramon import Veramon
 from src.utils.config_manager import get_config
+from src.core.security_integration import get_security_integration
 
 # Rarity spawn weights
 RARITY_WEIGHTS = {
@@ -185,7 +186,18 @@ class CatchingCog(commands.Cog):
         """Explore a biome and encounter a wild Veramon."""
         user_id = str(interaction.user.id)
         
-        # Check cooldown
+        # Security validation for exploration
+        security = get_security_integration()
+        validation_result = await security.validate_catch_flow(user_id, biome.lower(), special_area)
+        
+        if not validation_result["valid"]:
+            await interaction.response.send_message(
+                validation_result["error"],
+                ephemeral=True
+            )
+            return
+        
+        # Check cooldown - LEGACY, will be replaced by security system
         current_time = datetime.utcnow().timestamp()
         if user_id in self.spawn_cooldowns:
             time_diff = current_time - self.spawn_cooldowns[user_id]
@@ -414,40 +426,68 @@ class CatchingCog(commands.Cog):
     @require_permission_level(PermissionLevel.USER)
     async def catch(self, interaction: discord.Interaction, item: str):
         """Attempt to catch the last encountered Veramon using an item."""
-        user_id = interaction.user.id
+        user_id = str(interaction.user.id)
         spawn = self.last_spawn.pop(user_id, None)
         if not spawn:
             await interaction.response.send_message('No active encounter. Use /explore <biome> first.', ephemeral=True)
             return
-        # Load item data
-        info = self.items.get(item)
-        if not info:
-            await interaction.response.send_message(f"Item '{item}' not found.", ephemeral=True)
-            return
+            
+        # Assign a spawn_id if it doesn't have one already (for security tracking)
+        if 'spawn_id' not in spawn:
+            spawn['spawn_id'] = f"{user_id}-{int(time.time())}"
+            
+        # Security validation for catch attempt
+        security = get_security_integration()
+        validation_result = await security.validate_catch_attempt(user_id, spawn['spawn_id'], item)
         
-        # Check if user has the item
+        if not validation_result["valid"]:
+            await interaction.response.send_message(
+                validation_result["error"],
+                ephemeral=True
+            )
+            return
+            
+        # If using the new security system for catch calculation
+        if "success" in validation_result:
+            success = validation_result["success"]
+            chance = validation_result["catch_rate"]
+        else:
+            # Legacy catch calculation - will be fully replaced by security system
+            # Load item data
+            info = self.items.get(item)
+            if not info:
+                await interaction.response.send_message(f"Item '{item}' not found.", ephemeral=True)
+                return
+            
+            # Check if user has the item
+            conn = get_connection()
+            cursor = conn.cursor()
+            
+            # For standard_capsule, we'll always allow it even if not in inventory
+            if item != "standard_capsule":
+                cursor.execute("SELECT quantity FROM inventory WHERE user_id = ? AND item_id = ?", (user_id, item))
+                inventory_item = cursor.fetchone()
+                
+                if not inventory_item or inventory_item[0] <= 0:
+                    await interaction.response.send_message(f"You don't have any `{item}` in your inventory!", ephemeral=True)
+                    conn.close()
+                    return
+                    
+                # Decrease quantity
+                new_quantity = inventory_item[0] - 1
+                cursor.execute("UPDATE inventory SET quantity = ? WHERE user_id = ? AND item_id = ?", 
+                             (new_quantity, user_id, item))
+            
+            mult = info.get('multiplier', 1.0)
+            base_rate = self.veramon_data[spawn['name']].get('catch_rate', 0)
+            chance = min(1.0, base_rate * mult)
+            success = random.random() < chance
+            conn.close()
+            
+        # Process the catch result
         conn = get_connection()
         cursor = conn.cursor()
         
-        # For standard_capsule, we'll always allow it even if not in inventory
-        if item != "standard_capsule":
-            cursor.execute("SELECT quantity FROM inventory WHERE user_id = ? AND item_id = ?", (str(user_id), item))
-            inventory_item = cursor.fetchone()
-            
-            if not inventory_item or inventory_item[0] <= 0:
-                await interaction.response.send_message(f"You don't have any `{item}` in your inventory!", ephemeral=True)
-                conn.close()
-                return
-                
-            # Decrease quantity
-            new_quantity = inventory_item[0] - 1
-            cursor.execute("UPDATE inventory SET quantity = ? WHERE user_id = ? AND item_id = ?", 
-                         (new_quantity, str(user_id), item))
-        
-        mult = info.get('multiplier', 1.0)
-        base_rate = self.veramon_data[spawn['name']].get('catch_rate', 0)
-        chance = min(1.0, base_rate * mult)
-        success = random.random() < chance
         if success:
             # Find the next available slot for the Veramon
             cursor.execute("SELECT MAX(id) FROM captures")
@@ -457,7 +497,7 @@ class CatchingCog(commands.Cog):
             # Insert the capture
             cursor.execute(
                 "INSERT INTO captures (user_id, veramon_name, caught_at, shiny, biome, active_form) VALUES (?, ?, ?, ?, ?, ?)" ,
-                (str(user_id), spawn['name'], datetime.utcnow().isoformat(), int(spawn['shiny']), spawn['biome'], None)
+                (user_id, spawn['name'], datetime.utcnow().isoformat(), int(spawn['shiny']), spawn['biome'], None)
             )
             
             # Grant XP to the user
@@ -467,15 +507,15 @@ class CatchingCog(commands.Cog):
                 xp_gain *= get_config("exploration", "shiny_xp_multiplier", 5)  # 5x XP for shiny catches
                 
             # Update user XP or create user entry if none exists
-            cursor.execute("SELECT xp FROM users WHERE user_id = ?", (str(user_id),))
+            cursor.execute("SELECT xp FROM users WHERE user_id = ?", (user_id,))
             user_row = cursor.fetchone()
             
             if user_row:
                 new_xp = user_row[0] + xp_gain
-                cursor.execute("UPDATE users SET xp = ? WHERE user_id = ?", (new_xp, str(user_id)))
+                cursor.execute("UPDATE users SET xp = ? WHERE user_id = ?", (new_xp, user_id))
             else:
                 cursor.execute("INSERT INTO users (user_id, tokens, xp) VALUES (?, ?, ?)", 
-                             (str(user_id), 0, xp_gain))
+                             (user_id, 0, xp_gain))
                 new_xp = xp_gain
                 
             conn.commit()
@@ -502,12 +542,12 @@ class CatchingCog(commands.Cog):
                     "rarity": self.veramon_data[spawn['name']].get("rarity", "common"),
                     "shiny": spawn['shiny']
                 }
-                quest_cog.update_quest_progress(str(user_id), "CATCH", 1, metadata)
+                quest_cog.update_quest_progress(user_id, "CATCH", 1, metadata)
             except Exception as e:
                 print(f"Error updating quest progress: {e}")
         
         embed = discord.Embed(title='Catch Attempt Result', description=result_msg, color=color)
-        embed.add_field(name='Item', value=info.get('name', item), inline=True)
+        embed.add_field(name='Item', value=item, inline=True)
         embed.add_field(name='Chance', value=f"{chance*100:.1f}%", inline=True)
         await interaction.response.send_message(embed=embed)
         

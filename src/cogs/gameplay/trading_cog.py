@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from src.db.db import get_connection
 from src.models.permissions import require_permission_level, PermissionLevel
 from src.utils.data_loader import load_all_veramon_data
+from src.core.security_integration import get_security_integration
 
 class TradeView(discord.ui.View):
     """Interactive view for trade offers."""
@@ -76,6 +77,18 @@ class TradingCog(commands.Cog):
         initiator_id = str(interaction.user.id)
         recipient_id = str(player.id)
         
+        # Security validation for trade creation
+        security = get_security_integration()
+        validation_result = await security.validate_trade_creation(initiator_id, recipient_id)
+        
+        if not validation_result["valid"]:
+            await interaction.response.send_message(
+                validation_result["error"],
+                ephemeral=True
+            )
+            return
+        
+        # Legacy checks - will be fully replaced by security system
         # Validate user is not trading with themselves
         if initiator_id == recipient_id:
             await interaction.response.send_message(
@@ -182,17 +195,17 @@ class TradingCog(commands.Cog):
         
     @app_commands.command(name="trade_add", description="Add a Veramon to your current trade")
     @app_commands.describe(
-        capture_id="The ID of the Veramon to add to the trade"
+        capture_id="The Capture ID of the Veramon to add to the trade"
     )
     @require_permission_level(PermissionLevel.USER)
     async def trade_add(self, interaction: discord.Interaction, capture_id: int):
         """Add a Veramon to your current trade."""
         user_id = str(interaction.user.id)
         
+        # Find the user's active trade
         conn = get_connection()
         cursor = conn.cursor()
         
-        # Check if user has an active trade
         cursor.execute("""
             SELECT trade_id, initiator_id, recipient_id 
             FROM trades 
@@ -204,7 +217,7 @@ class TradingCog(commands.Cog):
         
         if not trade:
             await interaction.response.send_message(
-                "You don't have any active trades. Use `/trade_create` to start one.",
+                "You don't have an active trade. Start one with `/trade_create`.",
                 ephemeral=True
             )
             conn.close()
@@ -212,6 +225,24 @@ class TradingCog(commands.Cog):
             
         trade_id, initiator_id, recipient_id = trade
         
+        # Security validation for adding item to trade
+        security = get_security_integration()
+        validation_result = await security.validate_trade_action(
+            trade_id, 
+            user_id, 
+            "add", 
+            capture_id, 
+            "veramon"
+        )
+        
+        if not validation_result["valid"]:
+            await interaction.response.send_message(
+                validation_result["error"],
+                ephemeral=True
+            )
+            conn.close()
+            return
+            
         # Verify the Veramon belongs to the user
         cursor.execute("""
             SELECT id, veramon_name, shiny, nickname, level, active_form 
@@ -624,93 +655,64 @@ class TradingCog(commands.Cog):
         
     async def execute_trade(self, interaction: discord.Interaction, trade_id: int):
         """Execute a trade when accepted."""
-        # Get the trade details
-        conn = get_connection()
-        cursor = conn.cursor()
+        await interaction.response.defer()
         
-        cursor.execute("""
-            SELECT initiator_id, recipient_id, status
-            FROM trades
-            WHERE trade_id = ?
-        """, (trade_id,))
+        # Security validation for trade completion
+        security = get_security_integration()
+        validation_result = await security.validate_trade_completion(trade_id)
         
-        trade = cursor.fetchone()
-        
-        if not trade:
-            await interaction.followup.send("Trade not found.")
-            conn.close()
+        if not validation_result["valid"]:
+            await interaction.followup.send(
+                validation_result["error"],
+                ephemeral=True
+            )
             return
-            
-        initiator_id, recipient_id, status = trade
         
-        if status != 'pending':
-            await interaction.followup.send(f"This trade is already {status}.")
-            conn.close()
-            return
-            
-        # Verify both sides have at least one item
-        cursor.execute("""
-            SELECT owner_id, COUNT(*)
-            FROM trade_items
-            WHERE trade_id = ?
-            GROUP BY owner_id
-        """, (trade_id,))
-        
-        item_counts = cursor.fetchall()
-        item_counts_dict = {owner_id: count for owner_id, count in item_counts}
-        
-        if initiator_id not in item_counts_dict or recipient_id not in item_counts_dict:
-            await interaction.followup.send("Both traders must add at least one Veramon to complete the trade.")
-            conn.close()
-            return
-            
-        # Get trade items
-        cursor.execute("""
-            SELECT capture_id, owner_id
-            FROM trade_items
-            WHERE trade_id = ?
-        """, (trade_id,))
-        
-        trade_items = cursor.fetchall()
-        
-        # Begin transaction
         try:
-            # Transfer ownership of all Veramon
-            for capture_id, owner_id in trade_items:
-                new_owner_id = recipient_id if owner_id == initiator_id else initiator_id
-                
-                cursor.execute("""
-                    UPDATE captures
-                    SET user_id = ?, 
-                        active = 0  -- Reset active status when traded
-                    WHERE id = ?
-                """, (new_owner_id, capture_id))
-                
-            # Update trade status
+            # Process the trade through the security system
+            processing_result = await security.process_trade_completion(trade_id)
+            
+            if not processing_result["valid"]:
+                await interaction.followup.send(
+                    processing_result["error"],
+                    ephemeral=True
+                )
+                return
+            
+            # If we reach here, the trade was processed successfully
+            
+            # Get trade details for displaying the results
+            conn = get_connection()
+            cursor = conn.cursor()
+            
+            # Get trader IDs
             cursor.execute("""
-                UPDATE trades 
-                SET status = 'completed', 
-                    updated_at = ? 
+                SELECT initiator_id, recipient_id
+                FROM trades
                 WHERE trade_id = ?
-            """, (datetime.utcnow().isoformat(), trade_id))
+            """, (trade_id,))
             
-            conn.commit()
+            trade_row = cursor.fetchone()
+            if not trade_row:
+                await interaction.followup.send("Error: Trade not found.")
+                conn.close()
+                return
+                
+            initiator_id, recipient_id = trade_row
             
-            # Get traded Veramon details for the success message
+            # Get traded Veramon
             cursor.execute("""
-                SELECT c.id, c.veramon_name, c.shiny, c.nickname, c.level, c.active_form, ti.owner_id
-                FROM trade_items ti
-                JOIN captures c ON ti.capture_id = c.id
-                WHERE ti.trade_id = ?
+                SELECT c.id, c.veramon_name, c.shiny, c.nickname, c.level, c.active_form, ti.user_id
+                FROM captures c
+                JOIN trade_items ti ON c.id = ti.capture_id
+                WHERE ti.trade_id = ? AND ti.item_type = 'veramon'
             """, (trade_id,))
             
             traded_veramon = cursor.fetchall()
             
-            # Group by original owner
-            initiator_gave = [v for v in traded_veramon if v[5] == initiator_id]
-            recipient_gave = [v for v in traded_veramon if v[5] == recipient_id]
-            
-            conn.close()
+            # Group items by original owner
+            initiator_gave = [v for v in traded_veramon if v[6] == initiator_id]
+            recipient_gave = [v for v in traded_veramon if v[6] == recipient_id]
             
             # Format traded Veramon lists
             def format_veramon_list(items):
@@ -718,8 +720,9 @@ class TradingCog(commands.Cog):
                 for capture_id, name, shiny, nickname, level, active_form, _ in items:
                     display_name = nickname if nickname else name
                     shiny_star = "✨ " if shiny else ""
-                    result += f"• {shiny_star}**{display_name}** (Lvl {level}, ID: {capture_id}, Form: {active_form})\n"
-                return result
+                    form_text = f", Form: {active_form}" if active_form else ""
+                    result += f"• {shiny_star}**{display_name}** (Lvl {level}, ID: {capture_id}{form_text})\n"
+                return result or "No Veramon"
             
             # Create success embed
             embed = discord.Embed(
@@ -790,12 +793,12 @@ class TradingCog(commands.Cog):
                             inline=False
                         )
             
+            conn.close()
             await interaction.followup.send(embed=embed)
             
         except Exception as e:
-            # Roll back on error
-            conn.rollback()
-            conn.close()
+            # Log error and inform user
+            print(f"Error during trade execution: {str(e)}")
             await interaction.followup.send(f"Error during trade: {str(e)}")
         
 async def setup(bot: commands.Bot):

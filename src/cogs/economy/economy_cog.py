@@ -8,6 +8,7 @@ from typing import Dict, List, Optional, Union, Literal
 from src.db.db import get_connection  # This function should return an SQLite connection
 from src.models.permissions import require_permission_level, PermissionLevel, is_admin, get_permission_level
 from datetime import datetime
+from src.core.security_integration import get_security_integration
 
 def initialize_economy_db():
     """
@@ -102,6 +103,19 @@ def initialize_economy_db():
         PRIMARY KEY (user_id, quest_id),
         FOREIGN KEY (user_id) REFERENCES users (user_id),
         FOREIGN KEY (quest_id) REFERENCES quests (quest_id)
+    )
+    """)
+    
+    # Token transactions table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS token_transactions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sender_id TEXT,
+        recipient_id TEXT,
+        amount INTEGER,
+        transaction_time TEXT,
+        message TEXT,
+        transaction_type TEXT
     )
     """)
     
@@ -362,118 +376,131 @@ class EconomyCog(commands.Cog):
         
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name="shop_buy", description="Purchase an item from the shop")
+    @app_commands.command(name="shop_buy", description="Purchase an item from the shop using tokens")
     @app_commands.describe(
-        item_id="ID of the item to purchase",
-        quantity="Number of items to buy (default: 1)"
+        item_id="The ID of the item to purchase",
+        quantity="How many of the item to buy (default: 1)"
     )
     @require_permission_level(PermissionLevel.USER)
     async def shop_buy(self, interaction: discord.Interaction, item_id: str, quantity: int = 1):
         """Purchase an item from the shop using tokens."""
-        if quantity <= 0:
-            await interaction.response.send_message("Quantity must be a positive number.", ephemeral=True)
+        user_id = str(interaction.user.id)
+        
+        # Security validation for shop purchase
+        security = get_security_integration()
+        validation_result = await security.validate_shop_purchase(
+            user_id, item_id, quantity
+        )
+        
+        if not validation_result["valid"]:
+            await interaction.response.send_message(
+                validation_result["error"],
+                ephemeral=True
+            )
             return
             
+        # Legacy validation - will be fully replaced by security system
+        # Check if item exists
         if item_id not in self.items:
-            await interaction.response.send_message(f"Item ID `{item_id}` not found in the shop.", ephemeral=True)
+            await interaction.response.send_message(f"Item '{item_id}' not found in the shop.", ephemeral=True)
             return
             
         item = self.items[item_id]
-        total_price = item.get("price", 0) * quantity
+        price = item.get("price", 0)
+        total_price = price * quantity
         
-        user_id = str(interaction.user.id)
+        # Check if item is available in the shop
+        if not item.get("available", True):
+            await interaction.response.send_message(f"'{item['name']}' is not currently available for purchase.", ephemeral=True)
+            return
+        
+        # Check if the quantity is valid
+        if quantity <= 0:
+            await interaction.response.send_message("Quantity must be a positive number.", ephemeral=True)
+            return
+        
+        # Get user's current tokens
         conn = get_connection()
         cursor = conn.cursor()
         
-        # Check if user has enough tokens
         cursor.execute("SELECT tokens FROM users WHERE user_id = ?", (user_id,))
-        row = cursor.fetchone()
+        user_row = cursor.fetchone()
         
-        if not row:
-            conn.close()
-            await interaction.response.send_message("You don't have an account yet. Use another command first.", ephemeral=True)
-            return
-            
-        user_tokens = row[0]
+        if not user_row:
+            # Create user entry if not exists
+            cursor.execute("INSERT INTO users (user_id, tokens, xp) VALUES (?, 0, 0)", (user_id,))
+            conn.commit()
+            user_tokens = 0
+        else:
+            user_tokens = user_row[0]
         
+        # Check if user has enough tokens
         if user_tokens < total_price:
-            conn.close()
             await interaction.response.send_message(
-                f"You don't have enough tokens to buy {quantity}x {item['name']}.\n"
-                f"Price: {total_price:,} tokens | Your balance: {user_tokens:,} tokens",
+                f"You don't have enough tokens for this purchase. Price: {total_price}, Your tokens: {user_tokens}",
                 ephemeral=True
             )
+            conn.close()
             return
             
         # Process the purchase
-        try:
-            # Deduct tokens
-            new_balance = user_tokens - total_price
-            cursor.execute("UPDATE users SET tokens = ? WHERE user_id = ?", (new_balance, user_id))
+        cursor.execute("UPDATE users SET tokens = tokens - ? WHERE user_id = ?", (total_price, user_id))
+        
+        # Add item to inventory
+        cursor.execute("""
+            INSERT INTO inventory (user_id, item_id, quantity) VALUES (?, ?, ?)
+            ON CONFLICT(user_id, item_id) DO UPDATE SET quantity = quantity + ?
+        """, (user_id, item_id, quantity, quantity))
+        
+        # Record purchase in history
+        cursor.execute("""
+            INSERT INTO purchase_history (user_id, item_id, quantity, total_price, purchase_date)
+            VALUES (?, ?, ?, ?, ?)
+        """, (user_id, item_id, quantity, total_price, datetime.utcnow().isoformat()))
+        
+        conn.commit()
+        
+        # Handle any special effects for the item (boosters, etc.)
+        await self._handle_special_item_effects(interaction, item_id, quantity)
+        
+        # Create a receipt embed
+        embed = discord.Embed(
+            title="Purchase Successful",
+            description=f"You bought {quantity}x {item['name']} for {total_price} tokens.",
+            color=discord.Color.green()
+        )
+        
+        # Add remaining balance
+        cursor.execute("SELECT tokens FROM users WHERE user_id = ?", (user_id,))
+        new_balance = cursor.fetchone()[0]
+        embed.add_field(name="Remaining Balance", value=f"{new_balance} tokens", inline=False)
+        
+        # Add item details
+        if "description" in item:
+            embed.add_field(name="Description", value=item["description"], inline=False)
             
-            # Add to inventory
-            cursor.execute(
-                "SELECT quantity FROM inventory WHERE user_id = ? AND item_id = ?",
-                (user_id, item_id)
-            )
-            inventory_row = cursor.fetchone()
+        if "effects" in item:
+            effects_text = ""
+            for effect, value in item["effects"].items():
+                effects_text += f"{effect.replace('_', ' ').title()}: {value}\n"
             
-            if inventory_row:
-                new_quantity = inventory_row[0] + quantity
-                cursor.execute(
-                    "UPDATE inventory SET quantity = ? WHERE user_id = ? AND item_id = ?",
-                    (new_quantity, user_id, item_id)
-                )
-            else:
-                cursor.execute(
-                    "INSERT INTO inventory (user_id, item_id, quantity) VALUES (?, ?, ?)",
-                    (user_id, item_id, quantity)
-                )
+            if effects_text:
+                embed.add_field(name="Effects", value=effects_text, inline=False)
+        
+        conn.close()
+        
+        # Security logging for the transaction
+        security.log_security_event(
+            user_id=user_id,
+            event_type="shop_purchase",
+            details={
+                "item_id": item_id,
+                "quantity": quantity,
+                "total_price": total_price
+            }
+        )
                 
-            # Log the purchase
-            purchase_date = datetime.now().isoformat()
-            cursor.execute(
-                "INSERT INTO purchase_history (user_id, item_id, quantity, total_price, purchase_date) VALUES (?, ?, ?, ?, ?)",
-                (user_id, item_id, quantity, total_price, purchase_date)
-            )
-            
-            conn.commit()
-            
-            # Handle special item effects immediately if applicable
-            await self._handle_special_item_effects(interaction, item_id, quantity)
-            
-            # Create success message
-            embed = discord.Embed(
-                title="Purchase Successful",
-                description=f"You bought **{quantity}x {item['name']}** for **{total_price:,}** tokens.",
-                color=discord.Color.green()
-            )
-            
-            embed.add_field(
-                name="Item Effect",
-                value=item['description'],
-                inline=False
-            )
-            
-            embed.add_field(
-                name="Remaining Balance",
-                value=f"{new_balance:,} tokens",
-                inline=True
-            )
-            
-            embed.set_footer(text=f"Use /inventory to view your items")
-            
-            await interaction.response.send_message(embed=embed)
-            
-        except Exception as e:
-            conn.rollback()
-            print(f"Error during purchase: {e}")
-            await interaction.response.send_message(
-                "An error occurred while processing your purchase. Please try again.",
-                ephemeral=True
-            )
-        finally:
-            conn.close()
+        await interaction.response.send_message(embed=embed)
 
     @app_commands.command(name="inventory", description="View your current inventory")
     @require_permission_level(PermissionLevel.USER)
@@ -1276,6 +1303,336 @@ class EconomyCog(commands.Cog):
         
         # Return info about completed quests for notifications
         return completed_quests
+
+    @app_commands.command(name="transfer", description="Transfer tokens to another player")
+    @app_commands.describe(
+        user="The user to transfer tokens to",
+        amount="The amount of tokens to transfer",
+        message="Optional message to include with the transfer"
+    )
+    @require_permission_level(PermissionLevel.USER)
+    async def transfer(self, interaction: discord.Interaction, user: discord.Member, amount: int, message: Optional[str] = None):
+        """Transfer tokens to another player."""
+        sender_id = str(interaction.user.id)
+        recipient_id = str(user.id)
+        
+        # Prevent self-transfers
+        if sender_id == recipient_id:
+            await interaction.response.send_message("You cannot transfer tokens to yourself.", ephemeral=True)
+            return
+            
+        # Validate amount
+        if amount <= 0:
+            await interaction.response.send_message("Transfer amount must be positive.", ephemeral=True)
+            return
+            
+        # Security validation through security system
+        security = get_security_integration()
+        validation_result = await security.validate_token_transaction(
+            sender_id, amount, "transfer", recipient_id
+        )
+        
+        if not validation_result["valid"]:
+            await interaction.response.send_message(validation_result["error"], ephemeral=True)
+            return
+            
+        # Process the transfer
+        conn = get_connection()
+        cursor = conn.cursor()
+        
+        try:
+            # Check sender balance
+            cursor.execute("SELECT tokens FROM users WHERE user_id = ?", (sender_id,))
+            sender_row = cursor.fetchone()
+            
+            if not sender_row:
+                await interaction.response.send_message("You don't have an account yet.", ephemeral=True)
+                conn.close()
+                return
+                
+            sender_balance = sender_row[0]
+            if sender_balance < amount:
+                await interaction.response.send_message(
+                    f"Insufficient balance. You have {sender_balance:,} tokens, but tried to transfer {amount:,}.",
+                    ephemeral=True
+                )
+                conn.close()
+                return
+                
+            # Check if recipient exists, create if not
+            cursor.execute("SELECT 1 FROM users WHERE user_id = ?", (recipient_id,))
+            if not cursor.fetchone():
+                cursor.execute("INSERT INTO users (user_id, tokens, xp) VALUES (?, 0, 0)", (recipient_id,))
+                
+            # Begin transaction
+            conn.execute("BEGIN TRANSACTION")
+            
+            # Deduct from sender
+            cursor.execute(
+                "UPDATE users SET tokens = tokens - ? WHERE user_id = ?",
+                (amount, sender_id)
+            )
+            
+            # Add to recipient
+            cursor.execute(
+                "UPDATE users SET tokens = tokens + ? WHERE user_id = ?",
+                (amount, recipient_id)
+            )
+            
+            # Record the transaction
+            transaction_time = datetime.utcnow().isoformat()
+            cursor.execute("""
+                INSERT INTO token_transactions 
+                (sender_id, recipient_id, amount, transaction_time, message, transaction_type)
+                VALUES (?, ?, ?, ?, ?, 'transfer')
+            """, (sender_id, recipient_id, amount, transaction_time, message))
+            
+            conn.execute("COMMIT")
+            
+            # Get new balances
+            cursor.execute("SELECT tokens FROM users WHERE user_id = ?", (sender_id,))
+            new_sender_balance = cursor.fetchone()[0]
+            
+            # Security logging
+            security.log_security_event(
+                user_id=sender_id,
+                event_type="token_transfer",
+                details={
+                    "recipient_id": recipient_id,
+                    "amount": amount,
+                    "timestamp": transaction_time
+                }
+            )
+            
+            # Create success embed
+            embed = discord.Embed(
+                title="Token Transfer Successful",
+                description=f"Successfully transferred **{amount:,}** tokens to {user.mention}",
+                color=discord.Color.green()
+            )
+            
+            embed.add_field(name="New Balance", value=f"{new_sender_balance:,} tokens", inline=True)
+            
+            if message:
+                embed.add_field(name="Message", value=message, inline=False)
+                
+            embed.set_footer(text="Thank you for using Veramon Bank!")
+            
+            # Notify the recipient if they're online
+            try:
+                recipient_embed = discord.Embed(
+                    title="Tokens Received!",
+                    description=f"You received **{amount:,}** tokens from {interaction.user.mention}",
+                    color=discord.Color.gold()
+                )
+                
+                if message:
+                    recipient_embed.add_field(name="Message", value=message, inline=False)
+                    
+                cursor.execute("SELECT tokens FROM users WHERE user_id = ?", (recipient_id,))
+                new_recipient_balance = cursor.fetchone()[0]
+                recipient_embed.add_field(
+                    name="New Balance", 
+                    value=f"{new_recipient_balance:,} tokens", 
+                    inline=True
+                )
+                
+                # Only send DM if user is a member of the guild
+                if isinstance(user, discord.Member):
+                    await user.send(embed=recipient_embed)
+            except Exception as e:
+                # Silently fail if we can't message the recipient
+                print(f"Error sending transfer notification to recipient: {e}")
+                
+            await interaction.response.send_message(embed=embed)
+            
+        except Exception as e:
+            # Rollback on error
+            conn.execute("ROLLBACK")
+            print(f"Error processing token transfer: {e}")
+            await interaction.response.send_message(
+                "An error occurred while processing your transfer. Please try again later.",
+                ephemeral=True
+            )
+        finally:
+            conn.close()
+            
+    @app_commands.command(name="transaction_history", description="View your token transaction history")
+    @app_commands.describe(
+        transaction_type="Filter by transaction type",
+        limit="Number of transactions to show (default: 10)"
+    )
+    @app_commands.choices(
+        transaction_type=[
+            app_commands.Choice(name="All", value="all"),
+            app_commands.Choice(name="Transfers", value="transfer"),
+            app_commands.Choice(name="Shop Purchases", value="purchase"),
+            app_commands.Choice(name="Battle Rewards", value="battle_reward"),
+            app_commands.Choice(name="Daily Bonuses", value="daily_bonus")
+        ]
+    )
+    @require_permission_level(PermissionLevel.USER)
+    async def transaction_history(
+        self, 
+        interaction: discord.Interaction, 
+        transaction_type: str = "all", 
+        limit: int = 10
+    ):
+        """View your token transaction history."""
+        user_id = str(interaction.user.id)
+        
+        # Validate limit
+        if limit <= 0 or limit > 25:
+            await interaction.response.send_message(
+                "Limit must be between 1 and 25 transactions.",
+                ephemeral=True
+            )
+            return
+            
+        # Security validation
+        security = get_security_integration()
+        validation_result = await security.validate_transaction_history_view(user_id, transaction_type, limit)
+        if not validation_result["valid"]:
+            await interaction.response.send_message(validation_result["error"], ephemeral=True)
+            return
+            
+        # Fetch transaction history
+        conn = get_connection()
+        cursor = conn.cursor()
+        
+        try:
+            if transaction_type == "all":
+                # Combined incoming and outgoing
+                cursor.execute("""
+                    SELECT 
+                        'outgoing' as direction, 
+                        sender_id, 
+                        recipient_id, 
+                        amount, 
+                        transaction_time, 
+                        message, 
+                        transaction_type 
+                    FROM token_transactions 
+                    WHERE sender_id = ?
+                    UNION ALL
+                    SELECT 
+                        'incoming' as direction, 
+                        sender_id, 
+                        recipient_id, 
+                        amount, 
+                        transaction_time, 
+                        message, 
+                        transaction_type 
+                    FROM token_transactions 
+                    WHERE recipient_id = ? AND sender_id != recipient_id
+                    ORDER BY transaction_time DESC
+                    LIMIT ?
+                """, (user_id, user_id, limit))
+            else:
+                # Combined with type filter
+                cursor.execute("""
+                    SELECT 
+                        'outgoing' as direction, 
+                        sender_id, 
+                        recipient_id, 
+                        amount, 
+                        transaction_time, 
+                        message, 
+                        transaction_type 
+                    FROM token_transactions 
+                    WHERE sender_id = ? AND transaction_type = ?
+                    UNION ALL
+                    SELECT 
+                        'incoming' as direction, 
+                        sender_id, 
+                        recipient_id, 
+                        amount, 
+                        transaction_time, 
+                        message, 
+                        transaction_type 
+                    FROM token_transactions 
+                    WHERE recipient_id = ? AND sender_id != recipient_id AND transaction_type = ?
+                    ORDER BY transaction_time DESC
+                    LIMIT ?
+                """, (user_id, transaction_type, user_id, transaction_type, limit))
+                
+            transactions = cursor.fetchall()
+            
+            # Get current balance
+            cursor.execute("SELECT tokens FROM users WHERE user_id = ?", (user_id,))
+            balance_row = cursor.fetchone()
+            current_balance = balance_row[0] if balance_row else 0
+            
+            # Create embed
+            embed = discord.Embed(
+                title="Token Transaction History",
+                description=f"Your current balance: **{current_balance:,}** tokens",
+                color=discord.Color.blue()
+            )
+            
+            if transaction_type != "all":
+                embed.description += f"\nFiltering by: **{transaction_type}**"
+                
+            # Format transactions
+            for direction, sender_id, recipient_id, amount, transaction_time, message, tx_type in transactions:
+                # Format transaction time
+                try:
+                    dt = datetime.fromisoformat(transaction_time)
+                    time_str = dt.strftime("%Y-%m-%d %H:%M")
+                except:
+                    time_str = transaction_time
+                    
+                # Get user display names
+                try:
+                    if direction == "outgoing":
+                        recipient = await interaction.guild.fetch_member(int(recipient_id))
+                        recipient_name = recipient.display_name if recipient else f"User {recipient_id}"
+                        title = f"Sent {amount:,} tokens to {recipient_name}"
+                    else:
+                        sender = await interaction.guild.fetch_member(int(sender_id))
+                        sender_name = sender.display_name if sender else f"User {sender_id}"
+                        title = f"Received {amount:,} tokens from {sender_name}"
+                except:
+                    # Fallback if we can't resolve names
+                    if direction == "outgoing":
+                        title = f"Sent {amount:,} tokens"
+                    else:
+                        title = f"Received {amount:,} tokens"
+                        
+                # Format transaction type nicely
+                type_display = tx_type.replace("_", " ").title()
+                
+                # Create field value
+                value = f"**Type:** {type_display}\n**Time:** {time_str}"
+                if message:
+                    # Truncate long messages
+                    if len(message) > 100:
+                        message = message[:97] + "..."
+                    value += f"\n**Message:** {message}"
+                    
+                embed.add_field(
+                    name=title,
+                    value=value,
+                    inline=False
+                )
+                
+            if not transactions:
+                embed.add_field(
+                    name="No transactions found",
+                    value="You don't have any transactions matching the selected criteria.",
+                    inline=False
+                )
+                
+            await interaction.response.send_message(embed=embed)
+            
+        except Exception as e:
+            print(f"Error fetching transaction history: {e}")
+            await interaction.response.send_message(
+                "An error occurred while fetching your transaction history.",
+                ephemeral=True
+            )
+        finally:
+            conn.close()
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(EconomyCog(bot))

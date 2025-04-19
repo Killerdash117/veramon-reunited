@@ -4,7 +4,7 @@ This document tracks all notable changes to the Veramon Reunited Discord bot.
 
 <div align="center">
 
-![Version Status](https://img.shields.io/badge/Current%20Version-v0.32.002-brightgreen.svg)
+![Version Status](https://img.shields.io/badge/Current%20Version-v0.33.000-brightgreen.svg)
 ![Updated](https://img.shields.io/badge/Last%20Updated-April%2019%2C%202025-blue.svg)
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg)
 
@@ -26,6 +26,30 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
 ---
 
 ## Release History
+
+### v0.33.000 - April 19, 2025
+
+> *Setup Wizard & Database Management Improvements*
+
+#### Interactive Setup System
+- Added `/setup` command with a complete step-by-step configuration wizard
+- Implemented role-based access control for configuration management
+- Created intuitive UI components for all setup categories
+- Added ability to configure general settings, game features, economy, spawns, channels, roles, and security
+- Developed persistent configuration storage with automatic loading and saving
+
+#### Database Management Enhancements
+- Added `/db_backup` and `/db_restore` commands for administrators
+- Implemented `/db_analyze` for developers to optimize database performance
+- Added automatic database maintenance with pruning of old backups
+- Implemented temporary data cleanup to reduce storage usage
+- Enhanced security validation for database administration commands
+
+#### Security Improvements
+- Added role-based access control for sensitive commands
+- Implemented comprehensive logging for configuration changes
+- Added rate limiting for database operations
+- Enhanced permission validation for administrative actions
 
 ### v0.32.002 - April 19, 2025
 

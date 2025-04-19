@@ -4,11 +4,11 @@ import sys
 from discord.ext import commands
 from dotenv import load_dotenv
 
-# Veramon Reunited - Version v0.32.001
+# Veramon Reunited - Version v0.32.002
 # Created by Killerdash117
 
 # Current version of the bot
-VERSION = "v0.32.001"
+VERSION = "v0.32.002"
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
@@ -43,6 +43,8 @@ async def load_extensions():
         'cogs.admin.developer_cog',
         'cogs.admin.admin_game_settings',
         'cogs.admin.admin_battle_system',
+        'cogs.admin.db_admin_cog',     # Database administration commands
+        'cogs.admin.setup_cog',        # Interactive setup wizard
         
         # Other cogs
         'cogs.web_integration_cog',
@@ -64,10 +66,13 @@ async def load_extensions():
 
 async def setup_database():
     """Initialize the database with required tables."""
-    db = Database()
+    from src.db.db_manager import get_db_manager
     
-    # Create database directory if it doesn't exist
+    print("Setting up database...")
+    
+    # Create necessary directories
     os.makedirs("data", exist_ok=True)
+    os.makedirs("data/backups", exist_ok=True)
     os.makedirs("data/quests", exist_ok=True)
     os.makedirs("data/quests/daily", exist_ok=True)
     os.makedirs("data/quests/weekly", exist_ok=True)
@@ -76,88 +81,11 @@ async def setup_database():
     os.makedirs("data/quests/events", exist_ok=True)
     os.makedirs("data/events", exist_ok=True)
     
-    # Ensure all required tables exist
-    await db.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            user_id TEXT PRIMARY KEY,
-            username TEXT,
-            tokens INTEGER DEFAULT 0,
-            last_daily_claim REAL DEFAULT 0,
-            daily_streak INTEGER DEFAULT 0,
-            is_vip INTEGER DEFAULT 0,
-            settings TEXT
-        )
-    """)
+    # Get the database manager and initialize all tables
+    db_manager = get_db_manager()
+    db_manager.initialize_database()
     
-    # Other existing tables...
-    
-    # Quest system tables
-    await db.execute("""
-        CREATE TABLE IF NOT EXISTS user_quests (
-            user_id TEXT PRIMARY KEY,
-            quest_data TEXT NOT NULL,
-            last_updated REAL DEFAULT (strftime('%s', 'now'))
-        )
-    """)
-    
-    await db.execute("""
-        CREATE TABLE IF NOT EXISTS user_badges (
-            user_id TEXT,
-            badge_id TEXT,
-            earned_at REAL,
-            PRIMARY KEY (user_id, badge_id)
-        )
-    """)
-    
-    await db.execute("""
-        CREATE TABLE IF NOT EXISTS user_titles (
-            user_id TEXT,
-            title_id TEXT,
-            is_active INTEGER DEFAULT 0,
-            PRIMARY KEY (user_id, title_id)
-        )
-    """)
-    
-    # Event system tables
-    await db.execute("""
-        CREATE TABLE IF NOT EXISTS event_reminders (
-            user_id TEXT,
-            event_id TEXT,
-            remind_at REAL,
-            reminded INTEGER DEFAULT 0,
-            PRIMARY KEY (user_id, event_id)
-        )
-    """)
-    
-    await db.execute("""
-        CREATE TABLE IF NOT EXISTS event_purchases (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id TEXT,
-            event_id TEXT,
-            item_id TEXT,
-            quantity INTEGER,
-            price INTEGER,
-            purchased_at REAL
-        )
-    """)
-    
-    await db.execute("""
-        CREATE TABLE IF NOT EXISTS event_contributions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id TEXT,
-            event_id TEXT,
-            contribution INTEGER,
-            contribution_type TEXT,
-            contributed_at REAL
-        )
-    """)
-    
-    # Create indices for improved performance
-    await db.execute("CREATE INDEX IF NOT EXISTS idx_user_quests_user_id ON user_quests(user_id)")
-    await db.execute("CREATE INDEX IF NOT EXISTS idx_event_reminders_remind_at ON event_reminders(remind_at)")
-    await db.execute("CREATE INDEX IF NOT EXISTS idx_event_contributions_event_id ON event_contributions(event_id)")
-    
-    logger.info("Database initialized")
+    print(f"Database setup complete. Version: {db_manager.get_db_version()}")
 
 @bot.event
 async def on_ready():

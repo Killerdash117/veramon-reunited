@@ -37,6 +37,8 @@ class ActionType(Enum):
     TEAM_VIEW = auto()
     TEAM_MODIFY = auto()
     TEAM_MEMBER_MODIFY = auto()
+    DB_INFO = auto()             # Viewing database information
+    DB_MANAGEMENT = auto()   # Performing database management tasks
 
 
 class SecurityManager:

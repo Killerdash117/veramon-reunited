@@ -596,7 +596,92 @@ class SecurityIntegration:
             event_type=event_type,
             details=details
         )
-
+    
+    @staticmethod
+    async def validate_db_command_access(
+        user_id: str,
+        command_name: str,
+        required_role: str = "admin"
+    ) -> Dict[str, Any]:
+        """
+        Validate if a user can access database management commands.
+        
+        This method enforces a two-tier access system:
+        - 'dev' role can access ALL database commands (including destructive ones)
+        - 'admin' role can only access a subset of safer database commands
+        
+        Args:
+            user_id: ID of the user
+            command_name: The database command being accessed
+            required_role: Minimum role required ('admin' or 'dev')
+            
+        Returns:
+            Dict: Validation results
+        """
+        security_manager = get_security_manager()
+        
+        # First check if user has developer role (highest privilege)
+        is_dev = security_manager.check_user_role(user_id, "developer")
+        
+        # If dev role is required and user doesn't have it, deny access
+        if required_role == "dev" and not is_dev:
+            return {
+                "valid": False,
+                "error": "This command requires developer privileges."
+            }
+            
+        # If admin role is required, check if user has admin OR dev role
+        if required_role == "admin":
+            is_admin = security_manager.check_user_role(user_id, "admin")
+            if not (is_admin or is_dev):
+                return {
+                    "valid": False,
+                    "error": "This command requires administrator privileges."
+                }
+        
+        # Define dangerous commands that only devs should access
+        dev_only_commands = ["db_reset", "db_restore", "db_clear_table"]
+        
+        # If command is in dev_only list but user is not dev, deny access
+        if command_name in dev_only_commands and not is_dev:
+            return {
+                "valid": False,
+                "error": f"The {command_name} command requires developer privileges due to its potential impact."
+            }
+            
+        # Apply rate limiting based on command impact
+        high_impact_commands = ["db_optimize", "db_backup"]
+        
+        if command_name in high_impact_commands:
+            # Limit high-impact commands to prevent server overload
+            rate_limited = not security_manager.check_rate_limit(
+                user_id, ActionType.DB_MANAGEMENT, 5, 300  # Max 5 high-impact DB operations per 5 minutes
+            )
+        else:
+            # Lower rate limit for standard commands
+            rate_limited = not security_manager.check_rate_limit(
+                user_id, ActionType.DB_INFO, 10, 60  # Max 10 standard DB operations per minute
+            )
+            
+        if rate_limited:
+            return {
+                "valid": False,
+                "error": "You're performing database operations too frequently. Please wait a moment."
+            }
+        
+        # Log the database command access for security auditing
+        security_manager.log_security_event(
+            user_id=user_id,
+            event_type="database_access",
+            details={
+                "command": command_name,
+                "timestamp": datetime.utcnow().isoformat()
+            }
+        )
+        
+        return {
+            "valid": True
+        }
 
 # Singleton instance
 _security_integration = None

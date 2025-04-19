@@ -5,7 +5,7 @@
 <img src="https://i.imgur.com/EMNMEsp.jpeg" alt="Veramon Reunited" width="500"/>
 
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/killerdash117/veramon-reunited/blob/master/LICENSE)
-[![version](https://img.shields.io/badge/version-v0.32.002-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
+[![version](https://img.shields.io/badge/version-v0.33.000-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
 [![discord.py](https://img.shields.io/badge/discord.py-2.3.0-blue.svg)](https://github.com/Rapptz/discord.py)
 [![status](https://img.shields.io/badge/status-in%20development-orange.svg)](https://github.com/killerdash117/veramon-reunited)
 
@@ -31,6 +31,8 @@ Inspired by classic creature-collecting games but reimagined for real-time multi
 - **Balance First** - Designed for long-term engagement without pay-to-win mechanics
 - **Accessible Design** - Easy to learn, with intuitive UI and helpful commands
 - **Customizable Experience** - Server admins can tailor settings to their community
+- **Admin-Friendly** - Interactive setup wizard and comprehensive management tools
+- **Optimized Performance** - Efficient database structure and storage management
 
 ---
 
@@ -308,6 +310,9 @@ All commands use Discord's slash command system for easy discovery and usage.
 | `/admin_give_veramon [user] [veramon_id]` | Give a Veramon to a user | `/admin_give_veramon @Username charizard` |
 | `/admin_give_tokens [user] [amount]` | Give tokens to a user | `/admin_give_tokens @Username 1000` |
 | `/admin_spawn_rate [biome] [rarity] [percentage]` | Adjust spawn rates | `/admin_spawn_rate forest legendary 0.01` |
+| `/setup` | Interactive bot configuration wizard | `/setup` |
+| `/db_backup` | Create database backups | `/db_backup` |
+| `/db_restore` | Restore from backups | `/db_restore` |
 
 </details>
 
@@ -359,6 +364,7 @@ Moderation capabilities for server moderators:
 #### ADMIN Level
 Server management powers for administrators:
 - All MOD level commands
+- `/setup` - Interactive bot configuration wizard
 - `/award` - Award tokens to users
 - `/event` - Create and manage events
 - `/config_spawns` - Configure spawn rates
@@ -368,6 +374,8 @@ Server management powers for administrators:
 - `/spawn_veramon` - Spawn any Veramon
 - `/manage_guild` - Guild management commands
 - `/manage_faction` - Faction management commands
+- `/db_backup` - Create database backups
+- `/db_restore` - Restore from backups
 
 #### DEV Level
 Complete system control for developers:
@@ -378,6 +386,8 @@ Complete system control for developers:
 - `/debug_logs` - Access debug logs
 - `/reload` - Reload bot modules
 - `/query` - Execute custom database queries
+- `/db_analyze` - Analyze database usage
+- `/setup_reset` - Reset all bot configuration
 
 </details>
 
@@ -440,7 +450,22 @@ Complete system control for developers:
 3. Authorize the required permissions
 4. The bot will join your server ready to use!
 
-### First-Time Setup
+### Quick Setup
+
+1. Run the interactive setup wizard with `/setup`
+2. Follow the step-by-step prompts to configure:
+   - General settings (bot prefix, status, timezone)
+   - Game features (battles, trading, quests, events)
+   - Economy settings (token rewards, starting balances)
+   - Spawn settings (rates, rarities, biomes)
+   - Channel configurations (for spawns, announcements, logs)
+   - Role assignments (admin, moderator, VIP)
+   - Security settings (rate limits, cooldowns)
+3. Your configuration changes are saved automatically
+
+### Manual Setup
+
+If you prefer a more hands-on approach, you can also set up the bot manually:
 
 1. Create these recommended roles (optional but encouraged):
    - **Veramon Trainer** - For regular users

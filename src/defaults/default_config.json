@@ -1,0 +1,74 @@
+{
+  "prefix": "!",
+  "bot_status": "online",
+  "bot_status_message": "Veramon Reunited | Use /help",
+  "timezone": "UTC",
+  "language": "en",
+  
+  "features": {
+    "battle_system": true,
+    "trading_system": true,
+    "quest_system": true,
+    "factions": true,
+    "events": true,
+    "leaderboards": true,
+    "achievements": true,
+    "daily_rewards": true
+  },
+  
+  "economy": {
+    "starting_tokens": 100,
+    "daily_tokens": 50,
+    "catch_reward": 10,
+    "battle_win_reward": 25,
+    "quest_reward_multiplier": 1.0,
+    "max_transfer_amount": 1000,
+    "shop_refresh_hours": 12
+  },
+  
+  "spawns": {
+    "spawn_rate_minutes": 15,
+    "spawn_rate_messages": 25,
+    "max_active_spawns": 5,
+    "common_rate": 65,
+    "uncommon_rate": 25,
+    "rare_rate": 8,
+    "epic_rate": 2,
+    "shiny_rate": 0.1,
+    "enabled_biomes": ["forest", "beach", "mountain", "city", "desert"]
+  },
+  
+  "channels": {
+    "spawn_channels": [],
+    "announcement_channel": null,
+    "leaderboard_channel": null,
+    "support_channel": null,
+    "log_channel": null
+  },
+  
+  "roles": {
+    "admin_role": null,
+    "moderator_role": null,
+    "vip_role": null
+  },
+  
+  "security": {
+    "max_daily_catches": 100,
+    "max_daily_battles": 50,
+    "max_token_transfers": 10,
+    "catch_cooldown_seconds": 30,
+    "battle_cooldown_seconds": 60,
+    "trade_cooldown_seconds": 120,
+    "ip_rate_limit": true,
+    "logging_level": "INFO"
+  },
+  
+  "setup_completed": false,
+  "general_settings": {"configured": false},
+  "game_features": {"configured": false},
+  "economy_settings": {"configured": false},
+  "spawn_settings": {"configured": false},
+  "channel_setup": {"configured": false},
+  "role_config": {"configured": false},
+  "security_settings": {"configured": false}
+}

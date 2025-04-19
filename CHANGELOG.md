@@ -4,7 +4,7 @@ This document tracks all notable changes to the Veramon Reunited Discord bot.
 
 <div align="center">
 
-![Version Status](https://img.shields.io/badge/Current%20Version-v0.31.003-brightgreen.svg)
+![Version Status](https://img.shields.io/badge/Current%20Version-v0.32.000-brightgreen.svg)
 ![Updated](https://img.shields.io/badge/Last%20Updated-April%2019%2C%202025-blue.svg)
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg)
 
@@ -26,6 +26,45 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
 ---
 
 ## Release History
+
+### 🎮 v0.32.000 - April 19, 2025
+
+> *Faction Economy System and Codebase Reorganization*
+
+#### 🏦 Faction Shop & Economy System
+- Implemented comprehensive faction shop system with level-based unlocks
+- Added faction leveling system with progressive XP requirements
+- Created unique faction-exclusive items and upgrades
+- Added faction treasury management for collective purchasing power
+- Implemented faction buff system for temporary faction-wide benefits
+- Added contribution tracking with faction contribution leaderboards 
+
+#### 💰 Economy Balance Improvements
+- Adjusted item prices across regular and faction shops for better game balance
+- Added 14 new items to the regular shop including consumables and boosts
+- Created token sinks to prevent currency inflation
+- Added token converter for transferring currency to faction treasuries
+- Implemented tiered pricing system based on item rarity and effects
+
+#### 📂 Codebase Reorganization
+- Restructured all cogs into logical categories:
+  - admin/ - Admin commands and tools
+  - economy/ - Economy and shop systems
+  - events/ - Special events and tournaments
+  - faction/ - Faction management
+  - gameplay/ - Core gameplay mechanics
+  - integration/ - External integrations
+  - moderation/ - Moderation tools
+  - settings/ - Configuration and settings
+  - social/ - Social features
+- Created proper __init__.py files for each directory
+- Improved module discoverability and organization
+
+#### 🔄 Integration Improvements
+- Integrated faction shop with existing economy system
+- Connected battle rewards to faction XP calculations
+- Enhanced faction UI with interactive elements
+- Added notification system for faction purchases and buffs
 
 ### 🎮 v0.31.003 - April 19, 2025
 

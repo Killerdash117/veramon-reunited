@@ -38,7 +38,27 @@
     "daily_token_bonus": 50,
     "daily_reset_hour": 0,
     "token_cap": 9999,
-    "starter_tokens": 100
+    "starter_tokens": 100,
+    "daily_tokens": 100,
+    "daily_streak_bonus": 25,
+    "max_streak_bonus": 100,
+    "quest_token_multiplier": 1.5,
+    "item_price_scaling": 1.2,
+    "token_find_chance": 0.1,
+    "token_find_amount": [5, 50]
+  },
+  "faction": {
+    "base_level_xp": 100,
+    "xp_curve_exponent": 2.0,
+    "treasury_contribution_xp_rate": 0.1,
+    "war_victory_xp": 1000,
+    "territory_claim_xp": 250,
+    "max_faction_level": 50,
+    "buff_cooldown_hours": 48,
+    "max_treasury_base": 500000,
+    "max_members_base": 20,
+    "creation_cost": 10000,
+    "shop_items_per_level": 3
   },
   "quest": {
     "max_active_quests": 5,

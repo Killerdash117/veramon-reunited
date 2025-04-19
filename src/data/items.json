@@ -2,43 +2,47 @@
   "token_magnet": {
     "name": "Token Magnet",
     "description": "Increases token gains by 25% for 1 hour.",
-    "price": 500,
+    "price": 750,
     "effect": "token_boost",
     "multiplier": 1.25,
+    "duration": 3600,
     "category": "boost",
     "icon": "🧲"
   },
   "xp_booster": {
     "name": "XP Booster",
     "description": "Increases XP gains by 25% for 1 hour.",
-    "price": 500,
+    "price": 750,
     "effect": "xp_boost",
     "multiplier": 1.25,
+    "duration": 3600,
     "category": "boost",
     "icon": "✨"
   },
   "rainbow_lure": {
     "name": "Rainbow Lure",
     "description": "Increases shiny encounter chance by 15% for 1 hour.",
-    "price": 1000,
+    "price": 1500,
     "effect": "shiny_boost",
     "multiplier": 1.15,
+    "duration": 3600,
     "category": "boost",
     "icon": "🌈"
   },
   "rarity_charm": {
     "name": "Rarity Charm",
     "description": "Increases chances of finding rare Veramon by 20% for 1 hour.",
-    "price": 800,
+    "price": 1200,
     "effect": "rarity_boost",
     "multiplier": 1.2,
+    "duration": 3600,
     "category": "boost",
     "icon": "🔮"
   },
   "ultra_capsule": {
     "name": "Ultra Capsule",
     "description": "Increases catch rate by 25% for your next 5 catches.",
-    "price": 300,
+    "price": 500,
     "effect": "catch_rate_boost",
     "uses": 5,
     "category": "capsule",
@@ -47,7 +51,7 @@
   "master_capsule": {
     "name": "Master Capsule",
     "description": "Guarantees catching any Veramon. One-time use.",
-    "price": 2500,
+    "price": 3500,
     "effect": "guaranteed_catch",
     "uses": 1,
     "category": "capsule",
@@ -56,7 +60,7 @@
   "shiny_reroll": {
     "name": "Shiny Reroller",
     "description": "Gives a 5% chance to reroll one of your Veramon into a shiny version.",
-    "price": 2000,
+    "price": 3000,
     "effect": "shiny_reroll",
     "uses": 1,
     "category": "special",
@@ -65,7 +69,7 @@
   "ability_booster": {
     "name": "Ability Booster",
     "description": "Increases one of your Veramon's stats by 10%.",
-    "price": 1500,
+    "price": 2500,
     "effect": "ability_boost",
     "uses": 1,
     "category": "special",
@@ -74,7 +78,7 @@
   "evolution_crystal": {
     "name": "Evolution Crystal",
     "description": "Allows you to evolve a Veramon without meeting level requirements.",
-    "price": 3000,
+    "price": 4000,
     "effect": "instant_evolution",
     "uses": 1,
     "category": "special",
@@ -83,7 +87,7 @@
   "recovery_potion": {
     "name": "Recovery Potion",
     "description": "Instantly heals all of your Veramon to full health.",
-    "price": 200,
+    "price": 350,
     "effect": "full_heal",
     "uses": 1,
     "category": "battle",
@@ -92,7 +96,7 @@
   "battle_amulet": {
     "name": "Battle Amulet",
     "description": "Increases battle rewards by 20% for your next 3 battles.",
-    "price": 600,
+    "price": 900,
     "effect": "battle_reward_boost",
     "uses": 3,
     "category": "battle",
@@ -101,7 +105,7 @@
   "nickname_tag": {
     "name": "Nickname Tag",
     "description": "Allows you to rename one of your Veramon.",
-    "price": 100,
+    "price": 250,
     "effect": "rename",
     "uses": 1,
     "category": "utility",
@@ -110,7 +114,7 @@
   "biome_scanner": {
     "name": "Biome Scanner",
     "description": "Reveals all Veramon types in a biome for 30 minutes.",
-    "price": 400,
+    "price": 600,
     "effect": "biome_scan",
     "duration": 1800,
     "category": "utility",
@@ -119,7 +123,7 @@
   "lucky_egg": {
     "name": "Lucky Egg",
     "description": "Doubles XP gain for your next 10 Veramon catches.",
-    "price": 750,
+    "price": 1000,
     "effect": "catch_xp_boost",
     "multiplier": 2.0,
     "uses": 10,
@@ -139,10 +143,123 @@
   "shiny_charm": {
     "name": "Shiny Charm",
     "description": "Permanently increases shiny encounter rate by 5%.",
-    "price": 10000,
+    "price": 15000,
     "effect": "permanent_shiny_boost",
     "multiplier": 1.05,
     "category": "legendary",
     "icon": "✨"
+  },
+  "type_enhancer": {
+    "name": "Type Enhancer",
+    "description": "Increases damage for moves of a specific type by 10% for your next 5 battles.",
+    "price": 1200,
+    "effect": "type_boost",
+    "multiplier": 1.1,
+    "uses": 5,
+    "category": "battle",
+    "icon": "⚔️"
+  },
+  "weather_orb": {
+    "name": "Weather Orb",
+    "description": "Allows you to set the weather in your next 3 battles to benefit your team.",
+    "price": 1500,
+    "effect": "weather_control",
+    "uses": 3,
+    "category": "battle",
+    "icon": "🔘"
+  },
+  "exp_share": {
+    "name": "EXP Share",
+    "description": "Shares battle experience with all Veramon in your party for 24 hours.",
+    "price": 2000,
+    "effect": "exp_share",
+    "duration": 86400,
+    "category": "boost",
+    "icon": "🔄"
+  },
+  "biome_pass": {
+    "name": "Biome Pass",
+    "description": "Grants access to a restricted biome for 1 hour.",
+    "price": 2500,
+    "effect": "biome_access",
+    "duration": 3600,
+    "category": "utility",
+    "icon": "🎫"
+  },
+  "token_doubler": {
+    "name": "Token Doubler",
+    "description": "Doubles all tokens earned from battles and quests for 30 minutes.",
+    "price": 2000,
+    "effect": "token_double",
+    "multiplier": 2.0,
+    "duration": 1800,
+    "category": "boost",
+    "icon": "💎"
+  },
+  "rare_candy": {
+    "name": "Rare Candy",
+    "description": "Instantly grants one level to a Veramon of your choice.",
+    "price": 800,
+    "effect": "instant_level",
+    "uses": 1,
+    "category": "special",
+    "icon": "🍬"
+  },
+  "treasure_map": {
+    "name": "Treasure Map",
+    "description": "Reveals a hidden cache of items and tokens somewhere in the world.",
+    "price": 3000,
+    "effect": "treasure_hunt",
+    "uses": 1,
+    "category": "special",
+    "icon": "🗺️"
+  },
+  "iv_scanner": {
+    "name": "IV Scanner",
+    "description": "Reveals the true potential of 5 Veramon of your choice.",
+    "price": 1800,
+    "effect": "reveal_ivs",
+    "uses": 5,
+    "category": "utility",
+    "icon": "📊"
+  },
+  "nature_mint": {
+    "name": "Nature Mint",
+    "description": "Changes the nature of one of your Veramon.",
+    "price": 2200,
+    "effect": "change_nature",
+    "uses": 1,
+    "category": "special",
+    "icon": "🌿"
+  },
+  "training_weights": {
+    "name": "Training Weights",
+    "description": "Increases EV gain by 50% for 2 hours.",
+    "price": 1600,
+    "effect": "ev_boost",
+    "multiplier": 1.5,
+    "duration": 7200,
+    "category": "boost",
+    "icon": "🏋️"
+  },
+  "token_converter": {
+    "name": "Token Converter",
+    "description": "Converts 5000 tokens into 1000 faction treasury tokens. Requires faction membership.",
+    "price": 5000,
+    "effect": "faction_contribution",
+    "amount": 1000,
+    "category": "faction",
+    "faction_required": true,
+    "icon": "🔄"
+  },
+  "lucky_clover": {
+    "name": "Lucky Clover",
+    "description": "Increases critical hit chance by 15% for your next 10 battles.",
+    "price": 1400,
+    "effect": "crit_boost",
+    "multiplier": 1.15,
+    "uses": 10,
+    "category": "battle",
+    "icon": "🍀"
   }
 }

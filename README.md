@@ -5,7 +5,7 @@
 <img src="https://i.imgur.com/EMNMEsp.jpeg" alt="Veramon Reunited" width="500"/>
 
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/killerdash117/veramon-reunited/blob/master/LICENSE)
-[![version](https://img.shields.io/badge/version-v0.32.000-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
+[![version](https://img.shields.io/badge/version-v0.32.002-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
 [![discord.py](https://img.shields.io/badge/discord.py-2.3.0-blue.svg)](https://github.com/Rapptz/discord.py)
 [![status](https://img.shields.io/badge/status-in%20development-orange.svg)](https://github.com/killerdash117/veramon-reunited)
 

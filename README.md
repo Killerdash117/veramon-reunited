@@ -314,6 +314,74 @@ All commands use Discord's slash command system for easy discovery and usage.
 
 ---
 
+## 🔒 Permission Levels and Commands
+
+Veramon Reunited has 5 permission levels, each with access to different commands:
+
+#### USER Level
+Basic gameplay access for all players:
+- `/explore` - Explore biomes for wild Veramon
+- `/catch` - Attempt to catch a wild Veramon
+- `/battle_wild` - Battle wild Veramon
+- `/profile` - View your trainer profile
+- `/balance` - Check your token balance
+- `/shop` - Browse the item shop
+- `/shop_buy` - Purchase items from the shop
+- `/transfer` - Transfer tokens to another player
+- `/inventory` - View your items
+- `/collection` - View your Veramon collection
+- `/veramon_details` - Check details of a Veramon
+- `/nickname` - Set a nickname for your Veramon
+- `/guild_join` - Join an existing guild
+
+#### VIP Level
+Enhanced gameplay experience with bonuses:
+- All USER level commands
+- `/daily_bonus` - Claim enhanced daily rewards
+- `/set_profile_theme` - Customize profile appearance
+- `/set_title` - Set a special title for your profile
+- Access to exclusive VIP shop items
+- Reduced spawn cooldowns (15s vs 30s)
+- Increased catch rates (+10% bonus)
+- Enhanced shiny rates (+20% bonus)
+- Increased XP gain (+25% bonus)
+
+#### MOD Level
+Moderation capabilities for server moderators:
+- All VIP level commands
+- `/view_logs` - Access system and user logs
+- `/cancel_trade` - Cancel other users' trades
+- `/moderate` - Moderate faction/guild chat
+- `/temp_ban` - Issue temporary bans
+- `/lookup_user` - View detailed user information
+- `/reset_cooldown` - Reset a user's cooldowns
+- `/view_reports` - Monitor user reports
+
+#### ADMIN Level
+Server management powers for administrators:
+- All MOD level commands
+- `/award` - Award tokens to users
+- `/event` - Create and manage events
+- `/config_spawns` - Configure spawn rates
+- `/override_price` - Override shop prices
+- `/modify_inventory` - Manage user inventories
+- `/delete_capture` - Delete captures
+- `/spawn_veramon` - Spawn any Veramon
+- `/manage_guild` - Guild management commands
+- `/manage_faction` - Faction management commands
+
+#### DEV Level
+Complete system control for developers:
+- All ADMIN level commands
+- `/create_veramon` - Create/modify Veramon
+- `/system_stats` - View system diagnostics
+- `/update_config` - Update bot configuration
+- `/debug_logs` - Access debug logs
+- `/reload` - Reload bot modules
+- `/query` - Execute custom database queries
+
+---
+
 ## 🚀 Setup Guide
 
 ### Adding to Your Server
@@ -326,10 +394,11 @@ All commands use Discord's slash command system for easy discovery and usage.
 ### First-Time Setup
 
 1. Create these recommended roles (optional but encouraged):
-   - **Veramon Trainer** - Default role for players
-   - **Veramon Moderator** - For trusted moderators
-   - **Veramon Admin** - For server administrators
-
+   - **Veramon Trainer** - For regular users
+   - **VIP** - For premium users or supporters
+   - **Mod** - For server moderators
+   - **Admin** - For server administrators
+   - **Dev** - For bot developers
 2. Start with basic commands:
    - `/help` - View available commands
    - `/start` - Begin your adventure

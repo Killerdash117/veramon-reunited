@@ -3,6 +3,12 @@ import asyncio
 from discord.ext import commands
 from dotenv import load_dotenv
 
+# Veramon Reunited - Version v0.15
+# Created by Killerdash117
+
+# Current version of the bot
+VERSION = "v0.15"
+
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 
@@ -13,11 +19,29 @@ intents.guilds = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 async def load_extensions():
-    await bot.load_extension("cogs.catching_cog")
-    await bot.load_extension("cogs.battle_cog")
-    await bot.load_extension("cogs.profile_cog")
-    await bot.load_extension("cogs.economy_cog")  # Load the economy module
-
+    """Load all extension cogs."""
+    # Add all extension cogs here:
+    extensions = [
+        'cogs.enhanced_battle_cog',
+        'cogs.economy_cog',
+        'cogs.profile_cog',
+        'cogs.faction_cog',
+        'cogs.trading_cog',
+        'cogs.guild_cog',
+        'cogs.web_integration_cog',
+        'cogs.admin_cog',
+        'cogs.admin_game_settings',
+        'cogs.admin_battle_system',
+        'cogs.leaderboard_cog',
+        'cogs.tournament_cog'
+    ]
+    
+    for extension in extensions:
+        try:
+            await bot.load_extension(extension)
+            print(f"Loaded extension: {extension}")
+        except Exception as e:
+            print(f"Failed to load extension {extension}: {e}")
 
 @bot.event
 async def on_ready():

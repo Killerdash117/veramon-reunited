@@ -1,4 +1,8 @@
 # Veramon Reunited
+[![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/killerdash117/veramon-reunited/blob/master/LICENSE)
+[![version](https://img.shields.io/badge/version-0.450-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
+[![discord.py](https://img.shields.io/badge/discord.py-2.3.0-blue.svg)](https://github.com/Rapptz/discord.py)
+[![status](https://img.shields.io/badge/status-in%20development-orange.svg)](https://github.com/killerdash117/veramon-reunited)
 
 <div align="center">
 
@@ -16,6 +20,10 @@
 ## Overview
 
 Veramon Reunited delivers a rich monster-catching RPG experience within Discord. Inspired by classic creature-collecting games yet reimagined for persistent multiplayer action, this bot is built for communities that crave long-term progression, in-depth customization, and both competitive and cooperative gameplay.
+
+### Quick Links
+- [Invite Bot](#setup) - Add Veramon Reunited to your server
+- [GitHub Repository](https://github.com/killerdash117/veramon-reunited) - View source code and contribute
 
 ---
 
@@ -35,14 +43,31 @@ Veramon Reunited delivers a rich monster-catching RPG experience within Discord.
 
 ### Battle System
 - **Turn-Based Combat** with stats, type advantages, and abilities
-- **PvP Duels** between trainers (planned feature)
-- **Gyms & Challenges** for testing your team's strength
+- **Player vs Player (PvP)** battles to compete against other trainers
+- **Player vs Environment (PvE)** battles against NPC trainers
+- **Multi-Player Battles** with up to 4 players (2v2 or Free-for-All)
+- **Interactive Battle UI** with move selection and battle feedback
+- **Type Effectiveness** system with strengths and weaknesses
+- **Battle Rewards** including XP, tokens, and evolution opportunities
+- **Commands:**
+  - `/battle_pve [difficulty]` - Battle against an NPC trainer
+  - `/battle_pvp [player]` - Challenge another player to a battle
+  - `/battle_multi [type] [team_size]` - Start a multi-player battle
 
 ### Economy & Inventory
 - **Token System** for purchasing items and upgrades
 - **Item Shop** with catch tools, boosts, and cosmetics
 - **Inventory Management** for organizing your collection
 - **Trading System** for exchanging with other players
+  - Player-to-player Veramon trading
+  - Trade verification to prevent scams
+  - Trade history tracking
+  - Commands:
+    - `/trade_create` - Start a trade with another player
+    - `/trade_add` - Add a Veramon to the trade
+    - `/trade_remove` - Remove a Veramon from the trade
+    - `/trade_cancel` - Cancel an active trade
+    - `/trade_list` - View active and recent trades
 
 ### Social Systems
 
@@ -73,6 +98,23 @@ Veramon Reunited delivers a rich monster-catching RPG experience within Discord.
   - `/faction_upgrade` - Purchase permanent faction upgrades
   - `/faction_buff` - Activate temporary faction-wide buffs
   - `/faction_war` - Declare war on another faction
+
+### Admin Command System
+- **Veramon Management:**
+  - `/admin_add_veramon` - Add a new Veramon to the game
+  - `/admin_edit_veramon` - Edit an existing Veramon's properties
+  - `/admin_give_veramon` - Give a Veramon to a player (with customizable level, shiny status)
+- **Ability Management:**
+  - `/admin_add_ability` - Add a new ability with custom effects
+- **Game Settings:**
+  - `/admin_config_rarity` - Configure rarity tier settings (catch rates, spawn weights, rewards)
+  - `/admin_evolution_rules` - Adjust evolution mechanics (level multipliers, stat boosts)
+  - `/admin_battle_settings` - Fine-tune battle system parameters
+  - `/admin_spawn_rate` - Adjust spawn rates for specific biomes
+- **Data Management:**
+  - `/admin_export_data` - Export game data to JSON for backup purposes
+  - `/admin_import_data` - Import game data from backups
+  - `/admin_rebuild_db` - Rebuild database tables (with option to preserve data)
 
 ### Role-Based Permissions
 - **User:** Basic gameplay commands (exploring, catching, battling)
@@ -245,6 +287,10 @@ The SQLite database includes these key tables:
 
 ---
 
+For a detailed history of all changes and version information, see the [CHANGELOG.md](CHANGELOG.md) file.
+
+---
+
 ## Contributing
 
 We welcome contributions to Veramon Reunited! Here's how to get started:
@@ -255,15 +301,21 @@ We welcome contributions to Veramon Reunited! Here's how to get started:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+### Development Guidelines
+- Follow the existing code style and organization
+- Add appropriate documentation for new features
+- Include tests for new functionality when possible
+- Ensure your code works with existing systems
+
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 ## Credits
 
-- Built with [Discord.py](https://github.com/Rapptz/discord.py)
-- Created by Killerdash117
+- Built with [Discord.py](https://github.com/Rapptz/discord.py) v2.3.0
+- Created by [Killerdash117](https://github.com/killerdash117)

@@ -1,0 +1,778 @@
+{
+  "Embering": {
+    "name": "Embering",
+    "type": [
+      "Fire"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 45,
+      "atk": 55,
+      "def": 40,
+      "sp_atk": 60,
+      "sp_def": 40,
+      "speed": 65
+    },
+    "biomes": [
+      "volcano",
+      "plains"
+    ],
+    "flavor": "A small fire creature with a constantly burning tail. It tends to gather in warm areas during cold weather.",
+    "abilities": [
+      "Ember",
+      "Scratch",
+      "Fire Spin",
+      "Tackle"
+    ],
+    "evolution": {
+      "evolves_to": "Blazerine",
+      "level_required": 16
+    }
+  },
+  "Blazerine": {
+    "name": "Blazerine",
+    "type": [
+      "Fire"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 60,
+      "atk": 75,
+      "def": 60,
+      "sp_atk": 85,
+      "sp_def": 60,
+      "speed": 80
+    },
+    "biomes": [
+      "volcano",
+      "mountain"
+    ],
+    "flavor": "Its body temperature exceeds 1000 degrees Celsius. When threatened, it creates a wall of flames to protect itself.",
+    "abilities": [
+      "Ember",
+      "Flamethrower",
+      "Fire Spin",
+      "Fire Blast",
+      "Slash"
+    ],
+    "evolution": {
+      "evolves_to": "Inferstar",
+      "level_required": 36
+    }
+  },
+  "Inferstar": {
+    "name": "Inferstar",
+    "type": [
+      "Fire",
+      "Flying"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 80,
+      "atk": 95,
+      "def": 75,
+      "sp_atk": 120,
+      "sp_def": 85,
+      "speed": 110
+    },
+    "biomes": [
+      "volcano",
+      "mountain"
+    ],
+    "flavor": "Legend says that when Inferstar soars through the night sky, meteors rain down in its wake. Its fire never extinguishes.",
+    "abilities": [
+      "Inferno",
+      "Flamethrower",
+      "Sky Attack",
+      "Fire Blast",
+      "Heat Wave",
+      "Supernova Burst"
+    ]
+  },
+  "Aqualet": {
+    "name": "Aqualet",
+    "type": [
+      "Water"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 50,
+      "atk": 45,
+      "def": 50,
+      "sp_atk": 55,
+      "sp_def": 55,
+      "speed": 45
+    },
+    "biomes": [
+      "beach",
+      "river",
+      "lake"
+    ],
+    "flavor": "A small aquatic creature that can breathe both in water and on land. Its skin is always moist and slippery.",
+    "abilities": [
+      "Water Gun",
+      "Tackle",
+      "Bubble",
+      "Water Pulse"
+    ],
+    "evolution": {
+      "evolves_to": "Aquarell",
+      "level_required": 16
+    }
+  },
+  "Aquarell": {
+    "name": "Aquarell",
+    "type": [
+      "Water"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 65,
+      "atk": 60,
+      "def": 70,
+      "sp_atk": 75,
+      "sp_def": 80,
+      "speed": 60
+    },
+    "biomes": [
+      "beach",
+      "ocean",
+      "river"
+    ],
+    "flavor": "It can manipulate water currents at will. During storms, it dives deep underwater to avoid being caught in turbulent waves.",
+    "abilities": [
+      "Water Gun",
+      "Aqua Jet",
+      "Bubble Beam",
+      "Hydro Pump",
+      "Surf"
+    ],
+    "evolution": {
+      "evolves_to": "Tsunamoth",
+      "level_required": 36
+    }
+  },
+  "Tsunamoth": {
+    "name": "Tsunamoth",
+    "type": [
+      "Water",
+      "Dragon"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 90,
+      "atk": 85,
+      "def": 100,
+      "sp_atk": 110,
+      "sp_def": 100,
+      "speed": 80
+    },
+    "biomes": [
+      "ocean",
+      "deep_sea"
+    ],
+    "flavor": "Ancient sailors told tales of Tsunamoth creating massive waves that could swallow entire fleets. It controls the ocean depths.",
+    "abilities": [
+      "Hydro Cannon",
+      "Dragon Pulse",
+      "Tidal Wave",
+      "Hydro Pump",
+      "Aqua Tail",
+      "Ocean Fury"
+    ]
+  },
+  "Leaflet": {
+    "name": "Leaflet",
+    "type": [
+      "Grass"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 55,
+      "atk": 45,
+      "def": 45,
+      "sp_atk": 50,
+      "sp_def": 60,
+      "speed": 50
+    },
+    "biomes": [
+      "forest",
+      "plains",
+      "jungle"
+    ],
+    "flavor": "Tiny leaf buds grow from its body. It absorbs sunlight efficiently and can go days without water.",
+    "abilities": [
+      "Vine Whip",
+      "Tackle",
+      "Razor Leaf",
+      "Growth"
+    ],
+    "evolution": {
+      "evolves_to": "Florancient",
+      "level_required": 16
+    }
+  },
+  "Florancient": {
+    "name": "Florancient",
+    "type": [
+      "Grass"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 70,
+      "atk": 60,
+      "def": 65,
+      "sp_atk": 80,
+      "sp_def": 85,
+      "speed": 65
+    },
+    "biomes": [
+      "forest",
+      "jungle"
+    ],
+    "flavor": "The flower on its back blooms more vibrantly when it's healthy. It spreads a soothing aroma that calms other creatures.",
+    "abilities": [
+      "Vine Whip",
+      "Petal Dance",
+      "Razor Leaf",
+      "Solar Beam",
+      "Synthesis"
+    ],
+    "evolution": {
+      "evolves_to": "Arborlord",
+      "level_required": 36
+    }
+  },
+  "Arborlord": {
+    "name": "Arborlord",
+    "type": [
+      "Grass",
+      "Fairy"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 95,
+      "atk": 75,
+      "def": 85,
+      "sp_atk": 105,
+      "sp_def": 115,
+      "speed": 70
+    },
+    "biomes": [
+      "ancient_forest",
+      "jungle"
+    ],
+    "flavor": "Arborlord is said to be the guardian of ancient forests. Where it walks, plants flourish and bloom instantly.",
+    "abilities": [
+      "Petal Blizzard",
+      "Moonblast",
+      "Solar Beam",
+      "Frenzy Plant",
+      "Nature's Wrath",
+      "Forest Blessing"
+    ]
+  },
+  "Zappawatt": {
+    "name": "Zappawatt",
+    "type": [
+      "Electric"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 40,
+      "atk": 50,
+      "def": 40,
+      "sp_atk": 60,
+      "sp_def": 45,
+      "speed": 70
+    },
+    "biomes": [
+      "plains",
+      "urban",
+      "power_plant"
+    ],
+    "flavor": "Its cheeks store electricity that sometimes discharges when it's startled. It's attracted to electronic devices.",
+    "abilities": [
+      "Thunder Shock",
+      "Quick Attack",
+      "Spark",
+      "Thunderbolt"
+    ],
+    "evolution": {
+      "evolves_to": "Voltian",
+      "level_required": 16
+    }
+  },
+  "Voltian": {
+    "name": "Voltian",
+    "type": [
+      "Electric"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 60,
+      "atk": 70,
+      "def": 55,
+      "sp_atk": 85,
+      "sp_def": 60,
+      "speed": 95
+    },
+    "biomes": [
+      "plains",
+      "power_plant"
+    ],
+    "flavor": "It generates enough electricity to power a small town. During thunderstorms, it races to the highest point to absorb lightning.",
+    "abilities": [
+      "Thunder Shock",
+      "Wild Charge",
+      "Thunderbolt",
+      "Volt Switch",
+      "Discharge"
+    ],
+    "evolution": {
+      "evolves_to": "Thunderex",
+      "level_required": 36
+    }
+  },
+  "Thunderex": {
+    "name": "Thunderex",
+    "type": [
+      "Electric",
+      "Steel"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 75,
+      "atk": 95,
+      "def": 80,
+      "sp_atk": 120,
+      "sp_def": 85,
+      "speed": 130
+    },
+    "biomes": [
+      "power_plant",
+      "mountain"
+    ],
+    "flavor": "Its body contains an organ that produces unlimited electricity. Scientists study Thunderex hoping to discover sustainable energy.",
+    "abilities": [
+      "Thunder",
+      "Zap Cannon",
+      "Flash Cannon",
+      "Iron Tail",
+      "Thunder Wave",
+      "Lightning Storm"
+    ]
+  },
+  "Rocklet": {
+    "name": "Rocklet",
+    "type": [
+      "Rock"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 60,
+      "atk": 65,
+      "def": 75,
+      "sp_atk": 40,
+      "sp_def": 50,
+      "speed": 30
+    },
+    "biomes": [
+      "mountain",
+      "cave",
+      "desert"
+    ],
+    "flavor": "Its outer shell is made of compressed minerals. It rolls into a ball when threatened and can bounce surprisingly high.",
+    "abilities": [
+      "Rock Throw",
+      "Tackle",
+      "Rollout",
+      "Rock Polish"
+    ],
+    "evolution": {
+      "evolves_to": "Boulderush",
+      "level_required": 16
+    }
+  },
+  "Boulderush": {
+    "name": "Boulderush",
+    "type": [
+      "Rock"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 75,
+      "atk": 85,
+      "def": 100,
+      "sp_atk": 55,
+      "sp_def": 65,
+      "speed": 40
+    },
+    "biomes": [
+      "mountain",
+      "cave"
+    ],
+    "flavor": "Its massive body can demolish obstacles with ease. When rolling downhill, it can reach speeds of over 60 mph.",
+    "abilities": [
+      "Rock Throw",
+      "Rock Slide",
+      "Rollout",
+      "Stone Edge",
+      "Earthquake"
+    ],
+    "evolution": {
+      "evolves_to": "Boulderback",
+      "level_required": 36
+    }
+  },
+  "Boulderback": {
+    "name": "Boulderback",
+    "type": [
+      "Rock",
+      "Ground"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 95,
+      "atk": 95,
+      "def": 140,
+      "sp_atk": 65,
+      "sp_def": 80,
+      "speed": 45
+    },
+    "biomes": [
+      "mountain",
+      "cave"
+    ],
+    "flavor": "Its massive rock shell can withstand the most powerful attacks. It's said to sleep for decades at a time in mountain caves.",
+    "abilities": [
+      "Rock Throw",
+      "Rock Slide",
+      "Earthquake",
+      "Rollout",
+      "Stone Edge",
+      "Mountain Crush"
+    ]
+  },
+  "Psykit": {
+    "name": "Psykit",
+    "type": [
+      "Psychic"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 40,
+      "atk": 35,
+      "def": 40,
+      "sp_atk": 65,
+      "sp_def": 60,
+      "speed": 65
+    },
+    "biomes": [
+      "urban",
+      "temple",
+      "ruins"
+    ],
+    "flavor": "Its brain is highly developed even from birth. It can use telekinesis to lift objects five times its weight.",
+    "abilities": [
+      "Confusion",
+      "Teleport",
+      "Psybeam",
+      "Calm Mind"
+    ],
+    "evolution": {
+      "evolves_to": "Mentalis",
+      "level_required": 16
+    }
+  },
+  "Mentalis": {
+    "name": "Mentalis",
+    "type": [
+      "Psychic"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 60,
+      "atk": 45,
+      "def": 55,
+      "sp_atk": 95,
+      "sp_def": 85,
+      "speed": 80
+    },
+    "biomes": [
+      "temple",
+      "ruins"
+    ],
+    "flavor": "It can read the thoughts of others within a 100-foot radius. Some people train Mentalis to help with therapy and meditation.",
+    "abilities": [
+      "Confusion",
+      "Psychic",
+      "Psybeam",
+      "Telekinesis",
+      "Future Sight"
+    ],
+    "evolution": {
+      "evolves_to": "Omnimentus",
+      "level_required": 36
+    }
+  },
+  "Omnimentus": {
+    "name": "Omnimentus",
+    "type": [
+      "Psychic",
+      "Fairy"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 80,
+      "atk": 65,
+      "def": 75,
+      "sp_atk": 135,
+      "sp_def": 120,
+      "speed": 95
+    },
+    "biomes": [
+      "temple",
+      "celestial_plane"
+    ],
+    "flavor": "Its psychic powers transcend the physical realm. Omnimentus can see both the past and future simultaneously.",
+    "abilities": [
+      "Psychic",
+      "Moonblast",
+      "Future Sight",
+      "Telekinesis",
+      "Mind Control",
+      "Cosmic Power"
+    ]
+  },
+  "Venomite": {
+    "name": "Venomite",
+    "type": [
+      "Poison"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 45,
+      "atk": 55,
+      "def": 45,
+      "sp_atk": 55,
+      "sp_def": 45,
+      "speed": 55
+    },
+    "biomes": [
+      "swamp",
+      "jungle",
+      "cave"
+    ],
+    "flavor": "Its body contains over a dozen different toxins. Small sacs on its skin release poison when it feels threatened.",
+    "abilities": [
+      "Poison Sting",
+      "Acid",
+      "Venoshock",
+      "Toxic"
+    ],
+    "evolution": {
+      "evolves_to": "Toxigill",
+      "level_required": 16
+    }
+  },
+  "Toxigill": {
+    "name": "Toxigill",
+    "type": [
+      "Poison"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 65,
+      "atk": 75,
+      "def": 60,
+      "sp_atk": 80,
+      "sp_def": 60,
+      "speed": 70
+    },
+    "biomes": [
+      "swamp",
+      "toxic_waste"
+    ],
+    "flavor": "The gills on its neck can filter even the most toxic substances. It thrives in polluted environments.",
+    "abilities": [
+      "Poison Sting",
+      "Sludge Bomb",
+      "Venoshock",
+      "Toxic",
+      "Acid Spray"
+    ],
+    "evolution": {
+      "evolves_to": "Venomperor",
+      "level_required": 36
+    }
+  },
+  "Venomperor": {
+    "name": "Venomperor",
+    "type": [
+      "Poison",
+      "Dark"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 85,
+      "atk": 100,
+      "def": 85,
+      "sp_atk": 115,
+      "sp_def": 75,
+      "speed": 90
+    },
+    "biomes": [
+      "toxic_waste",
+      "dark_forest"
+    ],
+    "flavor": "The most lethal Veramon known to exist. A single drop of its concentrated venom can dissolve metal.",
+    "abilities": [
+      "Sludge Wave",
+      "Dark Pulse",
+      "Belch",
+      "Gunk Shot",
+      "Venoshock",
+      "Venom Eclipse"
+    ]
+  },
+  "Froslet": {
+    "name": "Froslet",
+    "type": [
+      "Ice"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 50,
+      "atk": 50,
+      "def": 50,
+      "sp_atk": 50,
+      "sp_def": 50,
+      "speed": 50
+    },
+    "biomes": [
+      "tundra",
+      "mountain_peak",
+      "arctic"
+    ],
+    "flavor": "Its body temperature is below freezing. Froslet can create small ice crystals from the moisture in the air.",
+    "abilities": [
+      "Powder Snow",
+      "Ice Shard",
+      "Icy Wind",
+      "Hail"
+    ],
+    "evolution": {
+      "evolves_to": "Glacialisk",
+      "level_required": 16
+    }
+  },
+  "Glacialisk": {
+    "name": "Glacialisk",
+    "type": [
+      "Ice"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 70,
+      "atk": 65,
+      "def": 70,
+      "sp_atk": 75,
+      "sp_def": 75,
+      "speed": 65
+    },
+    "biomes": [
+      "tundra",
+      "arctic"
+    ],
+    "flavor": "It can survive in the harshest blizzards. The ice crystals on its body never melt, even in intense heat.",
+    "abilities": [
+      "Powder Snow",
+      "Ice Beam",
+      "Avalanche",
+      "Blizzard",
+      "Frost Breath"
+    ],
+    "evolution": {
+      "evolves_to": "Frostitan",
+      "level_required": 36
+    }
+  },
+  "Frostitan": {
+    "name": "Frostitan",
+    "type": [
+      "Ice",
+      "Water"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 95,
+      "atk": 85,
+      "def": 95,
+      "sp_atk": 110,
+      "sp_def": 95,
+      "speed": 65
+    },
+    "biomes": [
+      "glacier",
+      "arctic"
+    ],
+    "flavor": "Ancient legends speak of Frostitan bringing ice ages with its breath. It can freeze entire oceans with a single roar.",
+    "abilities": [
+      "Blizzard",
+      "Hydro Pump",
+      "Sheer Cold",
+      "Glaciate",
+      "Ice Beam",
+      "Frozen Apocalypse"
+    ]
+  }
+}

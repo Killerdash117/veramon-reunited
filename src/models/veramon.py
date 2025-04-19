@@ -1,5 +1,6 @@
 import random
 from typing import Dict, List, Optional, Tuple, Union
+from src.utils.data_loader import load_all_veramon_data
 
 class Veramon:
     """
@@ -8,14 +9,24 @@ class Veramon:
     """
     def __init__(self, 
                  name: str, 
-                 data: Dict, 
+                 data: Dict = None, 
                  level: int = 1, 
                  shiny: bool = False,
                  nickname: Optional[str] = None,
                  experience: int = 0,
                  capture_id: Optional[int] = None):
         self.name = name
-        self.data = data
+        
+        # Auto-load data if not provided
+        if data is None:
+            all_veramon_data = load_all_veramon_data()
+            if name in all_veramon_data:
+                self.data = all_veramon_data[name]
+            else:
+                raise ValueError(f"Veramon {name} not found in data files")
+        else:
+            self.data = data
+            
         self.level = level
         self.shiny = shiny
         self.nickname = nickname

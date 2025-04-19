@@ -126,130 +126,247 @@ def initialize_db():
         last_active TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (faction_id, user_id),
         FOREIGN KEY (faction_id) REFERENCES factions(faction_id) ON DELETE CASCADE,
-        FOREIGN KEY (rank_id) REFERENCES faction_ranks(rank_id) ON DELETE CASCADE
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
     )
     """)
     
-    # Faction upgrades table - all possible faction upgrades
+    # Faction activity log
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS faction_activity (
+        activity_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        faction_id INTEGER NOT NULL,
+        user_id TEXT,
+        activity_type TEXT NOT NULL,
+        activity_data TEXT NOT NULL,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (faction_id) REFERENCES factions(faction_id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    )
+    """)
+    
+    # Faction upgrades - permanent faction improvements
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS faction_upgrades (
         upgrade_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        description TEXT NOT NULL,
-        cost INTEGER NOT NULL,
-        max_level INTEGER NOT NULL,
+        faction_id INTEGER NOT NULL,
         upgrade_type TEXT NOT NULL,
-        effect_per_level REAL NOT NULL
-    )
-    """)
-    
-    # Faction purchased upgrades - tracks which upgrades each faction has purchased
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS faction_purchased_upgrades (
-        faction_id INTEGER NOT NULL,
-        upgrade_id INTEGER NOT NULL,
-        level INTEGER NOT NULL DEFAULT 1,
+        level INTEGER DEFAULT 1,
         purchased_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (faction_id, upgrade_id),
-        FOREIGN KEY (faction_id) REFERENCES factions(faction_id) ON DELETE CASCADE,
-        FOREIGN KEY (upgrade_id) REFERENCES faction_upgrades(upgrade_id) ON DELETE CASCADE
-    )
-    """)
-    
-    # Faction wars - tracks ongoing faction vs. faction competitions
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS faction_wars (
-        war_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        faction1_id INTEGER NOT NULL,
-        faction2_id INTEGER NOT NULL,
-        start_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        end_time TEXT NOT NULL,
-        faction1_score INTEGER DEFAULT 0,
-        faction2_score INTEGER DEFAULT 0,
-        status TEXT DEFAULT 'active',
-        reward_pool INTEGER DEFAULT 0,
-        war_type TEXT DEFAULT 'standard',
-        FOREIGN KEY (faction1_id) REFERENCES factions(faction_id) ON DELETE CASCADE,
-        FOREIGN KEY (faction2_id) REFERENCES factions(faction_id) ON DELETE CASCADE
-    )
-    """)
-    
-    # Faction territories - areas that factions can control
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS faction_territories (
-        territory_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        description TEXT,
-        controlling_faction_id INTEGER,
-        capture_date TEXT,
-        resource_type TEXT NOT NULL,
-        resource_amount INTEGER NOT NULL,
-        cooldown_ends TEXT,
-        FOREIGN KEY (controlling_faction_id) REFERENCES factions(faction_id) ON DELETE SET NULL
-    )
-    """)
-    
-    # Faction raid events - special PvE challenges for factions
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS faction_raids (
-        raid_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        description TEXT,
-        start_time TEXT NOT NULL,
-        end_time TEXT NOT NULL,
-        difficulty TEXT NOT NULL,
-        boss_name TEXT NOT NULL,
-        boss_hp INTEGER NOT NULL,
-        status TEXT DEFAULT 'scheduled',
-        reward_tokens INTEGER NOT NULL,
-        reward_xp INTEGER NOT NULL,
-        min_participants INTEGER DEFAULT 10
-    )
-    """)
-    
-    # Faction raid participants - tracks which factions are participating in raids
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS faction_raid_participants (
-        raid_id INTEGER NOT NULL,
-        faction_id INTEGER NOT NULL,
-        join_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        damage_dealt INTEGER DEFAULT 0,
-        status TEXT DEFAULT 'joined',
-        PRIMARY KEY (raid_id, faction_id),
-        FOREIGN KEY (raid_id) REFERENCES faction_raids(raid_id) ON DELETE CASCADE,
+        effect_data TEXT NOT NULL,
         FOREIGN KEY (faction_id) REFERENCES factions(faction_id) ON DELETE CASCADE
     )
     """)
     
-    # Insert default faction upgrades
-    cursor.execute("SELECT COUNT(*) FROM faction_upgrades")
-    if cursor.fetchone()[0] == 0:
-        upgrades = [
-            ("Catch Rate Boost", "Increases catch success rate for all faction members", 50000, 5, "catch_rate", 0.05),
-            ("Shiny Rate Boost", "Increases chance of encountering shiny Veramon", 100000, 3, "shiny_rate", 0.10),
-            ("XP Boost", "Increases XP gained from all activities", 75000, 5, "xp_gain", 0.10),
-            ("Token Boost", "Increases tokens earned from activities", 60000, 5, "token_gain", 0.10),
-            ("Member Capacity", "Increases maximum member capacity", 150000, 3, "member_capacity", 25),
-            ("Territory Control", "Allows faction to control more territories", 200000, 3, "territory_capacity", 1),
-            ("Daily Token Pool", "Provides daily tokens to distribute among members", 80000, 5, "daily_tokens", 500),
-            ("Raid Damage", "Increases damage dealt in faction raids", 90000, 5, "raid_damage", 0.15),
-            ("War Power", "Increases points earned in faction wars", 120000, 4, "war_points", 0.15),
-            ("Resource Production", "Increases resources gained from territories", 70000, 5, "resource_rate", 0.20)
-        ]
-        
-        for upgrade in upgrades:
-            cursor.execute(
-                "INSERT INTO faction_upgrades (name, description, cost, max_level, upgrade_type, effect_per_level) VALUES (?, ?, ?, ?, ?, ?)",
-                upgrade
-            )
+    # Faction buffs - temporary faction-wide effects
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS faction_buffs (
+        buff_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        faction_id INTEGER NOT NULL,
+        buff_type TEXT NOT NULL,
+        strength INTEGER NOT NULL,
+        start_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        end_time TEXT NOT NULL,
+        applied_by TEXT NOT NULL,
+        FOREIGN KEY (faction_id) REFERENCES factions(faction_id) ON DELETE CASCADE,
+        FOREIGN KEY (applied_by) REFERENCES users(user_id)
+    )
+    """)
     
-    # Create indexes for better query performance
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_captures_user_id ON captures(user_id)")
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_inventory_user_id ON inventory(user_id)")
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_captures_active ON captures(user_id, active)")
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_faction_members ON faction_members(user_id)")
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_faction_upgrades ON faction_purchased_upgrades(faction_id)")
-    cursor.execute("CREATE INDEX IF NOT EXISTS idx_territories ON faction_territories(controlling_faction_id)")
+    # Faction territories - locations controlled by factions
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS faction_territories (
+        territory_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        faction_id INTEGER,
+        name TEXT NOT NULL,
+        resource_type TEXT NOT NULL,
+        capture_time TEXT,
+        contested BOOLEAN DEFAULT 0,
+        location_data TEXT NOT NULL,
+        FOREIGN KEY (faction_id) REFERENCES factions(faction_id) ON DELETE SET NULL
+    )
+    """)
+    
+    # Faction wars - track faction vs faction conflicts
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS faction_wars (
+        war_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        attacker_id INTEGER NOT NULL,
+        defender_id INTEGER NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        start_time TEXT,
+        end_time TEXT,
+        territory_id INTEGER,
+        score_attacker INTEGER DEFAULT 0,
+        score_defender INTEGER DEFAULT 0,
+        FOREIGN KEY (attacker_id) REFERENCES factions(faction_id),
+        FOREIGN KEY (defender_id) REFERENCES factions(faction_id),
+        FOREIGN KEY (territory_id) REFERENCES faction_territories(territory_id)
+    )
+    """)
+    
+    # Faction war participation - track individual contributions to wars
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS faction_war_participants (
+        war_id INTEGER NOT NULL,
+        user_id TEXT NOT NULL,
+        participation_type TEXT NOT NULL,
+        contribution_points INTEGER DEFAULT 0,
+        joined_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (war_id, user_id),
+        FOREIGN KEY (war_id) REFERENCES faction_wars(war_id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    )
+    """)
+    
+    # Create indices for faction-related tables
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_faction_members ON faction_members(faction_id, user_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_faction_activity ON faction_activity(faction_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_faction_upgrades ON faction_upgrades(faction_id, upgrade_type)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_faction_buffs ON faction_buffs(faction_id, buff_type)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_faction_territories ON faction_territories(faction_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_faction_wars ON faction_wars(attacker_id, defender_id)")
+    
+    # Trades system
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS trades (
+        trade_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        initiator_id TEXT NOT NULL,
+        recipient_id TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (initiator_id) REFERENCES users(user_id),
+        FOREIGN KEY (recipient_id) REFERENCES users(user_id)
+    )
+    """)
+    
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS trade_items (
+        trade_id INTEGER NOT NULL,
+        item_type TEXT NOT NULL,
+        item_id INTEGER NOT NULL,
+        owner_id TEXT NOT NULL,
+        quantity INTEGER DEFAULT 1,
+        PRIMARY KEY (trade_id, item_type, item_id, owner_id),
+        FOREIGN KEY (trade_id) REFERENCES trades(trade_id) ON DELETE CASCADE,
+        FOREIGN KEY (owner_id) REFERENCES users(user_id)
+    )
+    """)
+    
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_trades_users ON trades(initiator_id, recipient_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_trade_items ON trade_items(trade_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_trade_owner ON trade_items(owner_id)")
+    
+    # Enhanced Battle System Tables
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS battles (
+        battle_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        battle_type TEXT NOT NULL,  -- 'pvp', 'pve', 'multi'
+        status TEXT NOT NULL,       -- 'waiting', 'active', 'completed', 'cancelled'
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        winner_id TEXT,             -- ID of winning player or team
+        battle_data TEXT,           -- JSON data of battle state
+        expiry_time TEXT            -- When battle invitation expires
+    )
+    """)
+    
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS battle_participants (
+        battle_id INTEGER NOT NULL,
+        user_id TEXT NOT NULL,
+        team_id INTEGER DEFAULT 0,
+        is_host BOOLEAN DEFAULT 0,
+        is_npc BOOLEAN DEFAULT 0,
+        status TEXT NOT NULL,       -- 'invited', 'joined', 'declined', 'left'
+        joined_at TEXT,
+        PRIMARY KEY (battle_id, user_id),
+        FOREIGN KEY (battle_id) REFERENCES battles(battle_id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
+    )
+    """)
+    
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS battle_teams (
+        battle_id INTEGER NOT NULL,
+        team_id INTEGER NOT NULL,
+        team_name TEXT,
+        team_color TEXT,
+        PRIMARY KEY (battle_id, team_id),
+        FOREIGN KEY (battle_id) REFERENCES battles(battle_id) ON DELETE CASCADE
+    )
+    """)
+    
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS battle_veramon (
+        battle_id INTEGER NOT NULL,
+        user_id TEXT NOT NULL,
+        capture_id INTEGER NOT NULL,
+        slot_position INTEGER NOT NULL,
+        current_hp INTEGER NOT NULL,
+        status_effects TEXT,        -- JSON array of status effects
+        stat_stages TEXT,           -- JSON object of stat modifications
+        active BOOLEAN DEFAULT 0,
+        PRIMARY KEY (battle_id, user_id, capture_id),
+        FOREIGN KEY (battle_id) REFERENCES battles(battle_id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(user_id),
+        FOREIGN KEY (capture_id) REFERENCES captures(id)
+    )
+    """)
+    
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS battle_logs (
+        log_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        battle_id INTEGER NOT NULL,
+        timestamp TEXT NOT NULL,
+        action_type TEXT NOT NULL,  -- 'move', 'switch', 'item', 'flee'
+        actor_id TEXT NOT NULL,     -- User who performed the action
+        target_ids TEXT,            -- JSON array of target IDs
+        action_data TEXT,           -- JSON data of action details
+        result_data TEXT,           -- JSON data of action result
+        FOREIGN KEY (battle_id) REFERENCES battles(battle_id) ON DELETE CASCADE
+    )
+    """)
+    
+    # Updated NPC trainers table to match admin_battle_system.py expectations
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS npc_trainers (
+        trainer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        difficulty TEXT NOT NULL,   -- 'easy', 'normal', 'hard', 'expert', 'champion'
+        theme TEXT DEFAULT 'mixed', -- Type specialization of the trainer
+        veramon_count INTEGER DEFAULT 3,
+        min_level INTEGER DEFAULT 5,
+        max_level INTEGER DEFAULT 15,
+        token_reward INTEGER DEFAULT 25,
+        experience_reward INTEGER DEFAULT 300,
+        avatar_url TEXT,
+        description TEXT,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+    
+    # Add NPC trainer teams table for specific Veramon compositions
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS npc_trainer_teams (
+        team_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        trainer_id INTEGER NOT NULL,
+        veramon_name TEXT NOT NULL,
+        level INTEGER NOT NULL,
+        position INTEGER NOT NULL,   -- Position in team (1-6)
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (trainer_id) REFERENCES npc_trainers(trainer_id) ON DELETE CASCADE
+    )
+    """)
+    
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_battles_status ON battles(status)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_battle_participants ON battle_participants(battle_id, user_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_battle_veramon ON battle_veramon(battle_id, user_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_battle_logs ON battle_logs(battle_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_npc_trainers ON npc_trainers(name)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_npc_trainer_teams ON npc_trainer_teams(trainer_id, position)")
+    
     conn.commit()
     conn.close()
 

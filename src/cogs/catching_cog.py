@@ -8,6 +8,7 @@ from discord import app_commands
 from discord.ext import commands
 
 from utils.helpers import weighted_choice
+from utils.data_loader import load_all_veramon_data, load_biomes_data, load_items_data
 from db.db import get_connection
 from src.models.permissions import require_permission_level, PermissionLevel
 from src.models.veramon import Veramon
@@ -35,16 +36,10 @@ class CatchingCog(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        base_dir = os.path.dirname(__file__)
-        data_dir = os.path.abspath(os.path.join(base_dir, '..', 'data'))
-        # Load veramon and biome data
-        with open(os.path.join(data_dir, 'veramon_data.json'), 'r') as f:
-            self.veramon_data = json.load(f)
-        with open(os.path.join(data_dir, 'biomes.json'), 'r') as f:
-            self.biomes = json.load(f)
-        with open(os.path.join(data_dir, 'items.json'), 'r') as f:
-            self.items = json.load(f)
-        self.data_dir = data_dir
+        # Load veramon and biome data using the new data loader
+        self.veramon_data = load_all_veramon_data()
+        self.biomes = load_biomes_data()
+        self.items = load_items_data()
         self.last_spawn = {}
         self.spawn_cooldowns = {}
         self.cooldown_seconds = 30  # 30 seconds between spawns per user

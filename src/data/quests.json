@@ -1,0 +1,204 @@
+{
+  "daily_quests": [
+    {
+      "id": "daily_catch_5",
+      "title": "Creature Collector",
+      "description": "Catch 5 Veramon today.",
+      "requirements": {
+        "type": "catch",
+        "count": 5
+      },
+      "token_reward": 75,
+      "xp_reward": 150,
+      "difficulty": "easy"
+    },
+    {
+      "id": "daily_battle_3",
+      "title": "Battle Champion",
+      "description": "Win 3 battles today.",
+      "requirements": {
+        "type": "battle_win",
+        "count": 3
+      },
+      "token_reward": 100,
+      "xp_reward": 200,
+      "difficulty": "medium"
+    },
+    {
+      "id": "daily_explore_biomes",
+      "title": "Biome Explorer",
+      "description": "Explore 3 different biomes today.",
+      "requirements": {
+        "type": "explore_unique_biomes",
+        "count": 3
+      },
+      "token_reward": 50,
+      "xp_reward": 100,
+      "difficulty": "easy"
+    },
+    {
+      "id": "daily_catch_type",
+      "title": "Type Specialist",
+      "description": "Catch 3 Veramon of a specific type today.",
+      "requirements": {
+        "type": "catch_type",
+        "count": 3,
+        "type_name": "random"
+      },
+      "token_reward": 125,
+      "xp_reward": 175,
+      "difficulty": "medium"
+    }
+  ],
+  "weekly_quests": [
+    {
+      "id": "weekly_catch_rare",
+      "title": "Rare Hunter",
+      "description": "Catch 3 rare or higher Veramon this week.",
+      "requirements": {
+        "type": "catch_rarity",
+        "count": 3,
+        "min_rarity": "rare"
+      },
+      "token_reward": 300,
+      "xp_reward": 500,
+      "difficulty": "hard"
+    },
+    {
+      "id": "weekly_pvp_battles",
+      "title": "PvP Master",
+      "description": "Win 5 PvP battles this week.",
+      "requirements": {
+        "type": "pvp_win",
+        "count": 5
+      },
+      "token_reward": 350,
+      "xp_reward": 600,
+      "difficulty": "hard"
+    },
+    {
+      "id": "weekly_trade",
+      "title": "Trade Tycoon",
+      "description": "Complete 3 trades with other players this week.",
+      "requirements": {
+        "type": "trade",
+        "count": 3
+      },
+      "token_reward": 250,
+      "xp_reward": 400,
+      "difficulty": "medium"
+    }
+  ],
+  "achievement_quests": [
+    {
+      "id": "achievement_pokedex_50",
+      "title": "Veramon Scholar",
+      "description": "Catch 50 different species of Veramon.",
+      "requirements": {
+        "type": "unique_catches",
+        "count": 50
+      },
+      "token_reward": 1000,
+      "xp_reward": 2000,
+      "item_rewards": [
+        {
+          "item_id": "master_capsule",
+          "quantity": 3
+        }
+      ],
+      "difficulty": "legendary"
+    },
+    {
+      "id": "achievement_shiny_10",
+      "title": "Shiny Collector",
+      "description": "Catch 10 shiny Veramon.",
+      "requirements": {
+        "type": "catch_shiny",
+        "count": 10
+      },
+      "token_reward": 2000,
+      "xp_reward": 3000,
+      "item_rewards": [
+        {
+          "item_id": "rainbow_lure",
+          "quantity": 5
+        }
+      ],
+      "difficulty": "legendary"
+    },
+    {
+      "id": "achievement_battle_100",
+      "title": "Battle Legend",
+      "description": "Win 100 battles total.",
+      "requirements": {
+        "type": "battle_win",
+        "count": 100
+      },
+      "token_reward": 1500,
+      "xp_reward": 2500,
+      "item_rewards": [
+        {
+          "item_id": "ability_booster",
+          "quantity": 5
+        }
+      ],
+      "difficulty": "epic"
+    },
+    {
+      "id": "achievement_daily_streak_30",
+      "title": "Dedicated Trainer",
+      "description": "Maintain a daily login streak of 30 days.",
+      "requirements": {
+        "type": "daily_streak",
+        "count": 30
+      },
+      "token_reward": 1200,
+      "xp_reward": 2000,
+      "item_rewards": [
+        {
+          "item_id": "token_magnet",
+          "quantity": 3
+        }
+      ],
+      "difficulty": "epic"
+    }
+  ],
+  "story_quests": [
+    {
+      "id": "story_first_catch",
+      "title": "First Steps",
+      "description": "Catch your first Veramon.",
+      "requirements": {
+        "type": "catch",
+        "count": 1
+      },
+      "token_reward": 100,
+      "xp_reward": 200,
+      "difficulty": "tutorial"
+    },
+    {
+      "id": "story_first_battle",
+      "title": "Battle Initiation",
+      "description": "Complete your first battle.",
+      "requirements": {
+        "type": "battle",
+        "count": 1
+      },
+      "token_reward": 150,
+      "xp_reward": 250,
+      "difficulty": "tutorial"
+    },
+    {
+      "id": "story_evolve_first",
+      "title": "Evolution Milestone",
+      "description": "Evolve your first Veramon.",
+      "requirements": {
+        "type": "evolve",
+        "count": 1
+      },
+      "token_reward": 200,
+      "xp_reward": 300,
+      "difficulty": "easy"
+    }
+  ]
+}

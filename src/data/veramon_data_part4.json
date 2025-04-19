@@ -1,0 +1,885 @@
+{
+  "Earthpup": {
+    "name": "Earthpup",
+    "type": [
+      "Ground",
+      "Normal"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 55,
+      "atk": 50,
+      "def": 50,
+      "sp_atk": 35,
+      "sp_def": 40,
+      "speed": 55
+    },
+    "biomes": [
+      "plains",
+      "desert",
+      "savanna"
+    ],
+    "flavor": "A loyal companion that digs small holes to mark its territory. The soil packed under its paws becomes as hard as concrete.",
+    "abilities": [
+      "Dig",
+      "Tackle",
+      "Sand Attack",
+      "Mud Slap"
+    ],
+    "evolution": {
+      "evolves_to": "Terrafang",
+      "level_required": 20
+    }
+  },
+  "Terrafang": {
+    "name": "Terrafang",
+    "type": [
+      "Ground",
+      "Normal"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 75,
+      "atk": 80,
+      "def": 70,
+      "sp_atk": 45,
+      "sp_def": 60,
+      "speed": 75
+    },
+    "biomes": [
+      "plains",
+      "savanna"
+    ],
+    "flavor": "Its fangs can penetrate stone and metal. Terrafang hunts by detecting vibrations in the ground from prey up to a mile away.",
+    "abilities": [
+      "Dig",
+      "Bite",
+      "Earth Power",
+      "Take Down",
+      "Bulldoze"
+    ],
+    "evolution": {
+      "evolves_to": "Gaiawolf",
+      "level_required": 40
+    }
+  },
+  "Gaiawolf": {
+    "name": "Gaiawolf",
+    "type": [
+      "Ground",
+      "Normal"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 95,
+      "atk": 115,
+      "def": 95,
+      "sp_atk": 65,
+      "sp_def": 80,
+      "speed": 90
+    },
+    "biomes": [
+      "savanna",
+      "badlands"
+    ],
+    "flavor": "Revered as the guardian of the earth. Ancient cultures built temples to Gaiawolf, believing it could prevent earthquakes and landslides.",
+    "abilities": [
+      "Earthquake",
+      "Hyper Beam",
+      "Earth Power",
+      "Extreme Speed",
+      "Rock Slide",
+      "Terra Force"
+    ]
+  },
+  "Toxifrog": {
+    "name": "Toxifrog",
+    "type": [
+      "Poison",
+      "Water"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 50,
+      "atk": 45,
+      "def": 40,
+      "sp_atk": 55,
+      "sp_def": 45,
+      "speed": 65
+    },
+    "biomes": [
+      "swamp",
+      "rainforest",
+      "polluted_waters"
+    ],
+    "flavor": "Its skin secretes a mild toxin that deters predators. The brighter the colors on its body, the more potent its poison.",
+    "abilities": [
+      "Poison Sting",
+      "Water Gun",
+      "Acid",
+      "Bubble"
+    ],
+    "evolution": {
+      "evolves_to": "Toxitoad",
+      "level_required": 22
+    }
+  },
+  "Toxitoad": {
+    "name": "Toxitoad",
+    "type": [
+      "Poison",
+      "Water"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 75,
+      "atk": 65,
+      "def": 60,
+      "sp_atk": 85,
+      "sp_def": 65,
+      "speed": 80
+    },
+    "biomes": [
+      "swamp",
+      "toxic_waste"
+    ],
+    "flavor": "The sacs on its throat produce a powerful neurotoxin. It can project this toxin mixed with water as a defense mechanism.",
+    "abilities": [
+      "Sludge Bomb",
+      "Hydro Pump",
+      "Toxic",
+      "Venoshock",
+      "Bounce"
+    ],
+    "evolution": {
+      "evolves_to": "Venomphib",
+      "level_required": 40
+    }
+  },
+  "Venomphib": {
+    "name": "Venomphib",
+    "type": [
+      "Poison",
+      "Water"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 95,
+      "atk": 85,
+      "def": 85,
+      "sp_atk": 115,
+      "sp_def": 90,
+      "speed": 95
+    },
+    "biomes": [
+      "toxic_waste",
+      "polluted_waters"
+    ],
+    "flavor": "Its toxins are studied by medical researchers for potential cures to rare diseases. Venomphib can purify polluted water by absorbing the contaminants.",
+    "abilities": [
+      "Sludge Wave",
+      "Hydro Pump",
+      "Gunk Shot",
+      "Acid Rain",
+      "Toxic",
+      "Chemical Warfare"
+    ]
+  },
+  "Sparkite": {
+    "name": "Sparkite",
+    "type": [
+      "Electric",
+      "Rock"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 55,
+      "atk": 60,
+      "def": 80,
+      "sp_atk": 60,
+      "sp_def": 55,
+      "speed": 50
+    },
+    "biomes": [
+      "mountain",
+      "thunderstorm_peaks",
+      "cave"
+    ],
+    "flavor": "A living crystal that absorbs electrical energy from lightning strikes. It glows brighter as it stores more electricity.",
+    "abilities": [
+      "Spark",
+      "Rock Throw",
+      "Charge",
+      "Thunder Shock"
+    ],
+    "evolution": {
+      "evolves_to": "Thunderock",
+      "level_required": 30
+    }
+  },
+  "Thunderock": {
+    "name": "Thunderock",
+    "type": [
+      "Electric",
+      "Rock"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 75,
+      "atk": 85,
+      "def": 110,
+      "sp_atk": 95,
+      "sp_def": 75,
+      "speed": 70
+    },
+    "biomes": [
+      "thunderstorm_peaks",
+      "mountain"
+    ],
+    "flavor": "Its crystalline body conducts electricity with perfect efficiency. Mountains where Thunderock live experience constant lightning storms.",
+    "abilities": [
+      "Thunderbolt",
+      "Rock Slide",
+      "Discharge",
+      "Power Gem",
+      "Thunder",
+      "Electro Impact"
+    ]
+  },
+  "Cottonsweet": {
+    "name": "Cottonsweet",
+    "type": [
+      "Fairy",
+      "Grass"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 50,
+      "atk": 40,
+      "def": 40,
+      "sp_atk": 55,
+      "sp_def": 60,
+      "speed": 60
+    },
+    "biomes": [
+      "meadow",
+      "flower_fields",
+      "enchanted_forest"
+    ],
+    "flavor": "It floats on gentle breezes and spreads sweet-smelling pollen that induces happiness. Children love to chase Cottonsweet.",
+    "abilities": [
+      "Fairy Wind",
+      "Absorb",
+      "Sweet Kiss",
+      "Leech Seed"
+    ],
+    "evolution": {
+      "evolves_to": "Blossomite",
+      "level_required": 18
+    }
+  },
+  "Blossomite": {
+    "name": "Blossomite",
+    "type": [
+      "Fairy",
+      "Grass"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 70,
+      "atk": 55,
+      "def": 60,
+      "sp_atk": 80,
+      "sp_def": 85,
+      "speed": 80
+    },
+    "biomes": [
+      "flower_fields",
+      "enchanted_forest"
+    ],
+    "flavor": "The flowers on its body change color with its mood. When Blossomite is happy, nearby plants bloom regardless of season.",
+    "abilities": [
+      "Dazzling Gleam",
+      "Petal Dance",
+      "Aromatherapy",
+      "Energy Ball",
+      "Charm"
+    ],
+    "evolution": {
+      "evolves_to": "Florabelle",
+      "level_required": 36
+    }
+  },
+  "Florabelle": {
+    "name": "Florabelle",
+    "type": [
+      "Fairy",
+      "Grass"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 90,
+      "atk": 75,
+      "def": 80,
+      "sp_atk": 110,
+      "sp_def": 115,
+      "speed": 90
+    },
+    "biomes": [
+      "enchanted_forest",
+      "sacred_grove"
+    ],
+    "flavor": "Believed to be the incarnation of nature's benevolence. Florabelle can restore life to barren lands and heal both people and Veramon.",
+    "abilities": [
+      "Moonblast",
+      "Petal Blizzard",
+      "Fleur Cannon",
+      "Giga Drain",
+      "Misty Terrain",
+      "Nature's Blessing"
+    ]
+  },
+  "Pyrolin": {
+    "name": "Pyrolin",
+    "type": [
+      "Fire",
+      "Dark"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 60,
+      "atk": 75,
+      "def": 55,
+      "sp_atk": 75,
+      "sp_def": 55,
+      "speed": 85
+    },
+    "biomes": [
+      "volcano",
+      "wasteland",
+      "dark_forest"
+    ],
+    "flavor": "A cunning predator that hunts at night. The flames along its spine burn with a dark fire that consumes light rather than emitting it.",
+    "abilities": [
+      "Ember",
+      "Bite",
+      "Fire Fang",
+      "Foul Play"
+    ],
+    "evolution": {
+      "evolves_to": "Shadowburn",
+      "level_required": 32
+    }
+  },
+  "Shadowburn": {
+    "name": "Shadowburn",
+    "type": [
+      "Fire",
+      "Dark"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 80,
+      "atk": 110,
+      "def": 75,
+      "sp_atk": 110,
+      "sp_def": 75,
+      "speed": 110
+    },
+    "biomes": [
+      "volcano",
+      "shadow_realm"
+    ],
+    "flavor": "Its flames burn black as midnight. Ancient texts warn that a Shadowburn's gaze can incinerate a person's soul, leaving only an empty shell.",
+    "abilities": [
+      "Dark Pulse",
+      "Flamethrower",
+      "Night Slash",
+      "Inferno",
+      "Shadow Ball",
+      "Hellblaze"
+    ]
+  },
+  "Cryopuppy": {
+    "name": "Cryopuppy",
+    "type": [
+      "Ice",
+      "Normal"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 55,
+      "atk": 50,
+      "def": 45,
+      "sp_atk": 45,
+      "sp_def": 50,
+      "speed": 60
+    },
+    "biomes": [
+      "tundra",
+      "arctic",
+      "snowy_mountains"
+    ],
+    "flavor": "Its fur is as cold as ice but incredibly soft. Cryopuppy's body temperature is below freezing, making it comfortable in arctic conditions.",
+    "abilities": [
+      "Powder Snow",
+      "Tackle",
+      "Ice Shard",
+      "Baby-Doll Eyes"
+    ],
+    "evolution": {
+      "evolves_to": "Frostfang",
+      "level_required": 24
+    }
+  },
+  "Frostfang": {
+    "name": "Frostfang",
+    "type": [
+      "Ice",
+      "Normal"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 75,
+      "atk": 80,
+      "def": 65,
+      "sp_atk": 65,
+      "sp_def": 70,
+      "speed": 80
+    },
+    "biomes": [
+      "tundra",
+      "arctic"
+    ],
+    "flavor": "Its breath can freeze objects solid instantly. Frostfang is a loyal companion that will protect its trainer even in the harshest blizzards.",
+    "abilities": [
+      "Ice Fang",
+      "Take Down",
+      "Icicle Crash",
+      "Freeze-Dry",
+      "Play Rough"
+    ],
+    "evolution": {
+      "evolves_to": "Tundrawolf",
+      "level_required": 42
+    }
+  },
+  "Tundrawolf": {
+    "name": "Tundrawolf",
+    "type": [
+      "Ice",
+      "Normal"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 95,
+      "atk": 120,
+      "def": 85,
+      "sp_atk": 85,
+      "sp_def": 90,
+      "speed": 105
+    },
+    "biomes": [
+      "arctic",
+      "frozen_wasteland"
+    ],
+    "flavor": "The alpha predator of the frozen north. Tundrawolf travels with the winter storms and is said to bring the harshest cold with its howl.",
+    "abilities": [
+      "Blizzard",
+      "Extreme Speed",
+      "Crunch",
+      "Ice Beam",
+      "Aurora Veil",
+      "Arctic Fury"
+    ]
+  },
+  "Metalite": {
+    "name": "Metalite",
+    "type": [
+      "Steel",
+      "Fairy"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 50,
+      "atk": 45,
+      "def": 80,
+      "sp_atk": 60,
+      "sp_def": 70,
+      "speed": 50
+    },
+    "biomes": [
+      "mountain",
+      "industrial",
+      "crystal_cave"
+    ],
+    "flavor": "A small metallic creature infused with magical energy. It's attracted to precious metals and gemstones, often leading miners to valuable deposits.",
+    "abilities": [
+      "Metal Claw",
+      "Fairy Wind",
+      "Iron Defense",
+      "Play Rough"
+    ],
+    "evolution": {
+      "evolves_to": "Ferroshine",
+      "level_required": 30
+    }
+  },
+  "Ferroshine": {
+    "name": "Ferroshine",
+    "type": [
+      "Steel",
+      "Fairy"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 70,
+      "atk": 75,
+      "def": 115,
+      "sp_atk": 90,
+      "sp_def": 105,
+      "speed": 70
+    },
+    "biomes": [
+      "crystal_cave",
+      "enchanted_forge"
+    ],
+    "flavor": "Forged in the fires of enchanted volcanoes. Ferroshine's body contains every known metal plus some elements unknown to science.",
+    "abilities": [
+      "Flash Cannon",
+      "Moonblast",
+      "Iron Head",
+      "Play Rough",
+      "Metal Sound",
+      "Enchanted Strike"
+    ]
+  },
+  "Spectorch": {
+    "name": "Spectorch",
+    "type": [
+      "Ghost",
+      "Fire"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 55,
+      "atk": 50,
+      "def": 45,
+      "sp_atk": 80,
+      "sp_def": 60,
+      "speed": 75
+    },
+    "biomes": [
+      "abandoned_mansion",
+      "volcano",
+      "haunted_ruins"
+    ],
+    "flavor": "A spirit of flame that haunts volcanic regions. The blue fire that makes up its body never extinguishes and can burn even underwater.",
+    "abilities": [
+      "Will-O-Wisp",
+      "Shadow Sneak",
+      "Flame Burst",
+      "Hex"
+    ],
+    "evolution": {
+      "evolves_to": "Infernwraith",
+      "level_required": 36
+    }
+  },
+  "Infernwraith": {
+    "name": "Infernwraith",
+    "type": [
+      "Ghost",
+      "Fire"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 75,
+      "atk": 70,
+      "def": 65,
+      "sp_atk": 120,
+      "sp_def": 85,
+      "speed": 95
+    },
+    "biomes": [
+      "abandoned_mansion",
+      "lava_fields"
+    ],
+    "flavor": "Legend says it's the vengeful spirit of a volcano deity. Infernwraith's flames burn not just the body but the very soul.",
+    "abilities": [
+      "Shadow Ball",
+      "Inferno",
+      "Phantom Force",
+      "Fire Blast",
+      "Curse",
+      "Spectral Flames"
+    ]
+  },
+  "Psychub": {
+    "name": "Psychub",
+    "type": [
+      "Psychic",
+      "Ice"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 60,
+      "atk": 45,
+      "def": 45,
+      "sp_atk": 70,
+      "sp_def": 65,
+      "speed": 55
+    },
+    "biomes": [
+      "tundra",
+      "arctic",
+      "crystal_cave"
+    ],
+    "flavor": "Its transparent crystalline body refracts light, creating beautiful auroras. Psychub can predict snowstorms days in advance.",
+    "abilities": [
+      "Confusion",
+      "Powder Snow",
+      "Psybeam",
+      "Aurora Beam"
+    ],
+    "evolution": {
+      "evolves_to": "Aurorix",
+      "level_required": 32
+    }
+  },
+  "Aurorix": {
+    "name": "Aurorix",
+    "type": [
+      "Psychic",
+      "Ice"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 80,
+      "atk": 65,
+      "def": 65,
+      "sp_atk": 115,
+      "sp_def": 95,
+      "speed": 85
+    },
+    "biomes": [
+      "arctic",
+      "celestial_plane"
+    ],
+    "flavor": "It channels cosmic energy through its crystalline body. When Aurorix meditates, the northern lights appear regardless of location or season.",
+    "abilities": [
+      "Psychic",
+      "Blizzard",
+      "Future Sight",
+      "Ice Beam",
+      "Calm Mind",
+      "Aurora Veil",
+      "Cosmic Frost"
+    ]
+  },
+  "Mechanite": {
+    "name": "Mechanite",
+    "type": [
+      "Steel",
+      "Electric"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 50,
+      "atk": 55,
+      "def": 70,
+      "sp_atk": 65,
+      "sp_def": 60,
+      "speed": 65
+    },
+    "biomes": [
+      "industrial",
+      "power_plant",
+      "urban"
+    ],
+    "flavor": "A mechanical creature that feeds on electricity. Its origin is unknown - some believe it was created by humans, others think it evolved naturally.",
+    "abilities": [
+      "Metal Claw",
+      "Thunder Shock",
+      "Magnet Rise",
+      "Charge Beam"
+    ],
+    "evolution": {
+      "evolves_to": "Robogear",
+      "level_required": 28
+    }
+  },
+  "Robogear": {
+    "name": "Robogear",
+    "type": [
+      "Steel",
+      "Electric"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 70,
+      "atk": 85,
+      "def": 100,
+      "sp_atk": 95,
+      "sp_def": 80,
+      "speed": 85
+    },
+    "biomes": [
+      "industrial",
+      "power_plant"
+    ],
+    "flavor": "Its clockwork brain can perform a billion calculations per second. Robogear continuously upgrades itself by incorporating new technology.",
+    "abilities": [
+      "Zap Cannon",
+      "Flash Cannon",
+      "Discharge",
+      "Iron Head",
+      "Lock-On",
+      "System Override"
+    ]
+  },
+  "Dragnite": {
+    "name": "Dragnite",
+    "type": [
+      "Dragon",
+      "Steel"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 70,
+      "atk": 95,
+      "def": 110,
+      "sp_atk": 85,
+      "sp_def": 85,
+      "speed": 75
+    },
+    "biomes": [
+      "mountain",
+      "dragon_lair",
+      "volcanic_caves"
+    ],
+    "flavor": "Its scales are composed of a metal unknown to science. Dragnite sleeps for centuries at a time, emerging only when the world faces great danger.",
+    "abilities": [
+      "Dragon Claw",
+      "Iron Head",
+      "Dragon Breath",
+      "Flash Cannon",
+      "Dragon Dance",
+      "Steel Barrage"
+    ]
+  },
+  "Celesteon": {
+    "name": "Celesteon",
+    "type": [
+      "Fairy",
+      "Flying"
+    ],
+    "rarity": "legendary",
+    "catch_rate": 0.05,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 85,
+      "atk": 75,
+      "def": 80,
+      "sp_atk": 125,
+      "sp_def": 130,
+      "speed": 105
+    },
+    "biomes": [
+      "celestial_plane",
+      "floating_islands",
+      "sky_temple"
+    ],
+    "flavor": "Said to be born from the dreams of children. Celesteon flies through the night sky spreading stardust that grants wishes to the pure of heart.",
+    "abilities": [
+      "Moonblast",
+      "Hurricane",
+      "Dazzling Gleam",
+      "Sky Attack",
+      "Cosmic Power",
+      "Celestial Blessing"
+    ]
+  },
+  "Obsidius": {
+    "name": "Obsidius",
+    "type": [
+      "Rock",
+      "Fire"
+    ],
+    "rarity": "legendary",
+    "catch_rate": 0.05,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 95,
+      "atk": 130,
+      "def": 110,
+      "sp_atk": 100,
+      "sp_def": 80,
+      "speed": 85
+    },
+    "biomes": [
+      "volcanic_core",
+      "magma_chamber",
+      "lava_fields"
+    ],
+    "flavor": "Born in the heart of ancient volcanoes. Obsidius's body is made of molten rock that never cools, and its footsteps leave trails of lava.",
+    "abilities": [
+      "Stone Edge",
+      "Eruption",
+      "Heat Crash",
+      "Rock Slide",
+      "Magma Storm",
+      "Volcanic Judgment"
+    ]
+  }
+}

@@ -1,20 +1,148 @@
 {
-  "standard_capsule": {
-    "name": "Standard Capsule",
-    "effect": "catch_rate_boost",
-    "multiplier": 1.0,
-    "description": "A basic capsule with a standard catch rate."
+  "token_magnet": {
+    "name": "Token Magnet",
+    "description": "Increases token gains by 25% for 1 hour.",
+    "price": 500,
+    "effect": "token_boost",
+    "multiplier": 1.25,
+    "category": "boost",
+    "icon": "🧲"
+  },
+  "xp_booster": {
+    "name": "XP Booster",
+    "description": "Increases XP gains by 25% for 1 hour.",
+    "price": 500,
+    "effect": "xp_boost",
+    "multiplier": 1.25,
+    "category": "boost",
+    "icon": "✨"
+  },
+  "rainbow_lure": {
+    "name": "Rainbow Lure",
+    "description": "Increases shiny encounter chance by 15% for 1 hour.",
+    "price": 1000,
+    "effect": "shiny_boost",
+    "multiplier": 1.15,
+    "category": "boost",
+    "icon": "🌈"
+  },
+  "rarity_charm": {
+    "name": "Rarity Charm",
+    "description": "Increases chances of finding rare Veramon by 20% for 1 hour.",
+    "price": 800,
+    "effect": "rarity_boost",
+    "multiplier": 1.2,
+    "category": "boost",
+    "icon": "🔮"
   },
   "ultra_capsule": {
     "name": "Ultra Capsule",
+    "description": "Increases catch rate by 25% for your next 5 catches.",
+    "price": 300,
     "effect": "catch_rate_boost",
-    "multiplier": 1.5,
-    "description": "A high-tech capsule that increases capture chances."
+    "uses": 5,
+    "category": "capsule",
+    "icon": "🟡"
   },
-  "golden_lure": {
-    "name": "Golden Lure",
-    "effect": "rarity_boost",
+  "master_capsule": {
+    "name": "Master Capsule",
+    "description": "Guarantees catching any Veramon. One-time use.",
+    "price": 2500,
+    "effect": "guaranteed_catch",
+    "uses": 1,
+    "category": "capsule",
+    "icon": "⚫"
+  },
+  "shiny_reroll": {
+    "name": "Shiny Reroller",
+    "description": "Gives a 5% chance to reroll one of your Veramon into a shiny version.",
+    "price": 2000,
+    "effect": "shiny_reroll",
+    "uses": 1,
+    "category": "special",
+    "icon": "🎲"
+  },
+  "ability_booster": {
+    "name": "Ability Booster",
+    "description": "Increases one of your Veramon's stats by 10%.",
+    "price": 1500,
+    "effect": "ability_boost",
+    "uses": 1,
+    "category": "special",
+    "icon": "💪"
+  },
+  "evolution_crystal": {
+    "name": "Evolution Crystal",
+    "description": "Allows you to evolve a Veramon without meeting level requirements.",
+    "price": 3000,
+    "effect": "instant_evolution",
+    "uses": 1,
+    "category": "special",
+    "icon": "💎"
+  },
+  "recovery_potion": {
+    "name": "Recovery Potion",
+    "description": "Instantly heals all of your Veramon to full health.",
+    "price": 200,
+    "effect": "full_heal",
+    "uses": 1,
+    "category": "battle",
+    "icon": "🧪"
+  },
+  "battle_amulet": {
+    "name": "Battle Amulet",
+    "description": "Increases battle rewards by 20% for your next 3 battles.",
+    "price": 600,
+    "effect": "battle_reward_boost",
+    "uses": 3,
+    "category": "battle",
+    "icon": "🔶"
+  },
+  "nickname_tag": {
+    "name": "Nickname Tag",
+    "description": "Allows you to rename one of your Veramon.",
+    "price": 100,
+    "effect": "rename",
+    "uses": 1,
+    "category": "utility",
+    "icon": "🏷️"
+  },
+  "biome_scanner": {
+    "name": "Biome Scanner",
+    "description": "Reveals all Veramon types in a biome for 30 minutes.",
+    "price": 400,
+    "effect": "biome_scan",
+    "duration": 1800,
+    "category": "utility",
+    "icon": "🔍"
+  },
+  "lucky_egg": {
+    "name": "Lucky Egg",
+    "description": "Doubles XP gain for your next 10 Veramon catches.",
+    "price": 750,
+    "effect": "catch_xp_boost",
     "multiplier": 2.0,
-    "description": "Temporarily increases the chance of encountering rare Veramons."
+    "uses": 10,
+    "category": "boost",
+    "icon": "🥚"
+  },
+  "premium_token_pack": {
+    "name": "Premium Token Pack",
+    "description": "A premium item that grants 2500 tokens instantly.",
+    "price": 0,
+    "effect": "token_grant",
+    "amount": 2500,
+    "category": "premium",
+    "vip_only": true,
+    "icon": "💰"
+  },
+  "shiny_charm": {
+    "name": "Shiny Charm",
+    "description": "Permanently increases shiny encounter rate by 5%.",
+    "price": 10000,
+    "effect": "permanent_shiny_boost",
+    "multiplier": 1.05,
+    "category": "legendary",
+    "icon": "✨"
   }
 }

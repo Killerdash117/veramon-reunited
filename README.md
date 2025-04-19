@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Veramon Reunited](https://i.imgur.com/YourLogoHere.png)
+![Veramon Reunited](https://i.imgur.com/EMNMEsp.jpeg)
 
 **A feature-rich monster-catching Discord bot**  
 *Created by Killerdash117*

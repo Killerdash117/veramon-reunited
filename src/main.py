@@ -3,11 +3,11 @@ import asyncio
 from discord.ext import commands
 from dotenv import load_dotenv
 
-# Veramon Reunited - Version v0.25
+# Veramon Reunited - Version v0.30
 # Created by Killerdash117
 
 # Current version of the bot
-VERSION = "v0.25"
+VERSION = "v0.30"
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
@@ -37,7 +37,8 @@ async def load_extensions():
         'cogs.moderator_cog',   # Moderator commands
         'cogs.developer_cog',   # Developer commands
         'cogs.vip_cog',         # VIP features and shop
-        'cogs.settings_cog'     # User settings and UI themes
+        'cogs.settings_cog',    # User settings and UI themes
+        'cogs.interactive_cog'  # Interactive UI system and DM support
     ]
     
     for extension in extensions:

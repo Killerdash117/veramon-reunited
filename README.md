@@ -1,6 +1,6 @@
 # Veramon Reunited
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/killerdash117/veramon-reunited/blob/master/LICENSE)
-[![version](https://img.shields.io/badge/version-v0.25-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
+[![version](https://img.shields.io/badge/version-v0.30-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
 [![discord.py](https://img.shields.io/badge/discord.py-2.3.0-blue.svg)](https://github.com/Rapptz/discord.py)
 [![status](https://img.shields.io/badge/status-in%20development-orange.svg)](https://github.com/killerdash117/veramon-reunited)
 
@@ -104,6 +104,7 @@ Veramon Reunited delivers a rich monster-catching RPG experience within Discord.
 - **VIP Shop** with exclusive items and customizations
 - **Enhanced Daily Rewards** with streak bonuses for VIP members
 - **Profile Customization** options including nickname colors and backgrounds
+- **DM Support** allowing VIP users to interact with the bot in Direct Messages
 - **Cooldown Refreshes** for exploration and other activities
 - **Commands:**
   - `/vip_shop` - Browse the VIP exclusive shop
@@ -112,6 +113,7 @@ Veramon Reunited delivers a rich monster-catching RPG experience within Discord.
   - `/nickname_color [color]` - Change nickname color in bot embeds
   - `/cooldown_refresh` - Reset exploration cooldown once per day
   - `/profile_background [background_id]` - Change profile background
+  - `/dm_mode [enable]` - Enable or disable bot interaction in Direct Messages
 
 ### Performance Optimization
 - **Database Connection Pooling** for improved performance under load
@@ -135,6 +137,19 @@ Veramon Reunited delivers a rich monster-catching RPG experience within Discord.
   - `/theme` - View available themes or set your preferred theme
   - `/theme_preview [theme_name]` - Preview a theme before applying it
   - `/theme_create [theme_name] [base_theme]` - VIP-only command to create custom themes
+
+### Interactive Interface
+- **Button-Based Navigation** eliminates the need to type commands for most actions
+- **Central Menu Hub** with access to all features through a single `/menu` command
+- **Context-Aware Controls** that adapt to your current activity
+- **Interactive Exploration** with biome selection and encounter handling
+- **Battle Interface** with move selection, Veramon switching, and item use buttons
+- **Trading UI** for seamless Veramon exchanges
+- **Custom Profile Management** through intuitive menus
+- **Commands:**
+  - `/menu` - Open the main interactive menu with buttons for all features
+  - `/battle_menu` - Open the dedicated battle interface with PvE and PvP options
+  - `/trade_menu` - Access the trading system with interactive controls
 
 ### Admin Command System
 - **Veramon Management:**

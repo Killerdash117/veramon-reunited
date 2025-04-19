@@ -4,7 +4,7 @@ This document tracks all notable changes to the Veramon Reunited Discord bot.
 
 <div align="center">
 
-![Version Status](https://img.shields.io/badge/Current%20Version-v0.25-brightgreen.svg)
+![Version Status](https://img.shields.io/badge/Current%20Version-v0.30-brightgreen.svg)
 ![Updated](https://img.shields.io/badge/Last%20Updated-April%2019%2C%202025-blue.svg)
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg)
 
@@ -27,7 +27,37 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
 
 ## Release History
 
-### 🌟 v0.25 (Current) - April 19, 2025
+### 🎮 v0.30 (Current) - April 19, 2025
+
+> *Revolutionizing the user experience with interactive controls*
+
+#### 🖱️ Interactive UI System
+- Implemented comprehensive button-based navigation for all features
+- Created a central menu hub for accessing all functionality without typing
+- Added interactive exploration, battle, and trading interfaces
+- Designed context-aware menus that adapt to user actions
+
+#### 💬 DM Support for VIP+ Users
+- Added ability for VIP and Admin+ users to interact with the bot in DMs
+- Implemented permission-aware command handling in private messages
+- Created DM session management for persistent interactions
+- Integrated seamless experience between server channels and DMs
+
+#### 🔄 Integration Enhancements
+- Fully integrated interactive UI with existing battle system
+- Connected trading menu with the complete trading system
+- Added interactive collection management
+- Implemented button-based settings navigation
+
+#### 🌐 Accessibility Improvements
+- Reduced need for typing commands for most interactions
+- Created more intuitive navigation for new users
+- Improved discoverability of features through visual menus
+- Added ability to use the bot privately for eligible users
+
+---
+
+### 🌟 v0.25 - April 19, 2025
 
 > *Bringing customization and personalization to Veramon Reunited*
 

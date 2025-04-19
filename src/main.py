@@ -3,11 +3,11 @@ import asyncio
 from discord.ext import commands
 from dotenv import load_dotenv
 
-# Veramon Reunited - Version v0.15
+# Veramon Reunited - Version v0.25
 # Created by Killerdash117
 
 # Current version of the bot
-VERSION = "v0.15"
+VERSION = "v0.25"
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
@@ -34,8 +34,10 @@ async def load_extensions():
         'cogs.admin_battle_system',
         'cogs.leaderboard_cog',
         'cogs.tournament_cog',
-        'cogs.moderator_cog',   # New moderator commands
-        'cogs.developer_cog'    # New developer commands
+        'cogs.moderator_cog',   # Moderator commands
+        'cogs.developer_cog',   # Developer commands
+        'cogs.vip_cog',         # VIP features and shop
+        'cogs.settings_cog'     # User settings and UI themes
     ]
     
     for extension in extensions:
@@ -47,11 +49,11 @@ async def load_extensions():
 
 @bot.event
 async def on_ready():
-    print(f"✅ Veramon Reunited is online as {bot.user}!")
+    print(f" Veramon Reunited is online as {bot.user}!")
     print("Created by Killerdash117")
     try:
         await bot.tree.sync()
-        print("✅ Slash commands synced.")
+        print(" Slash commands synced.")
     except Exception as e:
         print("Error syncing slash commands:", e)
 

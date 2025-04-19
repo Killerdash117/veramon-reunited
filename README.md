@@ -1,6 +1,6 @@
 # Veramon Reunited
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/killerdash117/veramon-reunited/blob/master/LICENSE)
-[![version](https://img.shields.io/badge/version-v0.15-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
+[![version](https://img.shields.io/badge/version-v0.25-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
 [![discord.py](https://img.shields.io/badge/discord.py-2.3.0-blue.svg)](https://github.com/Rapptz/discord.py)
 [![status](https://img.shields.io/badge/status-in%20development-orange.svg)](https://github.com/killerdash117/veramon-reunited)
 
@@ -98,6 +98,43 @@ Veramon Reunited delivers a rich monster-catching RPG experience within Discord.
   - `/faction_upgrade` - Purchase permanent faction upgrades
   - `/faction_buff` - Activate temporary faction-wide buffs
   - `/faction_war` - Declare war on another faction
+
+### VIP System
+- **Premium Features** that are cosmetic and quality-of-life focused (not pay-to-win)
+- **VIP Shop** with exclusive items and customizations
+- **Enhanced Daily Rewards** with streak bonuses for VIP members
+- **Profile Customization** options including nickname colors and backgrounds
+- **Cooldown Refreshes** for exploration and other activities
+- **Commands:**
+  - `/vip_shop` - Browse the VIP exclusive shop
+  - `/vip_shop_buy [item_id] [quantity]` - Purchase from the VIP shop
+  - `/daily_vip` - Claim enhanced VIP daily rewards
+  - `/nickname_color [color]` - Change nickname color in bot embeds
+  - `/cooldown_refresh` - Reset exploration cooldown once per day
+  - `/profile_background [background_id]` - Change profile background
+
+### Performance Optimization
+- **Database Connection Pooling** for improved performance under load
+- **Caching System** for frequently accessed data with configurable TTL
+- **Command Autocomplete** for user-friendly interactions
+- **Advanced Modal Forms** for complex user inputs
+- **Error Handling** with user-friendly messages and logging
+- **Pagination System** for handling long outputs in a user-friendly way
+
+### UI System & Customization
+- **Theme Engine** with multiple built-in themes (default, dark, light, nature, tech, fire, water)
+- **Custom Themes** for VIP users with personalized colors and layout options
+- **User Settings** with persistent preferences across sessions
+- **Unified Rendering** for consistent display of all game elements
+- **Accessibility Features** including high contrast mode and screen reader support
+- **Privacy Controls** for managing profile and collection visibility
+- **Commands:**
+  - `/settings` - View and navigate all available settings
+  - `/settings_set [setting] [value]` - Change a specific setting
+  - `/settings_reset [setting]` - Reset settings to default values
+  - `/theme` - View available themes or set your preferred theme
+  - `/theme_preview [theme_name]` - Preview a theme before applying it
+  - `/theme_create [theme_name] [base_theme]` - VIP-only command to create custom themes
 
 ### Admin Command System
 - **Veramon Management:**

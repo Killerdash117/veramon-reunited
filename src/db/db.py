@@ -1,10 +1,153 @@
 import os
 import sqlite3
+import threading
+from typing import Dict, Union, Optional
+from queue import Queue, Empty
+import time
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "..", "db", "veramon.db")
 
-def get_connection():
-    return sqlite3.connect(DB_PATH)
+# Connection pool settings
+MAX_CONNECTIONS = 10
+TIMEOUT = 5.0  # seconds to wait for a connection before timeout
+_connection_pool = Queue(maxsize=MAX_CONNECTIONS)
+_pool_lock = threading.RLock()
+_active_connections = 0
+
+class PooledConnection:
+    """A wrapper for SQLite connections that returns them to the pool when closed."""
+    
+    def __init__(self, connection):
+        self.connection = connection
+        self.closed = False
+        
+    def cursor(self):
+        """Get a cursor from the connection."""
+        if self.closed:
+            raise sqlite3.Error("Connection has been closed")
+        return self.connection.cursor()
+        
+    def commit(self):
+        """Commit changes to the database."""
+        if self.closed:
+            raise sqlite3.Error("Connection has been closed")
+        return self.connection.commit()
+        
+    def rollback(self):
+        """Rollback changes to the database."""
+        if self.closed:
+            raise sqlite3.Error("Connection has been closed")
+        return self.connection.rollback()
+        
+    def close(self):
+        """Return the connection to the pool instead of closing it."""
+        if not self.closed:
+            self.closed = True
+            return_connection_to_pool(self.connection)
+            
+    def __enter__(self):
+        """Context manager entry."""
+        return self
+        
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Context manager exit."""
+        self.close()
+
+def _create_connection():
+    """Create a new SQLite connection."""
+    connection = sqlite3.connect(DB_PATH)
+    connection.row_factory = sqlite3.Row
+    return connection
+
+def initialize_pool():
+    """Initialize the connection pool."""
+    global _active_connections
+    
+    with _pool_lock:
+        # Clear any existing connections
+        while not _connection_pool.empty():
+            try:
+                conn = _connection_pool.get_nowait()
+                conn.close()
+            except Empty:
+                break
+                
+        # Create initial connections
+        for _ in range(MAX_CONNECTIONS // 2):  # Start with half capacity
+            connection = _create_connection()
+            _connection_pool.put(connection)
+            _active_connections += 1
+
+def get_connection() -> PooledConnection:
+    """
+    Get a connection from the pool or create a new one if needed.
+    
+    Returns:
+        A pooled database connection.
+    
+    Raises:
+        sqlite3.Error: If the connection pool is exhausted and no new connections can be created.
+    """
+    global _active_connections
+    
+    # Initialize pool if needed
+    if _connection_pool.empty() and _active_connections == 0:
+        initialize_pool()
+    
+    # Try to get a connection from the pool
+    try:
+        connection = _connection_pool.get(block=True, timeout=TIMEOUT)
+        return PooledConnection(connection)
+    except Empty:
+        # If pool is empty but we can create more connections
+        with _pool_lock:
+            if _active_connections < MAX_CONNECTIONS:
+                connection = _create_connection()
+                _active_connections += 1
+                return PooledConnection(connection)
+            else:
+                # No available connections and at max capacity
+                raise sqlite3.Error("Connection pool exhausted, try again later")
+
+def return_connection_to_pool(connection):
+    """Return a connection to the pool."""
+    # Check if connection is healthy before returning to pool
+    try:
+        cursor = connection.cursor()
+        cursor.execute("SELECT 1")
+        cursor.fetchone()
+        _connection_pool.put(connection)
+    except sqlite3.Error:
+        # If connection is bad, close it and create a new one
+        try:
+            connection.close()
+        except:
+            pass
+            
+        with _pool_lock:
+            global _active_connections
+            _active_connections -= 1
+            
+            # Create a replacement connection if below minimum threshold
+            if _active_connections < MAX_CONNECTIONS // 2:
+                new_connection = _create_connection()
+                _connection_pool.put(new_connection)
+                _active_connections += 1
+
+def close_all_connections():
+    """Close all connections in the pool."""
+    with _pool_lock:
+        global _active_connections
+        
+        # Empty the pool and close all connections
+        while not _connection_pool.empty():
+            try:
+                conn = _connection_pool.get_nowait()
+                conn.close()
+            except Empty:
+                break
+                
+        _active_connections = 0
 
 def initialize_db():
     conn = get_connection()

@@ -33,7 +33,9 @@ async def load_extensions():
         'cogs.admin_game_settings',
         'cogs.admin_battle_system',
         'cogs.leaderboard_cog',
-        'cogs.tournament_cog'
+        'cogs.tournament_cog',
+        'cogs.moderator_cog',   # New moderator commands
+        'cogs.developer_cog'    # New developer commands
     ]
     
     for extension in extensions:

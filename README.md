@@ -117,17 +117,142 @@ Veramon Reunited delivers a rich monster-catching RPG experience within Discord.
   - `/admin_rebuild_db` - Rebuild database tables (with option to preserve data)
 
 ### Role-Based Permissions
-- **User:** Basic gameplay commands (exploring, catching, battling)
-- **VIP:** Premium features (faster cooldowns, increased catch rates, exclusive items)
-- **Mod:** Moderation tools and event management capabilities
-- **Admin:** Full server control (faction creation, economy management)
-- **Dev:** System-level commands and database access
 
-### Progression Systems
-- **Experience** gained through activities
-- **Leveling** for both trainers and Veramon
-- **Evolution** of Veramon when meeting requirements
-- **Achievements** for completing challenges
+Veramon Reunited uses a tiered permission system to control access to commands:
+
+#### User Commands
+Basic gameplay commands for all users:
+
+**Exploration & Catching**
+- `/explore [biome]` - Explore a specific biome to find Veramon
+- `/catch [veramon_id]` - Attempt to catch a Veramon
+- `/explore_status` - View cooldown status for exploration
+- `/biomes` - View list of available biomes
+- `/pokedex` - View your caught Veramon species
+- `/pokedex_entry [veramon_name]` - View detailed info about a Veramon species
+
+**Veramon Management**
+- `/list` - View your captured Veramon
+- `/info [veramon_id]` - View details about your captured Veramon
+- `/nickname [veramon_id] [nickname]` - Change a Veramon's nickname
+- `/active_list` - View your active Veramon team
+- `/active_add [veramon_id]` - Add a Veramon to your active team
+- `/active_remove [veramon_id]` - Remove a Veramon from your active team
+- `/release [veramon_id]` - Release a captured Veramon
+
+**Battle System**
+- `/battle_pve [difficulty]` - Battle against an NPC trainer
+- `/battle_pvp [player]` - Challenge another player to a battle
+- `/battle_multi [type] [team_size]` - Start a multi-player battle
+- `/view_battle [battle_id]` - View details of an ongoing battle
+- `/battle_history` - View your recent battles
+
+**Economy & Items**
+- `/balance` - Check your token balance
+- `/shop` - View items available in the shop
+- `/shop_buy [item_id] [quantity]` - Purchase an item from the shop
+- `/inventory` - View items in your inventory
+- `/use_item [item_id] [target_id]` - Use an item from your inventory
+- `/daily` - Claim daily rewards
+- `/quests` - View available quests
+- `/quests [quest_type]` - View specific quest types
+
+**Trading**
+- `/trade_create [player]` - Start a trade with another player
+- `/trade_add [veramon_id]` - Add a Veramon to the trade
+- `/trade_remove [veramon_id]` - Remove a Veramon from the trade
+- `/trade_cancel` - Cancel an active trade
+- `/trade_list` - View active and recent trades
+
+**Social & Guilds**
+- `/profile` - View your trainer profile
+- `/profile [user]` - View another trainer's profile
+- `/guild_create [name]` - Start a new guild
+- `/guild_join [guild_id]` - Join an existing guild
+- `/guild_info [guild_id]` - View guild details
+- `/guild_leave` - Leave your current guild
+- `/guild_invite [player]` - Invite a player to your guild
+- `/leaderboard [category]` - View leaderboards
+- `/mystats` - View your personal stats and rankings
+
+**Faction System**
+- `/faction_join [faction_id]` - Request to join a faction
+- `/faction_info [faction_id]` - View faction details
+- `/faction_leave` - Leave your current faction
+- `/faction_members` - View members of your faction
+- `/faction_quests` - View faction quests
+- `/faction_quest_start [quest_id]` - Start a faction quest
+- `/faction_quest_complete [quest_id]` - Complete a faction quest
+- `/faction_contribution [amount]` - Contribute tokens to faction treasury
+
+**Tournament System**
+- `/tournament_list` - View active tournaments
+- `/tournament_join [tournament_id]` - Join a tournament
+- `/tournament_status [tournament_id]` - View tournament status
+- `/tournament_matches [tournament_id]` - View tournament matches
+
+**Utility**
+- `/help` - View command help
+- `/help [command]` - View detailed help for a specific command
+- `/settings` - View your personal settings
+- `/settings_update [setting] [value]` - Update a personal setting
+- `/ping` - Check bot response time
+- `/invite` - Get bot invite link
+- `/website` - Get link to the official website
+
+#### Moderator Commands
+All USER commands plus these moderation tools:
+
+**Trade Moderation**
+- `/mod_trade_view [trade_id]` - View details of any trade
+- `/mod_trade_cancel [trade_id] [reason]` - Cancel a suspicious trade
+- `/mod_trade_history [user_id]` - View a user's trade history
+
+**User Management**
+- `/mod_warn [user_id] [reason]` - Issue a warning to a user
+- `/mod_mute [user_id] [duration] [reason]` - Temporarily prevent a user from using commands
+- `/mod_unmute [user_id]` - Remove a command mute
+
+**Battle Moderation**
+- `/mod_battle_view [battle_id]` - View any battle details
+- `/mod_battle_end [battle_id] [winner_id]` - Force-end a stuck battle
+
+**Note:** Additional moderation commands are planned for future releases.
+
+#### Admin Commands
+All USER and MODERATOR commands plus these administrative tools:
+
+**Veramon Management**
+- `/admin_add_veramon [name] [types] [rarity]` - Add a new Veramon to the game
+- `/admin_edit_veramon [name] [field] [value]` - Edit an existing Veramon's data
+- `/admin_add_ability [name] [type] [power] [accuracy]` - Add a new ability to the game
+- `/admin_give_veramon [player] [veramon_name] [level] [shiny] [nickname]` - Grant a Veramon to a user
+- `/admin_spawn_rate [biome] [rarity] [percentage]` - Adjust spawn rates for a biome
+
+**Note:** Additional admin commands are planned for future releases.
+
+#### Developer Commands
+All USER, MODERATOR, and ADMIN commands plus these development tools:
+
+**Debug Commands**
+- `/dev_debug [module]` - Enable debug mode for a specific module
+- `/dev_error_log [count]` - View recent error logs
+- `/dev_memory_usage` - View memory usage statistics
+
+**Data Management**
+- `/dev_migration [version]` - Run database migrations
+- `/dev_rebuild_indices` - Rebuild database indices
+- `/dev_test_data [amount]` - Generate test data
+
+**System Commands**
+- `/dev_reload [module]` - Reload a specific code module
+- `/dev_config [key] [value]` - Modify configuration values
+
+**Testing Tools**
+- `/dev_simulate_catch [rarity] [shiny_chance] [count]` - Simulate Veramon catches
+- `/dev_simulate_battle [team1] [team2] [iterations]` - Simulate a battle outcome
+
+**Note:** Additional developer commands will be implemented as needed.
 
 ---
 
@@ -136,7 +261,6 @@ Veramon Reunited delivers a rich monster-catching RPG experience within Discord.
 1. **Invite the bot** to your Discord server
 2. **Configure roles** to match the permission levels:
    - User (or Veramon Trainer)
-   - VIP (or Premium)
    - Mod (or Moderator)
    - Admin (or Administrator)
    - Dev (or Developer)

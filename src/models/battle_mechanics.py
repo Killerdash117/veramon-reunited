@@ -1,6 +1,6 @@
 """
 Advanced Battle Mechanics for Veramon Reunited
-© 2025 killerdash117 | https://github.com/killerdash117
+ 2025 killerdash117 | https://github.com/killerdash117
 
 This module integrates the status effects and field conditions systems
 with the core battle mechanics, providing strategic depth to battles.
@@ -816,3 +816,84 @@ class BattleMechanics:
             mechanics.used_zmoves = set(mechanics_data["used_zmoves"])
             
         return mechanics
+
+# Standalone functions that can be imported directly
+
+def calculate_damage(
+    attacker_stats: Dict[str, Any],
+    defender_stats: Dict[str, Any],
+    move_data: Dict[str, Any],
+    type_effectiveness: float = 1.0,
+    critical_hit: bool = False,
+    modifiers: Dict[str, float] = None
+) -> int:
+    """
+    Calculate battle damage for a move.
+    
+    Args:
+        attacker_stats: Stats of the attacking Veramon
+        defender_stats: Stats of the defending Veramon  
+        move_data: Data for the move being used
+        type_effectiveness: Type effectiveness multiplier
+        critical_hit: Whether this is a critical hit
+        modifiers: Additional damage modifiers
+        
+    Returns:
+        The calculated damage amount
+    """
+    # Default modifiers if none provided
+    if modifiers is None:
+        modifiers = {
+            "stab": 1.0,   # Same-type attack bonus
+            "weather": 1.0, # Weather boost
+            "status": 1.0,  # Status condition effects
+            "field": 1.0,   # Field condition effects
+            "item": 1.0     # Held item effects
+        }
+    
+    # Get base stats
+    atk_stat = attacker_stats.get("attack", 50)
+    def_stat = defender_stats.get("defense", 50)
+    
+    # For special attacks, use special stats
+    if move_data.get("category") == "special":
+        atk_stat = attacker_stats.get("special_attack", 50)
+        def_stat = defender_stats.get("special_defense", 50)
+    
+    # Base power of the move
+    base_power = move_data.get("power", 0)
+    if base_power == 0:
+        return 0  # Status moves do no damage
+    
+    # Apply level scaling
+    level = attacker_stats.get("level", 5)
+    level_factor = (2 * level) / 5 + 2
+    
+    # Calculate raw damage
+    raw_damage = (level_factor * base_power * atk_stat / def_stat) / 50 + 2
+    
+    # Apply STAB (Same Type Attack Bonus)
+    stab_modifier = modifiers.get("stab", 1.0)
+    
+    # Apply type effectiveness
+    type_modifier = type_effectiveness
+    
+    # Apply critical hit (x1.5 damage)
+    crit_modifier = 1.5 if critical_hit else 1.0
+    
+    # Apply other modifiers
+    weather_modifier = modifiers.get("weather", 1.0)
+    status_modifier = modifiers.get("status", 1.0)
+    field_modifier = modifiers.get("field", 1.0)
+    item_modifier = modifiers.get("item", 1.0)
+    
+    # Calculate final damage
+    final_damage = raw_damage * stab_modifier * type_modifier * crit_modifier
+    final_damage = final_damage * weather_modifier * status_modifier * field_modifier * item_modifier
+    
+    # Apply random factor (85-100%)
+    random_factor = random.uniform(0.85, 1.0)
+    final_damage = final_damage * random_factor
+    
+    # Convert to integer
+    return max(1, int(final_damage))  # Minimum 1 damage

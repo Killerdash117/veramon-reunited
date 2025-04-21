@@ -1,0 +1,917 @@
+{
+  "Oceanid": {
+    "name": "Oceanid",
+    "type": [
+      "Water",
+      "Fairy"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 65,
+      "atk": 50,
+      "def": 50,
+      "sp_atk": 70,
+      "sp_def": 75,
+      "speed": 70
+    },
+    "biomes": [
+      "ocean",
+      "beach",
+      "coral_reef"
+    ],
+    "flavor": "A playful sea sprite that brings good luck to sailors. The sound of Oceanid's singing calms stormy waters.",
+    "abilities": [
+      "Water Gun",
+      "Fairy Wind",
+      "Aqua Ring",
+      "Charm"
+    ],
+    "evolution": {
+      "evolves_to": "Tidemaid",
+      "level_required": 28
+    }
+  },
+  "Tidemaid": {
+    "name": "Tidemaid",
+    "type": [
+      "Water",
+      "Fairy"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 85,
+      "atk": 70,
+      "def": 70,
+      "sp_atk": 100,
+      "sp_def": 110,
+      "speed": 90
+    },
+    "biomes": [
+      "ocean",
+      "coral_reef"
+    ],
+    "flavor": "Guardian of the coral reefs and caretaker of marine life. Tidemaid can control water currents and heal injured sea creatures.",
+    "abilities": [
+      "Hydro Pump",
+      "Moonblast",
+      "Sparkling Aria",
+      "Misty Terrain",
+      "Whirlpool",
+      "Ocean's Blessing"
+    ]
+  },
+  "Boltpup": {
+    "name": "Boltpup",
+    "type": [
+      "Electric",
+      "Fighting"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 50,
+      "atk": 65,
+      "def": 45,
+      "sp_atk": 60,
+      "sp_def": 45,
+      "speed": 75
+    },
+    "biomes": [
+      "urban",
+      "power_plant",
+      "dojo"
+    ],
+    "flavor": "Its paws generate electricity when it runs. Boltpup has endless energy and loves to spar with other fighting-type Veramon.",
+    "abilities": [
+      "Thunder Shock",
+      "Quick Attack",
+      "Low Kick",
+      "Spark"
+    ],
+    "evolution": {
+      "evolves_to": "Strikehound",
+      "level_required": 25
+    }
+  },
+  "Strikehound": {
+    "name": "Strikehound",
+    "type": [
+      "Electric",
+      "Fighting"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 70,
+      "atk": 105,
+      "def": 65,
+      "sp_atk": 85,
+      "sp_def": 65,
+      "speed": 110
+    },
+    "biomes": [
+      "power_plant",
+      "dojo"
+    ],
+    "flavor": "Its punches are as fast as lightning. Strikehound's fighting style combines electrical discharge with precise martial arts techniques.",
+    "abilities": [
+      "Thunder Punch",
+      "Close Combat",
+      "Wild Charge",
+      "Aura Sphere",
+      "Volt Switch",
+      "Lightning Barrage"
+    ]
+  },
+  "Mysticorn": {
+    "name": "Mysticorn",
+    "type": [
+      "Psychic",
+      "Normal"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 55,
+      "atk": 45,
+      "def": 45,
+      "sp_atk": 75,
+      "sp_def": 65,
+      "speed": 75
+    },
+    "biomes": [
+      "plains",
+      "enchanted_forest",
+      "crystal_meadow"
+    ],
+    "flavor": "A gentle creature with a single horn that glows when it uses its psychic powers. Mysticorn can read emotions and send telepathic messages.",
+    "abilities": [
+      "Confusion",
+      "Tackle",
+      "Psybeam",
+      "Calm Mind"
+    ],
+    "evolution": {
+      "evolves_to": "Cerestar",
+      "level_required": 32
+    }
+  },
+  "Cerestar": {
+    "name": "Cerestar",
+    "type": [
+      "Psychic",
+      "Normal"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 75,
+      "atk": 65,
+      "def": 65,
+      "sp_atk": 115,
+      "sp_def": 95,
+      "speed": 95
+    },
+    "biomes": [
+      "enchanted_forest",
+      "crystal_meadow"
+    ],
+    "flavor": "Its horn acts as a powerful psychic amplifier. Cerestar can project thoughts and images into reality, creating lifelike illusions.",
+    "abilities": [
+      "Psychic",
+      "Hyper Beam",
+      "Future Sight",
+      "Recover",
+      "Calm Mind",
+      "Astral Projection"
+    ]
+  },
+  "Flametail": {
+    "name": "Flametail",
+    "type": [
+      "Fire",
+      "Normal"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 55,
+      "atk": 60,
+      "def": 45,
+      "sp_atk": 65,
+      "sp_def": 50,
+      "speed": 65
+    },
+    "biomes": [
+      "forest",
+      "plains",
+      "urban"
+    ],
+    "flavor": "A fox-like creature with a tail that burns constantly. It uses the flame on its tail to warm its den during cold nights.",
+    "abilities": [
+      "Ember",
+      "Quick Attack",
+      "Flame Charge",
+      "Bite"
+    ],
+    "evolution": {
+      "evolves_to": "Vulpyre",
+      "level_required": 22
+    }
+  },
+  "Vulpyre": {
+    "name": "Vulpyre",
+    "type": [
+      "Fire",
+      "Normal"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 75,
+      "atk": 80,
+      "def": 65,
+      "sp_atk": 90,
+      "sp_def": 70,
+      "speed": 90
+    },
+    "biomes": [
+      "forest",
+      "volcano"
+    ],
+    "flavor": "Its fur can withstand extreme temperatures. Vulpyre is highly intelligent and has been known to play tricks on travelers in the forest.",
+    "abilities": [
+      "Flamethrower",
+      "Quick Attack",
+      "Fire Spin",
+      "Extreme Speed",
+      "Flare Blitz"
+    ],
+    "evolution": {
+      "evolves_to": "Infernox",
+      "level_required": 40
+    }
+  },
+  "Infernox": {
+    "name": "Infernox",
+    "type": [
+      "Fire",
+      "Normal"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 95,
+      "atk": 100,
+      "def": 85,
+      "sp_atk": 115,
+      "sp_def": 90,
+      "speed": 115
+    },
+    "biomes": [
+      "volcano",
+      "fire_fields"
+    ],
+    "flavor": "Ancient civilizations worshipped Infernox as a messenger between the mortal world and the realm of fire spirits. Its nine tails represent wisdom and power.",
+    "abilities": [
+      "Fire Blast",
+      "Extreme Speed",
+      "Flare Blitz",
+      "Hyper Beam",
+      "Fire Spin",
+      "Spirit Flames"
+    ]
+  },
+  "Rockling": {
+    "name": "Rockling",
+    "type": [
+      "Rock"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 50,
+      "atk": 60,
+      "def": 70,
+      "sp_atk": 40,
+      "sp_def": 40,
+      "speed": 30
+    },
+    "biomes": [
+      "mountain",
+      "cave",
+      "canyon"
+    ],
+    "flavor": "It resembles a small pile of pebbles until it moves. Rockling can compress its body to fit through narrow crevices.",
+    "abilities": [
+      "Rock Throw",
+      "Tackle",
+      "Harden",
+      "Defense Curl"
+    ],
+    "evolution": {
+      "evolves_to": "Gravello",
+      "level_required": 20
+    }
+  },
+  "Gravello": {
+    "name": "Gravello",
+    "type": [
+      "Rock",
+      "Ground"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 70,
+      "atk": 80,
+      "def": 100,
+      "sp_atk": 55,
+      "sp_def": 60,
+      "speed": 40
+    },
+    "biomes": [
+      "mountain",
+      "canyon"
+    ],
+    "flavor": "Its body has hardened into solid granite. Gravello can cause minor earthquakes by stomping its heavy feet.",
+    "abilities": [
+      "Rock Slide",
+      "Earthquake",
+      "Rollout",
+      "Sandstorm",
+      "Stealth Rock"
+    ],
+    "evolution": {
+      "evolves_to": "Teratitan",
+      "level_required": 42
+    }
+  },
+  "Teratitan": {
+    "name": "Teratitan",
+    "type": [
+      "Rock",
+      "Ground"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 105,
+      "atk": 120,
+      "def": 130,
+      "sp_atk": 65,
+      "sp_def": 80,
+      "speed": 50
+    },
+    "biomes": [
+      "mountain",
+      "badlands"
+    ],
+    "flavor": "Massive and nearly indestructible. Teratitan's footsteps register on seismographs hundreds of miles away, often mistaken for earthquakes.",
+    "abilities": [
+      "Stone Edge",
+      "Earthquake",
+      "Heavy Slam",
+      "Rock Slide",
+      "Sandstorm",
+      "Mountain Crusher"
+    ]
+  },
+  "Mystikoi": {
+    "name": "Mystikoi",
+    "type": [
+      "Water",
+      "Psychic"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 45,
+      "atk": 45,
+      "def": 45,
+      "sp_atk": 75,
+      "sp_def": 65,
+      "speed": 85
+    },
+    "biomes": [
+      "ocean",
+      "deep_sea",
+      "coral_reef"
+    ],
+    "flavor": "A small, intelligent fish with psychic abilities. Mystikoi travels in schools that move with perfect synchronization thanks to their telepathic link.",
+    "abilities": [
+      "Water Gun",
+      "Confusion",
+      "Aqua Jet",
+      "Psybeam"
+    ],
+    "evolution": {
+      "evolves_to": "Psyquatic",
+      "level_required": 30
+    }
+  },
+  "Psyquatic": {
+    "name": "Psyquatic",
+    "type": [
+      "Water",
+      "Psychic"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 75,
+      "atk": 65,
+      "def": 70,
+      "sp_atk": 115,
+      "sp_def": 95,
+      "speed": 105
+    },
+    "biomes": [
+      "deep_sea",
+      "psychic_abyss"
+    ],
+    "flavor": "It can manipulate water molecules with its mind. Psyquatic is said to know all the secrets of the ocean depths and can communicate with any sea creature.",
+    "abilities": [
+      "Hydro Pump",
+      "Psychic",
+      "Surf",
+      "Future Sight",
+      "Calm Mind",
+      "Mind Tsunami"
+    ]
+  },
+  "Statikeet": {
+    "name": "Statikeet",
+    "type": [
+      "Electric",
+      "Flying"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 40,
+      "atk": 45,
+      "def": 35,
+      "sp_atk": 65,
+      "sp_def": 40,
+      "speed": 80
+    },
+    "biomes": [
+      "forest",
+      "plains",
+      "thunderstorm_peaks"
+    ],
+    "flavor": "A small bird that generates electricity in its feathers. During thunderstorms, Statikeet's feathers light up like tiny lightning bolts.",
+    "abilities": [
+      "Thunder Shock",
+      "Peck",
+      "Quick Attack",
+      "Charge"
+    ],
+    "evolution": {
+      "evolves_to": "Voltrave",
+      "level_required": 24
+    }
+  },
+  "Voltrave": {
+    "name": "Voltrave",
+    "type": [
+      "Electric",
+      "Flying"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 60,
+      "atk": 70,
+      "def": 55,
+      "sp_atk": 90,
+      "sp_def": 60,
+      "speed": 110
+    },
+    "biomes": [
+      "thunderstorm_peaks",
+      "sky_heights"
+    ],
+    "flavor": "It flies within storm clouds to absorb lightning. Voltrave can detect electrical fields and predict thunderstorms days in advance.",
+    "abilities": [
+      "Thunderbolt",
+      "Aerial Ace",
+      "Discharge",
+      "Air Slash",
+      "Thunder"
+    ],
+    "evolution": {
+      "evolves_to": "Tempestrix",
+      "level_required": 45
+    }
+  },
+  "Tempestrix": {
+    "name": "Tempestrix",
+    "type": [
+      "Electric",
+      "Flying"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 80,
+      "atk": 90,
+      "def": 75,
+      "sp_atk": 120,
+      "sp_def": 80,
+      "speed": 135
+    },
+    "biomes": [
+      "thunderstorm_peaks",
+      "sky_temple"
+    ],
+    "flavor": "The embodiment of storm and sky. Tempestrix can summon thunderstorms at will and conducts lightning through its wings to strike with devastating accuracy.",
+    "abilities": [
+      "Thunder",
+      "Hurricane",
+      "Zap Cannon",
+      "Brave Bird",
+      "Rain Dance",
+      "Storm Sovereign"
+    ]
+  },
+  "Toxisect": {
+    "name": "Toxisect",
+    "type": [
+      "Bug",
+      "Poison"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 45,
+      "atk": 60,
+      "def": 50,
+      "sp_atk": 45,
+      "sp_def": 50,
+      "speed": 65
+    },
+    "biomes": [
+      "forest",
+      "swamp",
+      "jungle"
+    ],
+    "flavor": "A venomous insect that sprays toxic mist when threatened. Its bright colors warn predators of its poisonous nature.",
+    "abilities": [
+      "Poison Sting",
+      "Bug Bite",
+      "Toxic",
+      "Leech Life"
+    ],
+    "evolution": {
+      "evolves_to": "Venomoth",
+      "level_required": 20
+    }
+  },
+  "Venomoth": {
+    "name": "Venomoth",
+    "type": [
+      "Bug",
+      "Poison"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 65,
+      "atk": 80,
+      "def": 60,
+      "sp_atk": 70,
+      "sp_def": 65,
+      "speed": 90
+    },
+    "biomes": [
+      "forest",
+      "toxic_waste"
+    ],
+    "flavor": "The scales on its wings contain various toxins. When Venomoth flaps its wings, it releases poisonous dust that can paralyze opponents.",
+    "abilities": [
+      "Venoshock",
+      "Bug Buzz",
+      "Quiver Dance",
+      "Toxic",
+      "Silver Wind"
+    ],
+    "evolution": {
+      "evolves_to": "Toxoptera",
+      "level_required": 38
+    }
+  },
+  "Toxoptera": {
+    "name": "Toxoptera",
+    "type": [
+      "Bug",
+      "Poison"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 80,
+      "atk": 100,
+      "def": 75,
+      "sp_atk": 105,
+      "sp_def": 85,
+      "speed": 115
+    },
+    "biomes": [
+      "toxic_waste",
+      "death_forest"
+    ],
+    "flavor": "The ultimate toxic predator. Toxoptera's venom contains over 100 different toxins, many of which have no known antidotes.",
+    "abilities": [
+      "Sludge Wave",
+      "Bug Buzz",
+      "Quiver Dance",
+      "Toxic",
+      "Leech Life",
+      "Venomous Cyclone"
+    ]
+  },
+  "Pummel": {
+    "name": "Pummel",
+    "type": [
+      "Fighting"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 50,
+      "atk": 70,
+      "def": 50,
+      "sp_atk": 35,
+      "sp_def": 40,
+      "speed": 60
+    },
+    "biomes": [
+      "dojo",
+      "urban",
+      "mountains"
+    ],
+    "flavor": "A small but determined fighter. Pummel trains constantly by punching rocks and trees to strengthen its fists.",
+    "abilities": [
+      "Karate Chop",
+      "Rock Smash",
+      "Low Kick",
+      "Bulk Up"
+    ],
+    "evolution": {
+      "evolves_to": "Kombatant",
+      "level_required": 25
+    }
+  },
+  "Kombatant": {
+    "name": "Kombatant",
+    "type": [
+      "Fighting"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 70,
+      "atk": 105,
+      "def": 75,
+      "sp_atk": 45,
+      "sp_def": 65,
+      "speed": 85
+    },
+    "biomes": [
+      "dojo",
+      "mountains"
+    ],
+    "flavor": "A disciplined martial artist that has mastered multiple fighting styles. Kombatant meditates daily to focus its energy and fighting spirit.",
+    "abilities": [
+      "Brick Break",
+      "Close Combat",
+      "Detect",
+      "Bulk Up",
+      "Aura Sphere"
+    ],
+    "evolution": {
+      "evolves_to": "Grandmaster",
+      "level_required": 45
+    }
+  },
+  "Grandmaster": {
+    "name": "Grandmaster",
+    "type": [
+      "Fighting",
+      "Psychic"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 90,
+      "atk": 130,
+      "def": 95,
+      "sp_atk": 95,
+      "sp_def": 95,
+      "speed": 95
+    },
+    "biomes": [
+      "dojo",
+      "zen_temple"
+    ],
+    "flavor": "It has achieved perfect harmony between body and mind. Grandmaster can predict opponents' moves before they make them and strike with supernatural precision.",
+    "abilities": [
+      "Close Combat",
+      "Psychic",
+      "Focus Blast",
+      "Calm Mind",
+      "Detect",
+      "Enlightened Strike"
+    ]
+  },
+  "Shadeling": {
+    "name": "Shadeling",
+    "type": [
+      "Dark"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 45,
+      "atk": 55,
+      "def": 40,
+      "sp_atk": 55,
+      "sp_def": 40,
+      "speed": 70
+    },
+    "biomes": [
+      "dark_forest",
+      "cave",
+      "abandoned_mansion"
+    ],
+    "flavor": "It hides in shadows and is almost invisible at night. Shadeling feeds on negative emotions and is attracted to places of fear and sadness.",
+    "abilities": [
+      "Bite",
+      "Feint Attack",
+      "Pursuit",
+      "Nasty Plot"
+    ],
+    "evolution": {
+      "evolves_to": "Umbranine",
+      "level_required": 25
+    }
+  },
+  "Umbranine": {
+    "name": "Umbranine",
+    "type": [
+      "Dark"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 65,
+      "atk": 85,
+      "def": 60,
+      "sp_atk": 85,
+      "sp_def": 60,
+      "speed": 95
+    },
+    "biomes": [
+      "dark_forest",
+      "shadow_realm"
+    ],
+    "flavor": "A predator that stalks its prey in total darkness. Umbranine can melt into shadows and reappear elsewhere, making it an elusive hunter.",
+    "abilities": [
+      "Dark Pulse",
+      "Sucker Punch",
+      "Night Slash",
+      "Nasty Plot",
+      "Shadow Ball"
+    ],
+    "evolution": {
+      "evolves_to": "Shadowraith",
+      "level_required": 42
+    }
+  },
+  "Shadowraith": {
+    "name": "Shadowraith",
+    "type": [
+      "Dark",
+      "Ghost"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 85,
+      "atk": 115,
+      "def": 80,
+      "sp_atk": 115,
+      "sp_def": 80,
+      "speed": 115
+    },
+    "biomes": [
+      "shadow_realm",
+      "void_abyss"
+    ],
+    "flavor": "A creature of pure darkness that exists between life and death. Shadowraith can devour light itself, creating zones of impenetrable darkness.",
+    "abilities": [
+      "Dark Pulse",
+      "Shadow Ball",
+      "Phantom Force",
+      "Night Daze",
+      "Shadow Sneak",
+      "Abyssal Void"
+    ]
+  },
+  "Elemander": {
+    "name": "Elemander",
+    "type": [
+      "Normal"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 60,
+      "atk": 60,
+      "def": 60,
+      "sp_atk": 60,
+      "sp_def": 60,
+      "speed": 60
+    },
+    "biomes": [
+      "plains",
+      "forest",
+      "mountain",
+      "beach"
+    ],
+    "flavor": "A chameleon-like creature that can adapt to any environment. Elemander changes color based on its surroundings and mood.",
+    "abilities": [
+      "Tackle",
+      "Quick Attack",
+      "Swift",
+      "Camouflage"
+    ],
+    "evolution": {
+      "evolves_to": "Adaptile",
+      "level_required": 25
+    }
+  },
+  "Adaptile": {
+    "name": "Adaptile",
+    "type": [
+      "Normal"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 80,
+      "atk": 80,
+      "def": 80,
+      "sp_atk": 80,
+      "sp_def": 80,
+      "speed": 80
+    },
+    "biomes": [
+      "plains",
+      "forest",
+      "mountain",
+      "beach"
+    ],
+    "flavor": "It can survive in any environment by altering its biology. Adaptile's cells can reconfigure to withstand extreme heat, cold, pressure, or toxins.",
+    "abilities": [
+      "Hyper Beam",
+      "Extreme Speed",
+      "Conversion",
+      "Tri Attack",
+      "Recover",
+      "Adapt"
+    ]
+  }
+}

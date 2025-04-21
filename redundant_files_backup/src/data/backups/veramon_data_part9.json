@@ -1,0 +1,772 @@
+{
+  "Bubling": {
+    "name": "Bubling",
+    "type": [
+      "Water"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 40,
+      "atk": 30,
+      "def": 35,
+      "sp_atk": 50,
+      "sp_def": 40,
+      "speed": 60
+    },
+    "biomes": [
+      "river",
+      "lake",
+      "coastal_waters"
+    ],
+    "flavor": "A small water creature made almost entirely of bubbles. It breathes through its skin and can survive on land for short periods by keeping itself moist.",
+    "abilities": [
+      "Water Absorb",
+      "Swift Swim"
+    ],
+    "evolution": {
+      "evolves_to": "Frothar",
+      "level_required": 18
+    }
+  },
+  "Frothar": {
+    "name": "Frothar",
+    "type": [
+      "Water"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 65,
+      "atk": 50,
+      "def": 55,
+      "sp_atk": 80,
+      "sp_def": 60,
+      "speed": 90
+    },
+    "biomes": [
+      "river",
+      "lake",
+      "coastal_waters"
+    ],
+    "flavor": "Its body is composed of dense bubbles held together by surface tension. Frothar can alter the consistency of its body to slip through narrow spaces.",
+    "abilities": [
+      "Water Absorb",
+      "Swift Swim"
+    ],
+    "evolution": {
+      "evolves_to": "Tsunabble",
+      "level_required": 36
+    }
+  },
+  "Tsunabble": {
+    "name": "Tsunabble",
+    "type": [
+      "Water",
+      "Fighting"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 85,
+      "atk": 110,
+      "def": 75,
+      "sp_atk": 100,
+      "sp_def": 80,
+      "speed": 105
+    },
+    "biomes": [
+      "ocean",
+      "waterfall",
+      "coastal_cliffs"
+    ],
+    "flavor": "Master of water pressure, its punches can cut through steel plates. Tsunabble can compress water into devastating projectiles that strike with incredible force.",
+    "abilities": [
+      "Water Absorb",
+      "Swift Swim"
+    ]
+  },
+  "Cubflame": {
+    "name": "Cubflame",
+    "type": [
+      "Fire"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 45,
+      "atk": 65,
+      "def": 40,
+      "sp_atk": 60,
+      "sp_def": 40,
+      "speed": 70
+    },
+    "biomes": [
+      "volcano",
+      "grassland",
+      "mountain"
+    ],
+    "flavor": "A small bear cub with a flame burning on its forehead. It sleeps in volcanic caverns where the heat keeps it comfortable.",
+    "abilities": [
+      "Blaze",
+      "Flame Body"
+    ],
+    "evolution": {
+      "evolves_to": "Embearl",
+      "level_required": 20
+    }
+  },
+  "Embearl": {
+    "name": "Embearl",
+    "type": [
+      "Fire",
+      "Fighting"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 75,
+      "atk": 95,
+      "def": 60,
+      "sp_atk": 80,
+      "sp_def": 60,
+      "speed": 90
+    },
+    "biomes": [
+      "volcano",
+      "mountain"
+    ],
+    "flavor": "It fights using martial arts combined with its natural fire abilities. The flames on its paws intensify when it lands a critical hit.",
+    "abilities": [
+      "Blaze",
+      "Iron Fist"
+    ],
+    "evolution": {
+      "evolves_to": "Ursinferno",
+      "level_required": 40
+    }
+  },
+  "Ursinferno": {
+    "name": "Ursinferno",
+    "type": [
+      "Fire",
+      "Fighting"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 95,
+      "atk": 130,
+      "def": 80,
+      "sp_atk": 100,
+      "sp_def": 80,
+      "speed": 95
+    },
+    "biomes": [
+      "volcano",
+      "lava_fields"
+    ],
+    "flavor": "A massive bear wreathed in flames. Legends say that Ursinferno hibernates in the heart of active volcanoes, awakening only when the mountain is about to erupt.",
+    "abilities": [
+      "Blaze",
+      "Iron Fist"
+    ]
+  },
+  "Mysticle": {
+    "name": "Mysticle",
+    "type": [
+      "Psychic"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 35,
+      "atk": 25,
+      "def": 35,
+      "sp_atk": 70,
+      "sp_def": 65,
+      "speed": 60
+    },
+    "biomes": [
+      "crystal_cave",
+      "zen_garden",
+      "ancient_temple"
+    ],
+    "flavor": "A small psychic creature with a crystalline body. It communicates through telepathy and can project calming mental images to those around it.",
+    "abilities": [
+      "Synchronize",
+      "Telepathy"
+    ],
+    "evolution": {
+      "evolves_to": "Psysticle",
+      "level_required": 28
+    }
+  },
+  "Psysticle": {
+    "name": "Psysticle",
+    "type": [
+      "Psychic",
+      "Ice"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 65,
+      "atk": 45,
+      "def": 65,
+      "sp_atk": 115,
+      "sp_def": 105,
+      "speed": 85
+    },
+    "biomes": [
+      "crystal_cave",
+      "frozen_temple",
+      "arctic_ruins"
+    ],
+    "flavor": "Its crystalline body has frozen into geometric perfection. Psysticle can lower the temperature around it to near absolute zero using its psychic powers.",
+    "abilities": [
+      "Synchronize",
+      "Snow Cloak"
+    ]
+  },
+  "Flufflet": {
+    "name": "Flufflet",
+    "type": [
+      "Normal",
+      "Flying"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 40,
+      "atk": 45,
+      "def": 35,
+      "sp_atk": 40,
+      "sp_def": 55,
+      "speed": 70
+    },
+    "biomes": [
+      "forest",
+      "meadow",
+      "cloud_forest"
+    ],
+    "flavor": "A tiny bird covered in extraordinarily soft down feathers. Flufflet's feathers are prized for making the most comfortable pillows and clothing.",
+    "abilities": [
+      "Fluffy",
+      "Cloud Nine"
+    ],
+    "evolution": {
+      "evolves_to": "Plumavia",
+      "level_required": 20
+    }
+  },
+  "Plumavia": {
+    "name": "Plumavia",
+    "type": [
+      "Normal",
+      "Flying"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 65,
+      "atk": 70,
+      "def": 60,
+      "sp_atk": 65,
+      "sp_def": 80,
+      "speed": 95
+    },
+    "biomes": [
+      "forest",
+      "cloud_forest"
+    ],
+    "flavor": "Its magnificent plumage changes color with the seasons. Plumavia's aerial displays during mating season are considered one of nature's most beautiful sights.",
+    "abilities": [
+      "Fluffy",
+      "Cloud Nine"
+    ],
+    "evolution": {
+      "evolves_to": "Cirroflair",
+      "level_required": 38
+    }
+  },
+  "Cirroflair": {
+    "name": "Cirroflair",
+    "type": [
+      "Normal",
+      "Flying"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 85,
+      "atk": 95,
+      "def": 80,
+      "sp_atk": 85,
+      "sp_def": 100,
+      "speed": 125
+    },
+    "biomes": [
+      "mountain_peak",
+      "sky_heights",
+      "cloud_sea"
+    ],
+    "flavor": "A majestic bird that soars above the clouds. Cirroflair's feathers are so light and airy that it appears to be made of clouds itself when flying high in the sky.",
+    "abilities": [
+      "Fluffy",
+      "Cloud Nine"
+    ]
+  },
+  "Sproutling": {
+    "name": "Sproutling",
+    "type": [
+      "Grass"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 45,
+      "atk": 35,
+      "def": 40,
+      "sp_atk": 65,
+      "sp_def": 55,
+      "speed": 50
+    },
+    "biomes": [
+      "forest",
+      "meadow",
+      "jungle"
+    ],
+    "flavor": "A small plant creature with a single leaf sprouting from its head. Sproutling absorbs sunlight through the leaf, which grows larger as it matures.",
+    "abilities": [
+      "Overgrow",
+      "Early Bird"
+    ],
+    "evolution": {
+      "evolves_to": "Floraplume",
+      "level_required": 16
+    }
+  },
+  "Floraplume": {
+    "name": "Floraplume",
+    "type": [
+      "Grass",
+      "Flying"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 65,
+      "atk": 55,
+      "def": 60,
+      "sp_atk": 85,
+      "sp_def": 75,
+      "speed": 80
+    },
+    "biomes": [
+      "forest",
+      "flower_fields",
+      "jungle"
+    ],
+    "flavor": "The leaf on its head has grown into a colorful plume that catches the wind. Floraplume can glide on air currents and spread seeds over wide areas.",
+    "abilities": [
+      "Overgrow",
+      "Early Bird"
+    ],
+    "evolution": {
+      "evolves_to": "Avianthe",
+      "level_required": 36
+    }
+  },
+  "Avianthe": {
+    "name": "Avianthe",
+    "type": [
+      "Grass",
+      "Flying"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 85,
+      "atk": 75,
+      "def": 80,
+      "sp_atk": 115,
+      "sp_def": 95,
+      "speed": 110
+    },
+    "biomes": [
+      "rainforest",
+      "jungle_canopy",
+      "ancient_forest"
+    ],
+    "flavor": "A magnificent creature that embodies the harmony between plants and the sky. Avianthe can control air currents to disperse healing pollen across vast distances.",
+    "abilities": [
+      "Overgrow",
+      "Aerilate"
+    ]
+  },
+  "Stoneling": {
+    "name": "Stoneling",
+    "type": [
+      "Rock"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 50,
+      "atk": 60,
+      "def": 80,
+      "sp_atk": 30,
+      "sp_def": 45,
+      "speed": 20
+    },
+    "biomes": [
+      "mountain",
+      "cave",
+      "rocky_terrain"
+    ],
+    "flavor": "A small creature formed from animated pebbles. Stoneling absorbs minerals from surrounding rocks to strengthen its body as it grows.",
+    "abilities": [
+      "Rock Head",
+      "Sturdy"
+    ],
+    "evolution": {
+      "evolves_to": "Boulderling",
+      "level_required": 25
+    }
+  },
+  "Boulderling": {
+    "name": "Boulderling",
+    "type": [
+      "Rock",
+      "Ground"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 70,
+      "atk": 90,
+      "def": 110,
+      "sp_atk": 45,
+      "sp_def": 65,
+      "speed": 35
+    },
+    "biomes": [
+      "mountain",
+      "canyon"
+    ],
+    "flavor": "Its body has compressed into a denser form. Boulderling can curl into a perfect sphere and roll at high speeds, crushing obstacles in its path.",
+    "abilities": [
+      "Rock Head",
+      "Sturdy"
+    ],
+    "evolution": {
+      "evolves_to": "Megalith",
+      "level_required": 42
+    }
+  },
+  "Megalith": {
+    "name": "Megalith",
+    "type": [
+      "Rock",
+      "Ground"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 100,
+      "atk": 125,
+      "def": 140,
+      "sp_atk": 55,
+      "sp_def": 85,
+      "speed": 45
+    },
+    "biomes": [
+      "mountain_peak",
+      "ancient_ruins"
+    ],
+    "flavor": "A colossal rock creature believed to have existed since prehistoric times. Some Megaliths have been mistaken for natural rock formations for centuries.",
+    "abilities": [
+      "Rock Head",
+      "Sturdy"
+    ]
+  },
+  "Sparkit": {
+    "name": "Sparkit",
+    "type": [
+      "Electric"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 40,
+      "atk": 45,
+      "def": 40,
+      "sp_atk": 65,
+      "sp_def": 55,
+      "speed": 70
+    },
+    "biomes": [
+      "urban",
+      "power_plant",
+      "electrical_fields"
+    ],
+    "flavor": "A small creature made of living electricity. Sparkit feeds on electrical currents and is often found near power lines and electrical substations.",
+    "abilities": [
+      "Static",
+      "Plus"
+    ],
+    "evolution": {
+      "evolves_to": "Voltric",
+      "level_required": 20
+    }
+  },
+  "Voltric": {
+    "name": "Voltric",
+    "type": [
+      "Electric"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 60,
+      "atk": 65,
+      "def": 60,
+      "sp_atk": 95,
+      "sp_def": 75,
+      "speed": 100
+    },
+    "biomes": [
+      "power_plant",
+      "electrical_fields"
+    ],
+    "flavor": "Its body constantly generates electrical energy. Voltric can travel through power lines and electrical systems, appearing as power surges.",
+    "abilities": [
+      "Static",
+      "Plus"
+    ],
+    "evolution": {
+      "evolves_to": "Thunderon",
+      "level_required": 40
+    }
+  },
+  "Thunderon": {
+    "name": "Thunderon",
+    "type": [
+      "Electric",
+      "Flying"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 80,
+      "atk": 85,
+      "def": 80,
+      "sp_atk": 130,
+      "sp_def": 95,
+      "speed": 130
+    },
+    "biomes": [
+      "thunderstorm_peaks",
+      "electrical_fields"
+    ],
+    "flavor": "A creature born from the fusion of lightning and storm clouds. Thunderon can generate thunderstorms at will and harness the electrical energy of lightning strikes.",
+    "abilities": [
+      "Static",
+      "Volt Absorb"
+    ]
+  },
+  "Toxiseed": {
+    "name": "Toxiseed",
+    "type": [
+      "Poison",
+      "Grass"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 45,
+      "atk": 50,
+      "def": 50,
+      "sp_atk": 60,
+      "sp_def": 55,
+      "speed": 45
+    },
+    "biomes": [
+      "swamp",
+      "polluted_waters",
+      "toxic_forest"
+    ],
+    "flavor": "A small seed that thrives in polluted environments. Toxiseed absorbs toxins from soil and water, purifying the area around it.",
+    "abilities": [
+      "Poison Point",
+      "Effect Spore"
+    ],
+    "evolution": {
+      "evolves_to": "Toxibloom",
+      "level_required": 21
+    }
+  },
+  "Toxibloom": {
+    "name": "Toxibloom",
+    "type": [
+      "Poison",
+      "Grass"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 65,
+      "atk": 70,
+      "def": 70,
+      "sp_atk": 85,
+      "sp_def": 75,
+      "speed": 55
+    },
+    "biomes": [
+      "toxic_forest",
+      "polluted_waters"
+    ],
+    "flavor": "Its flower releases spores that neutralize environmental toxins. Toxibloom is often used by environmental scientists to remediate polluted areas.",
+    "abilities": [
+      "Poison Point",
+      "Effect Spore"
+    ],
+    "evolution": {
+      "evolves_to": "Venoplant",
+      "level_required": 38
+    }
+  },
+  "Venoplant": {
+    "name": "Venoplant",
+    "type": [
+      "Poison",
+      "Grass"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 85,
+      "atk": 90,
+      "def": 90,
+      "sp_atk": 115,
+      "sp_def": 95,
+      "speed": 75
+    },
+    "biomes": [
+      "toxic_forest",
+      "chemical_swamp"
+    ],
+    "flavor": "A powerful plant that has evolved to thrive in the most toxic environments. Venoplant can synthesize any known toxin and its antidote, making it invaluable for medical research.",
+    "abilities": [
+      "Poison Point",
+      "Effect Spore"
+    ]
+  },
+  "Lumina": {
+    "name": "Lumina",
+    "type": [
+      "Fairy",
+      "Fairy"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 75,
+      "atk": 70,
+      "def": 70,
+      "sp_atk": 120,
+      "sp_def": 115,
+      "speed": 95
+    },
+    "biomes": [
+      "fairy_glade",
+      "light_shrine",
+      "crystal_cave"
+    ],
+    "flavor": "A being made of pure light energy. Lumina can manipulate light to create stunning illusions and can become invisible by bending light around its body.",
+    "abilities": [
+      "Illuminate",
+      "Prism Guard"
+    ]
+  },
+  "Nightshade": {
+    "name": "Nightshade",
+    "type": [
+      "Dark",
+      "Ghost"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 85,
+      "atk": 110,
+      "def": 75,
+      "sp_atk": 115,
+      "sp_def": 85,
+      "speed": 110
+    },
+    "biomes": [
+      "haunted_forest",
+      "shadow_realm",
+      "abandoned_mansion"
+    ],
+    "flavor": "A creature born from the deepest shadows. Nightshade can melt into darkness completely, becoming undetectable even to the keenest observers.",
+    "abilities": [
+      "Shadow Tag",
+      "Infiltrator"
+    ]
+  },
+  "Elementus": {
+    "name": "Elementus",
+    "type": [
+      "Normal"
+    ],
+    "rarity": "mythical",
+    "catch_rate": 0.01,
+    "shiny_rate": 0.0005,
+    "base_stats": {
+      "hp": 95,
+      "atk": 95,
+      "def": 95,
+      "sp_atk": 95,
+      "sp_def": 95,
+      "speed": 95
+    },
+    "biomes": [
+      "elemental_convergence",
+      "dimensional_rift",
+      "ancient_temple"
+    ],
+    "flavor": "A mysterious creature that can change its elemental affinity at will. Elementus is said to exist simultaneously in multiple dimensions, allowing it to harness all elemental powers.",
+    "abilities": [
+      "Protean",
+      "Adaptability"
+    ]
+  }
+}

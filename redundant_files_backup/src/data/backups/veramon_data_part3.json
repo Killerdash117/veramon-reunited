@@ -1,0 +1,874 @@
+{
+  "Pufflet": {
+    "name": "Pufflet",
+    "type": [
+      "Normal",
+      "Flying"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 45,
+      "atk": 40,
+      "def": 35,
+      "sp_atk": 40,
+      "sp_def": 45,
+      "speed": 60
+    },
+    "biomes": [
+      "forest",
+      "plains",
+      "urban"
+    ],
+    "flavor": "A small, fluffy bird that collects colorful objects. It's known for its cheerful song that brings joy to listeners.",
+    "abilities": [
+      "Peck",
+      "Gust",
+      "Quick Attack",
+      "Sing"
+    ],
+    "evolution": {
+      "evolves_to": "Plumella",
+      "level_required": 15
+    }
+  },
+  "Plumella": {
+    "name": "Plumella",
+    "type": [
+      "Normal",
+      "Flying"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 65,
+      "atk": 55,
+      "def": 50,
+      "sp_atk": 60,
+      "sp_def": 60,
+      "speed": 85
+    },
+    "biomes": [
+      "forest",
+      "plains"
+    ],
+    "flavor": "Its beautiful plumage changes color with the seasons. Plumella's singing voice can calm even the most aggressive Veramon.",
+    "abilities": [
+      "Aerial Ace",
+      "Hyper Voice",
+      "Air Slash",
+      "Hurricane"
+    ],
+    "evolution": {
+      "evolves_to": "Symphonia",
+      "level_required": 32
+    }
+  },
+  "Symphonia": {
+    "name": "Symphonia",
+    "type": [
+      "Normal",
+      "Flying"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 80,
+      "atk": 70,
+      "def": 65,
+      "sp_atk": 95,
+      "sp_def": 85,
+      "speed": 105
+    },
+    "biomes": [
+      "cloud_heights",
+      "enchanted_forest"
+    ],
+    "flavor": "Master of melody and wind currents. Symphonia's song is said to have healing properties and can influence the weather.",
+    "abilities": [
+      "Hurricane",
+      "Hyper Voice",
+      "Moonblast",
+      "Brave Bird",
+      "Sky Attack",
+      "Harmonic Crescendo"
+    ]
+  },
+  "Flopper": {
+    "name": "Flopper",
+    "type": [
+      "Water"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 40,
+      "atk": 35,
+      "def": 35,
+      "sp_atk": 40,
+      "sp_def": 40,
+      "speed": 65
+    },
+    "biomes": [
+      "beach",
+      "river",
+      "lake"
+    ],
+    "flavor": "A small fish with remarkable jumping ability. Flopper can survive outside water for short periods by storing moisture in its scales.",
+    "abilities": [
+      "Splash",
+      "Water Gun",
+      "Quick Attack",
+      "Flail"
+    ],
+    "evolution": {
+      "evolves_to": "Splashfin",
+      "level_required": 18
+    }
+  },
+  "Splashfin": {
+    "name": "Splashfin",
+    "type": [
+      "Water"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 60,
+      "atk": 55,
+      "def": 55,
+      "sp_atk": 65,
+      "sp_def": 65,
+      "speed": 90
+    },
+    "biomes": [
+      "ocean",
+      "river"
+    ],
+    "flavor": "Known for its acrobatic jumps that can reach 30 feet high. It swims in schools and creates beautiful water displays.",
+    "abilities": [
+      "Aqua Jet",
+      "Waterfall",
+      "Bounce",
+      "Hydro Pump"
+    ],
+    "evolution": {
+      "evolves_to": "Tidalord",
+      "level_required": 36
+    }
+  },
+  "Tidalord": {
+    "name": "Tidalord",
+    "type": [
+      "Water",
+      "Flying"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 80,
+      "atk": 90,
+      "def": 75,
+      "sp_atk": 95,
+      "sp_def": 85,
+      "speed": 125
+    },
+    "biomes": [
+      "ocean",
+      "waterfall"
+    ],
+    "flavor": "It can control water currents and fly by creating water jets. Tidalord is revered by fishermen, who consider sighting one a sign of good fortune.",
+    "abilities": [
+      "Hydro Pump",
+      "Hurricane",
+      "Dive",
+      "Rain Dance",
+      "Aqua Tail",
+      "Torrent Tornado"
+    ]
+  },
+  "Sporeling": {
+    "name": "Sporeling",
+    "type": [
+      "Grass",
+      "Poison"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 45,
+      "atk": 45,
+      "def": 45,
+      "sp_atk": 55,
+      "sp_def": 55,
+      "speed": 35
+    },
+    "biomes": [
+      "forest",
+      "swamp",
+      "mushroom_grove"
+    ],
+    "flavor": "A small mushroom creature that thrives in damp, dark environments. It releases glowing spores at night to attract pollinators.",
+    "abilities": [
+      "Absorb",
+      "Poison Powder",
+      "Stun Spore",
+      "Mega Drain"
+    ],
+    "evolution": {
+      "evolves_to": "Funganite",
+      "level_required": 22
+    }
+  },
+  "Funganite": {
+    "name": "Funganite",
+    "type": [
+      "Grass",
+      "Poison"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 70,
+      "atk": 65,
+      "def": 65,
+      "sp_atk": 85,
+      "sp_def": 75,
+      "speed": 45
+    },
+    "biomes": [
+      "forest",
+      "mushroom_grove"
+    ],
+    "flavor": "The cap on its head can change color to match its surroundings. Funganite forms symbiotic relationships with forest trees.",
+    "abilities": [
+      "Giga Drain",
+      "Sludge Bomb",
+      "Spore",
+      "Energy Ball",
+      "Venoshock"
+    ],
+    "evolution": {
+      "evolves_to": "Mycogiant",
+      "level_required": 40
+    }
+  },
+  "Mycogiant": {
+    "name": "Mycogiant",
+    "type": [
+      "Grass",
+      "Poison"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 105,
+      "atk": 85,
+      "def": 90,
+      "sp_atk": 110,
+      "sp_def": 90,
+      "speed": 50
+    },
+    "biomes": [
+      "ancient_forest",
+      "mushroom_grove"
+    ],
+    "flavor": "An ancient fungal entity that's been alive for centuries. It can communicate telepathically with other plant life and controls entire forest ecosystems.",
+    "abilities": [
+      "Giga Drain",
+      "Sludge Wave",
+      "Spore",
+      "Solar Beam",
+      "Toxic",
+      "Fungal Network"
+    ]
+  },
+  "Terrapup": {
+    "name": "Terrapup",
+    "type": [
+      "Ground"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 55,
+      "atk": 60,
+      "def": 60,
+      "sp_atk": 40,
+      "sp_def": 45,
+      "speed": 50
+    },
+    "biomes": [
+      "plains",
+      "desert",
+      "savanna"
+    ],
+    "flavor": "A playful canine that loves to dig. Its paws are specially adapted for burrowing through even the hardest soil.",
+    "abilities": [
+      "Dig",
+      "Sand Attack",
+      "Bite",
+      "Mud Shot"
+    ],
+    "evolution": {
+      "evolves_to": "Terrierdon",
+      "level_required": 24
+    }
+  },
+  "Terrierdon": {
+    "name": "Terrierdon",
+    "type": [
+      "Ground"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 75,
+      "atk": 85,
+      "def": 80,
+      "sp_atk": 55,
+      "sp_def": 60,
+      "speed": 70
+    },
+    "biomes": [
+      "plains",
+      "desert"
+    ],
+    "flavor": "It can sense vibrations through the ground from miles away. Terrierdon creates complex tunnel systems that can span entire regions.",
+    "abilities": [
+      "Dig",
+      "Earthquake",
+      "Crunch",
+      "Earth Power",
+      "Sandstorm"
+    ],
+    "evolution": {
+      "evolves_to": "Seismodon",
+      "level_required": 42
+    }
+  },
+  "Seismodon": {
+    "name": "Seismodon",
+    "type": [
+      "Ground",
+      "Dark"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 95,
+      "atk": 120,
+      "def": 100,
+      "sp_atk": 75,
+      "sp_def": 80,
+      "speed": 85
+    },
+    "biomes": [
+      "desert",
+      "badlands"
+    ],
+    "flavor": "Feared for its ability to cause localized earthquakes. Seismodon's howl can be heard moments before a tremor strikes.",
+    "abilities": [
+      "Earthquake",
+      "Crunch",
+      "Earth Power",
+      "Fissure",
+      "Rock Slide",
+      "Tectonic Rage"
+    ]
+  },
+  "Nimblet": {
+    "name": "Nimblet",
+    "type": [
+      "Flying"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 40,
+      "atk": 40,
+      "def": 35,
+      "sp_atk": 45,
+      "sp_def": 40,
+      "speed": 75
+    },
+    "biomes": [
+      "plains",
+      "mountain",
+      "cloud_heights"
+    ],
+    "flavor": "Its body is light enough to be lifted by the gentlest breeze. Nimblet can sleep while floating on air currents.",
+    "abilities": [
+      "Gust",
+      "Quick Attack",
+      "Air Cutter",
+      "Tailwind"
+    ],
+    "evolution": {
+      "evolves_to": "Zephyrix",
+      "level_required": 20
+    }
+  },
+  "Zephyrix": {
+    "name": "Zephyrix",
+    "type": [
+      "Flying"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 60,
+      "atk": 65,
+      "def": 55,
+      "sp_atk": 75,
+      "sp_def": 60,
+      "speed": 105
+    },
+    "biomes": [
+      "mountain",
+      "cloud_heights"
+    ],
+    "flavor": "Its wings generate powerful gusts that can uproot trees. Zephyrix nests at high altitudes where the air is thin.",
+    "abilities": [
+      "Gust",
+      "Air Slash",
+      "Hurricane",
+      "Brave Bird",
+      "Tailwind"
+    ],
+    "evolution": {
+      "evolves_to": "Cyclonix",
+      "level_required": 46
+    }
+  },
+  "Cyclonix": {
+    "name": "Cyclonix",
+    "type": [
+      "Flying",
+      "Electric"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 80,
+      "atk": 95,
+      "def": 75,
+      "sp_atk": 115,
+      "sp_def": 80,
+      "speed": 135
+    },
+    "biomes": [
+      "cloud_heights",
+      "storm_peaks"
+    ],
+    "flavor": "Master of the skies and storm clouds. Cyclonix is said to be born from the heart of the most powerful hurricanes.",
+    "abilities": [
+      "Hurricane",
+      "Thunder",
+      "Brave Bird",
+      "Sky Attack",
+      "Discharge",
+      "Tempest Fury"
+    ]
+  },
+  "Pyrobud": {
+    "name": "Pyrobud",
+    "type": [
+      "Fire",
+      "Grass"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 45,
+      "atk": 50,
+      "def": 40,
+      "sp_atk": 65,
+      "sp_def": 50,
+      "speed": 60
+    },
+    "biomes": [
+      "volcano",
+      "forest",
+      "hot_springs"
+    ],
+    "flavor": "A rare plant that thrives in volcanic soil. Its flower contains a natural flame that never goes out, even underwater.",
+    "abilities": [
+      "Ember",
+      "Razor Leaf",
+      "Flame Charge",
+      "Leech Seed"
+    ],
+    "evolution": {
+      "evolves_to": "Blazeblossom",
+      "level_required": 28
+    }
+  },
+  "Blazeblossom": {
+    "name": "Blazeblossom",
+    "type": [
+      "Fire",
+      "Grass"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 70,
+      "atk": 75,
+      "def": 65,
+      "sp_atk": 105,
+      "sp_def": 80,
+      "speed": 85
+    },
+    "biomes": [
+      "volcano",
+      "ash_fields"
+    ],
+    "flavor": "It spreads seeds that can only germinate in the aftermath of wildfires. Blazeblossom's presence helps rejuvenate burned landscapes.",
+    "abilities": [
+      "Flamethrower",
+      "Energy Ball",
+      "Fire Spin",
+      "Petal Dance",
+      "Synthesis",
+      "Wildfire Bloom"
+    ]
+  },
+  "Mystifly": {
+    "name": "Mystifly",
+    "type": [
+      "Bug",
+      "Psychic"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 45,
+      "atk": 40,
+      "def": 40,
+      "sp_atk": 70,
+      "sp_def": 60,
+      "speed": 80
+    },
+    "biomes": [
+      "forest",
+      "enchanted_forest",
+      "flower_fields"
+    ],
+    "flavor": "Its wings shimmer with psychic energy. Mystifly can predict danger seconds before it occurs and navigate through dense fog with ease.",
+    "abilities": [
+      "Confusion",
+      "Bug Buzz",
+      "Psybeam",
+      "Signal Beam"
+    ],
+    "evolution": {
+      "evolves_to": "Clairvoyant",
+      "level_required": 30
+    }
+  },
+  "Clairvoyant": {
+    "name": "Clairvoyant",
+    "type": [
+      "Bug",
+      "Psychic"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 65,
+      "atk": 60,
+      "def": 60,
+      "sp_atk": 115,
+      "sp_def": 95,
+      "speed": 105
+    },
+    "biomes": [
+      "enchanted_forest",
+      "crystal_cave"
+    ],
+    "flavor": "Its compound eyes see all possible futures simultaneously. Clairvoyant is sought after by those seeking guidance about their destiny.",
+    "abilities": [
+      "Psychic",
+      "Bug Buzz",
+      "Future Sight",
+      "Quiver Dance",
+      "Dream Eater",
+      "Precognition"
+    ]
+  },
+  "Boulderex": {
+    "name": "Boulderex",
+    "type": [
+      "Rock",
+      "Fighting"
+    ],
+    "rarity": "uncommon",
+    "catch_rate": 0.4,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 60,
+      "atk": 80,
+      "def": 85,
+      "sp_atk": 40,
+      "sp_def": 60,
+      "speed": 45
+    },
+    "biomes": [
+      "mountain",
+      "canyon",
+      "quarry"
+    ],
+    "flavor": "Its fists are made of compressed granite. Boulderex trains by punching mountains, gradually reshaping the landscape around it.",
+    "abilities": [
+      "Rock Throw",
+      "Karate Chop",
+      "Rock Slide",
+      "Brick Break"
+    ],
+    "evolution": {
+      "evolves_to": "Granitemaw",
+      "level_required": 38
+    }
+  },
+  "Granitemaw": {
+    "name": "Granitemaw",
+    "type": [
+      "Rock",
+      "Fighting"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 85,
+      "atk": 120,
+      "def": 120,
+      "sp_atk": 55,
+      "sp_def": 80,
+      "speed": 65
+    },
+    "biomes": [
+      "mountain",
+      "canyon"
+    ],
+    "flavor": "Ancient sculptures depict Granitemaw as a deity of strength and endurance. Its jaw can crush diamonds with ease.",
+    "abilities": [
+      "Stone Edge",
+      "Close Combat",
+      "Rock Slide",
+      "Dynamic Punch",
+      "Earthquake",
+      "Tectonic Slam"
+    ]
+  },
+  "Miragion": {
+    "name": "Miragion",
+    "type": [
+      "Psychic",
+      "Water"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 65,
+      "atk": 60,
+      "def": 65,
+      "sp_atk": 95,
+      "sp_def": 90,
+      "speed": 95
+    },
+    "biomes": [
+      "desert",
+      "oasis",
+      "mirage_islands"
+    ],
+    "flavor": "It creates elaborate illusions of water in dry places. Travelers who follow Miragion often find hidden oases and springs.",
+    "abilities": [
+      "Confusion",
+      "Water Pulse",
+      "Psychic",
+      "Hydro Pump",
+      "Calm Mind",
+      "Mirage Veil"
+    ]
+  },
+  "Lunarwing": {
+    "name": "Lunarwing",
+    "type": [
+      "Flying",
+      "Fairy"
+    ],
+    "rarity": "rare",
+    "catch_rate": 0.15,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 70,
+      "atk": 75,
+      "def": 70,
+      "sp_atk": 95,
+      "sp_def": 90,
+      "speed": 100
+    },
+    "biomes": [
+      "night_sky",
+      "enchanted_forest",
+      "celestial_plane"
+    ],
+    "flavor": "A nocturnal avian that absorbs moonlight through its iridescent feathers. Lunarwing's presence brings peaceful sleep and pleasant dreams.",
+    "abilities": [
+      "Moonblast",
+      "Air Slash",
+      "Dazzling Gleam",
+      "Psychic",
+      "Nightmare",
+      "Lunar Blessing"
+    ]
+  },
+  "Solarix": {
+    "name": "Solarix",
+    "type": [
+      "Fire",
+      "Psychic"
+    ],
+    "rarity": "legendary",
+    "catch_rate": 0.05,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 80,
+      "atk": 90,
+      "def": 80,
+      "sp_atk": 135,
+      "sp_def": 105,
+      "speed": 110
+    },
+    "biomes": [
+      "celestial_plane",
+      "solar_temple"
+    ],
+    "flavor": "Guardian of the daytime sky. It's said that Solarix pulls the sun across the heavens and brings light to the world each morning.",
+    "abilities": [
+      "Solar Beam",
+      "Psychic",
+      "Fire Blast",
+      "Morning Sun",
+      "Future Sight",
+      "Solar Flare"
+    ]
+  },
+  "Umbrix": {
+    "name": "Umbrix",
+    "type": [
+      "Dark",
+      "Psychic"
+    ],
+    "rarity": "legendary",
+    "catch_rate": 0.05,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 80,
+      "atk": 90,
+      "def": 80,
+      "sp_atk": 135,
+      "sp_def": 105,
+      "speed": 110
+    },
+    "biomes": [
+      "shadow_realm",
+      "eclipse_temple"
+    ],
+    "flavor": "Guardian of the nighttime sky. When Umbrix spreads its wings, day turns to night and stars appear even at noon.",
+    "abilities": [
+      "Dark Pulse",
+      "Psychic",
+      "Shadow Ball",
+      "Moonlight",
+      "Nightmare",
+      "Eclipse"
+    ]
+  },
+  "Chronomal": {
+    "name": "Chronomal",
+    "type": [
+      "Steel",
+      "Psychic"
+    ],
+    "rarity": "mythic",
+    "catch_rate": 0.01,
+    "shiny_rate": 0.002,
+    "base_stats": {
+      "hp": 90,
+      "atk": 95,
+      "def": 95,
+      "sp_atk": 125,
+      "sp_def": 95,
+      "speed": 100
+    },
+    "biomes": [
+      "time_rift",
+      "ancient_ruins",
+      "celestial_plane"
+    ],
+    "flavor": "A mysterious being that exists in multiple timestreams simultaneously. Chronomal can glimpse events from the distant past and far future.",
+    "abilities": [
+      "Flash Cannon",
+      "Psychic",
+      "Future Sight",
+      "Gear Grind",
+      "Ancient Power",
+      "Temporal Shift"
+    ]
+  },
+  "Dimenstra": {
+    "name": "Dimenstra",
+    "type": [
+      "Ghost",
+      "Dragon"
+    ],
+    "rarity": "mythic",
+    "catch_rate": 0.01,
+    "shiny_rate": 0.002,
+    "base_stats": {
+      "hp": 90,
+      "atk": 105,
+      "def": 90,
+      "sp_atk": 125,
+      "sp_def": 90,
+      "speed": 100
+    },
+    "biomes": [
+      "space_rift",
+      "void_realm",
+      "celestial_plane"
+    ],
+    "flavor": "It drifts between dimensions, never fully existing in any single reality. Dimenstra appears to those who have glimpsed beyond the veil of normal existence.",
+    "abilities": [
+      "Shadow Ball",
+      "Dragon Pulse",
+      "Phantom Force",
+      "Spacial Rend",
+      "Outrage",
+      "Dimension Door"
+    ]
+  }
+}

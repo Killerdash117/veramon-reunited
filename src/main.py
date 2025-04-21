@@ -13,11 +13,11 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from src.utils.ui.accessibility_shortcuts import setup_shortcut_handler
 
-# Veramon Reunited - Version v0.33.000
+# Veramon Reunited - Version v0.34.0
 # Created by killerdash117
 
 # Current version of the bot
-VERSION = "v0.33.000"
+VERSION = "v0.34.0"
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
@@ -49,6 +49,7 @@ async def load_extensions():
         
         # User cogs
         'cogs.user.accessibility_cog', # Accessibility features
+        'cogs.user.help_cog',          # Help command system
         
         # Admin cogs
         'cogs.admin.admin_cog',

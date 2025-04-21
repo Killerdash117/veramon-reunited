@@ -4,7 +4,7 @@ This document tracks all notable changes to the Veramon Reunited Discord bot.
 
 <div align="center">
 
-![Version Status](https://img.shields.io/badge/Current%20Version-v0.33.000-brightgreen.svg)
+![Version Status](https://img.shields.io/badge/Current%20Version-v0.34.0-brightgreen.svg)
 ![Updated](https://img.shields.io/badge/Last%20Updated-April%2021%2C%202025-blue.svg)
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg)
 
@@ -16,13 +16,9 @@ This document tracks all notable changes to the Veramon Reunited Discord bot.
 
 > **Upcoming Features & Improvements**
 
-### Next Major Release (v0.34.000)
-* **Enhanced Battle Stability** - Optimized actor system for Discord interactions
-* **Strategic NPC Trainers** - Pattern-based battle strategies with difficulty scaling
-* **Battle Logs & History** - Track battle statistics and improve player progression
-
-### Future Developments
+### Next Major Release (v0.35.0)
 * **Tournament System 2.0** - In-server tournaments with automated brackets
+* **Strategic NPC Trainers** - Pattern-based battle strategies with difficulty scaling 
 * **Party System Improvements** - Small team gameplay for friend groups
 * **Discord UI Enhancements** - Utilizing latest Discord button and menu features
 
@@ -44,66 +40,48 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
 ## 📋 Release History
 
 <details>
-<summary><h3>🚧 Unreleased</h3></summary>
+<summary><h3>v0.34.0 - April 21, 2025</h3></summary>
 
-> *Actor-Based Battle Architecture with Persistence & Performance Optimizations*
+> *Help System and Documentation Improvements*
 
 <details>
 <summary><b>Release Details</b></summary>
 
 #### ✨ Added
-- **Actor-Based Architecture**
-  - Created a lightweight actor framework for isolated component communication
-  - Implemented the `BattleActor` class to encapsulate battle state
-  - Added `BattleManager` for coordinating battle actors
-  - Added message-passing interfaces for all battle operations
-  - Implemented performance metrics for actor operations
+- **Comprehensive Help System**
+  - Added `/help` command with overview of all available command categories
+  - Implemented category-specific help with `/help [category]` 
+  - Created interactive dropdown UI for browsing command categories
+  - Added detailed command descriptions with usage examples
+  - Integrated documentation links and references
+  - Verified and updated all commands to accurately reflect actual implementations
+  - Corrected command parameter names and examples for consistency
 
-- **Persistence System**
-  - Added database-backed persistence for battle state
-  - Implemented automatic battle recovery on bot restart
-  - Created graceful shutdown handling to save battle state
-  - Added signal handlers for unexpected terminations
-  - Developed dirty tracking to minimize database operations
+- **Documentation Improvements**
+  - Enhanced README organization with logical sectioning
+  - Added comprehensive troubleshooting section
+  - Improved feature documentation for trading and battle systems
+  - Updated project structure documentation
+  - Added "Back to Top" navigation links
+  - Added comprehensive Staff Commands section with admin and developer commands
+  - Updated command documentation to match actual implementation
 
-- **Performance Optimizations**
-  - Enhanced status effect processing using constants and loops
-  - Optimized repetitive code patterns for improved execution time
-  - Implemented intelligent caching for frequently accessed battle data
-  - Added comprehensive performance monitoring and metrics
-  
-- **Discord UI Enhancements**
-  - Implemented comprehensive UI theming system with customizable themes
-  - Created enhanced selection menus with multi-select support and categories
-  - Added carousel views for Veramon displays and item selection
-  - Developed modernized battle UI with interactive elements and effects
-  - Enhanced trading UI with side-by-side comparisons and visual confirmations
-  - Created a central UI registry for consistent component styling
-  - Added settings interface for user theme customization
-  - Implemented theme preview and customization options
-  - Integrated all UI components with the actor-based architecture
+- **Diagnostic Tools**
+  - Added `/debug_info` command to generate diagnostic reports
+  - Implemented `/system_health` command to check system status
+  - Created detailed error reporting with step-by-step solutions
 
 #### 🔄 Changed
-- **Battle System Refactoring**
-  - Converted battle system to use message passing between isolated components
-  - Improved move execution by isolating each calculation
-  - Enhanced type effectiveness calculations with proper type chart
-  - Updated damage calculation formula for more consistent results
-  - Refactored status effects to be more maintainable
-
-- **System Improvements**
-  - Enhanced error handling and recovery throughout all systems
-  - Improved battle cog integration with actor-based architecture
-  - Added detailed battle metrics with performance insights
-  - Enhanced database interaction with optimized queries
+- **UI Improvements**
+  - Standardized help text formatting across all commands
+  - Enhanced command feedback with more detailed responses
+  - Improved error handling with clearer user guidance
 
 #### 🐛 Fixed
-- **Stability Improvements**
-  - Resolved battle state loss during bot restarts
-  - Fixed inconsistent status effect durations
-  - Improved battle cleanup to prevent memory leaks
-  - Fixed race conditions in concurrent battle operations
-  - Enhanced error handling for edge case battle scenarios
+- Fixed inconsistencies in command documentation
+- Corrected outdated command examples
+- Updated feature descriptions to match current implementation
+
 </details>
 </details>
 

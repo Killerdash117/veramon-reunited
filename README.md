@@ -76,7 +76,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 - **Battle Logs** for tracking match history and statistics
 - **Battle Rankings** for competitive players
 - **Battle Rewards** including XP, tokens, and rare items
-- **Enhanced Battle UI** with animated health bars and interactive controls
+- **Enhanced Battle UI** with interactive controls
 
 </details>
 
@@ -182,7 +182,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
   - Tritanopia mode (blue-blind friendly)
   - Monochrome/grayscale mode
 - **High Contrast Mode** - Enhanced visibility with maximized contrast
-- **Animation Controls** - Full, reduced, or no animations based on user preference
+- **Visual Update Controls** - Configure frequency of UI updates based on user preference
 - **Simplified UI Mode** - Cleaner layouts with reduced visual complexity
 - **Extended Interaction Timeouts** - Longer response windows for battles and trades
 - **Extra Button Spacing** - Improved motor accessibility for button interactions

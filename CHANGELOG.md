@@ -76,7 +76,7 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
   - Implemented comprehensive UI theming system with customizable themes
   - Created enhanced selection menus with multi-select support and categories
   - Added carousel views for Veramon displays and item selection
-  - Developed modernized battle UI with animated health bars and effects
+  - Developed modernized battle UI with interactive elements and effects
   - Enhanced trading UI with side-by-side comparisons and visual confirmations
   - Created a central UI registry for consistent component styling
   - Added settings interface for user theme customization
@@ -140,7 +140,7 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
 - **Accessibility Features**
   - Implemented comprehensive accessibility settings for improved user experience
   - Added high contrast mode, text size options, and screen reader support
-  - Created reduced visual update mode for performance and accessibility
+  - Created visual update frequency controls for performance and accessibility
   - Implemented settings menu navigation with interactive buttons
   - Added categorized settings display for easy navigation
   - Created theme preview system for testing themes before applying
@@ -352,12 +352,12 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
   - Added user settings framework with persistent preferences
   - Created notification preference controls
   - Implemented privacy settings for controlling profile visibility
-  - Added gameplay settings for battle animation speeds and more
+  - Added gameplay settings for battle interaction speeds and more
 
 - **Accessibility Features**
-  - Implemented accessibility settings for improved user experience
+  - Implemented comprehensive accessibility settings for improved user experience
   - Added high contrast mode, text size options, and screen reader support
-  - Created reduced visual update mode for performance and accessibility
+  - Created visual update frequency controls for performance and accessibility
   - Implemented settings menu navigation with interactive buttons
   - Added categorized settings display for easy navigation
   - Created theme preview system for testing themes before applying

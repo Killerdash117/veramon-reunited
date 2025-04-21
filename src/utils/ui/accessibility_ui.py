@@ -17,7 +17,7 @@ from src.utils.ui.accessibility import (
     get_accessibility_manager, 
     AccessibilitySettings,
     TextSize, 
-    AnimationLevel, 
+    UpdateFrequency, 
     ColorMode
 )
 
@@ -30,7 +30,7 @@ class AccessibilitySettingsView(NavigableView):
     
     Features:
     - Text size adjustment
-    - Animation level control
+    - Update frequency control
     - Color mode selection
     - Screen reader support
     - UI simplification options
@@ -131,33 +131,33 @@ class AccessibilitySettingsView(NavigableView):
     
     def _setup_visual_tab(self):
         """Set up the visual accessibility settings tab."""
-        # Animation level selection
-        animation_select = ui.Select(
-            placeholder="Select Animation Level",
+        # Update frequency selection
+        update_frequency_select = ui.Select(
+            placeholder="Select Update Frequency",
             options=[
                 discord.SelectOption(
-                    label="Full Animations",
-                    value=AnimationLevel.FULL.value,
-                    description="Show all animations",
-                    default=self.settings.animation_level == AnimationLevel.FULL
+                    label="Standard Updates",
+                    value=UpdateFrequency.STANDARD.value,
+                    description="Show all updates",
+                    default=self.settings.update_frequency == UpdateFrequency.STANDARD
                 ),
                 discord.SelectOption(
-                    label="Reduced Animations",
-                    value=AnimationLevel.REDUCED.value,
-                    description="Show only essential animations",
-                    default=self.settings.animation_level == AnimationLevel.REDUCED
+                    label="Reduced Updates",
+                    value=UpdateFrequency.REDUCED.value,
+                    description="Show only essential updates",
+                    default=self.settings.update_frequency == UpdateFrequency.REDUCED
                 ),
                 discord.SelectOption(
-                    label="No Animations",
-                    value=AnimationLevel.NONE.value,
-                    description="Disable all animations",
-                    default=self.settings.animation_level == AnimationLevel.NONE
+                    label="Minimal Updates",
+                    value=UpdateFrequency.MINIMAL.value,
+                    description="Disable most updates",
+                    default=self.settings.update_frequency == UpdateFrequency.MINIMAL
                 )
             ],
             row=1
         )
-        animation_select.callback = self._on_animation_level_changed
-        self.add_item(animation_select)
+        update_frequency_select.callback = self._on_update_frequency_changed
+        self.add_item(update_frequency_select)
         
         # Color mode selection
         color_mode_select = ui.Select(
@@ -302,14 +302,14 @@ class AccessibilitySettingsView(NavigableView):
                 ephemeral=True
             )
     
-    async def _on_animation_level_changed(self, interaction: discord.Interaction):
-        """Handle animation level change."""
-        animation_level_value = interaction.data["values"][0]
+    async def _on_update_frequency_changed(self, interaction: discord.Interaction):
+        """Handle update frequency change."""
+        update_frequency_value = interaction.data["values"][0]
         try:
-            self.settings.animation_level = AnimationLevel(animation_level_value)
+            self.settings.update_frequency = UpdateFrequency(update_frequency_value)
             self.accessibility_manager.update_settings(
                 self.user_id,
-                {"animation_level": animation_level_value}
+                {"update_frequency": update_frequency_value}
             )
             
             # Update the view
@@ -317,14 +317,14 @@ class AccessibilitySettingsView(NavigableView):
             
             # Send a confirmation
             await interaction.response.send_message(
-                f"Animation level updated to {animation_level_value}.",
+                f"Update frequency updated to {update_frequency_value}.",
                 ephemeral=True,
                 delete_after=3
             )
         except Exception as e:
-            logger.error(f"Error updating animation level: {e}")
+            logger.error(f"Error updating update frequency: {e}")
             await interaction.response.send_message(
-                "There was an error updating the animation level. Please try again.",
+                "There was an error updating the update frequency. Please try again.",
                 ephemeral=True
             )
     
@@ -673,7 +673,7 @@ class AccessibilitySettingsView(NavigableView):
             name="Current Settings",
             value=(
                 f"Text Size: {self.settings.text_size.value}\n"
-                f"Animation Level: {self.settings.animation_level.value}\n"
+                f"Update Frequency: {self.settings.update_frequency.value}\n"
                 f"Color Mode: {self.settings.color_mode.value}"
             ),
             inline=False
@@ -689,7 +689,7 @@ class AccessibilitySettingsView(NavigableView):
         elif current_tab == "Visual":
             embed.add_field(
                 name="Visual Settings",
-                value="Customize animations and color modes.",
+                value="Customize update frequency and color modes.",
                 inline=False
             )
         elif current_tab == "Controls":

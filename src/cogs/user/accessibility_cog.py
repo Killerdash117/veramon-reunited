@@ -15,7 +15,7 @@ from src.utils.ui.accessibility import (
     get_accessibility_manager, 
     AccessibilitySettings,
     TextSize, 
-    AnimationLevel, 
+    UpdateFrequency, 
     ColorMode
 )
 from src.utils.ui.accessibility_ui import AccessibilitySettingsView
@@ -57,7 +57,7 @@ class AccessibilityCog(commands.Cog):
             name="Current Settings",
             value=(
                 f"**Text Size:** {settings.text_size.value}\n"
-                f"**Animation Level:** {settings.animation_level.value}\n"
+                f"**Visual Update Frequency:** {settings.update_frequency.value}\n"
                 f"**Color Mode:** {settings.color_mode.value}\n"
                 f"**Screen Reader Support:** {'Enabled' if settings.screen_reader_support else 'Disabled'}\n"
                 f"**Simplified UI:** {'Enabled' if settings.simplified_ui else 'Disabled'}"
@@ -266,27 +266,27 @@ class AccessibilityCog(commands.Cog):
             )
     
     @app_commands.command(
-        name="toggle_animations",
-        description="Toggle animations on or off"
+        name="toggle_visual_updates",
+        description="Toggle visual update frequency on or off"
     )
-    @app_commands.choices(level=[
-        app_commands.Choice(name="Full Animations", value="full"),
-        app_commands.Choice(name="Reduced Animations", value="reduced"),
-        app_commands.Choice(name="No Animations", value="none")
+    @app_commands.choices(frequency=[
+        app_commands.Choice(name="Standard Updates", value="standard"),
+        app_commands.Choice(name="Reduced Updates", value="reduced"),
+        app_commands.Choice(name="Minimal Updates", value="minimal")
     ])
-    async def toggle_animations(
+    async def toggle_visual_updates(
         self, 
         interaction: discord.Interaction, 
-        level: app_commands.Choice[str]
+        frequency: app_commands.Choice[str]
     ):
-        """Set animation level."""
+        """Set visual update frequency."""
         user_id = str(interaction.user.id)
         
         try:
             # Update the setting
             self.accessibility_manager.update_settings(
                 user_id,
-                {"animation_level": level.value}
+                {"update_frequency": frequency.value}
             )
             
             # Get user's theme
@@ -294,18 +294,18 @@ class AccessibilityCog(commands.Cog):
             
             # Create confirmation embed
             embed = theme.create_embed(
-                title="Animation Setting Updated",
-                description=f"Animation level has been set to **{level.name}**.",
+                title="Visual Update Frequency Updated",
+                description=f"Visual update frequency has been set to **{frequency.name}**.",
                 color_type=ThemeColorType.SUCCESS
             )
             
-            # Add description
-            if level.value == "full":
-                description = "All animations will be shown, including battle effects, transitions, and UI animations."
-            elif level.value == "reduced":
-                description = "Only essential animations will be shown. Most decorative animations will be disabled."
-            else:  # none
-                description = "All animations have been disabled for maximum performance and minimal distraction."
+            # Add explanation
+            if frequency.value == "standard":
+                description = "Visual updates will be sent at the standard rate, providing a more dynamic experience."
+            elif frequency.value == "reduced":
+                description = "Visual updates will be sent at a reduced rate, providing a balance between performance and visual feedback."
+            else:  # minimal
+                description = "Visual updates will be sent at a minimal rate, prioritizing performance over visual feedback."
             
             embed.add_field(
                 name="What Changed",
@@ -319,9 +319,9 @@ class AccessibilityCog(commands.Cog):
                 ephemeral=True
             )
         except Exception as e:
-            logger.error(f"Error setting animation level: {e}")
+            logger.error(f"Error setting visual update frequency: {e}")
             await interaction.response.send_message(
-                "There was an error updating your animation setting. Please try again or use the /accessibility command.",
+                "There was an error updating your visual update frequency. Please try again or use the /accessibility command.",
                 ephemeral=True
             )
     

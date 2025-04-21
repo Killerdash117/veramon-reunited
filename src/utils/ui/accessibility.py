@@ -22,11 +22,11 @@ class TextSize(Enum):
     LARGE = "large"
     EXTRA_LARGE = "extra_large"
 
-class AnimationLevel(Enum):
-    """Visual update frequency options."""
-    FULL = "full"          # All visual updates
-    REDUCED = "reduced"    # Only essential visual updates
-    NONE = "none"          # Minimal visual updates
+class UpdateFrequency(Enum):
+    """Controls frequency of UI updates in Discord messages."""
+    STANDARD = "standard"   # Regular UI updates for state changes
+    REDUCED = "reduced"     # Only critical UI updates
+    MINIMAL = "minimal"     # Only absolutely necessary UI updates
 
 class ColorMode(Enum):
     """Color mode options."""
@@ -42,7 +42,7 @@ class AccessibilitySettings:
     """User accessibility settings."""
     user_id: str
     text_size: TextSize = TextSize.MEDIUM
-    animation_level: AnimationLevel = AnimationLevel.FULL
+    update_frequency: UpdateFrequency = UpdateFrequency.STANDARD
     color_mode: ColorMode = ColorMode.NORMAL
     screen_reader_support: bool = False
     simplified_ui: bool = False
@@ -64,9 +64,9 @@ class AccessibilitySettings:
             text_size = TextSize.MEDIUM
             
         try:
-            animation_level = AnimationLevel(data.get("animation_level", AnimationLevel.FULL.value))
+            update_frequency = UpdateFrequency(data.get("update_frequency", UpdateFrequency.STANDARD.value))
         except ValueError:
-            animation_level = AnimationLevel.FULL
+            update_frequency = UpdateFrequency.STANDARD
             
         try:
             color_mode = ColorMode(data.get("color_mode", ColorMode.NORMAL.value))
@@ -86,7 +86,7 @@ class AccessibilitySettings:
         return cls(
             user_id=user_id,
             text_size=text_size,
-            animation_level=animation_level,
+            update_frequency=update_frequency,
             color_mode=color_mode,
             screen_reader_support=screen_reader,
             simplified_ui=simplified_ui,
@@ -101,7 +101,7 @@ class AccessibilitySettings:
         return {
             "user_id": self.user_id,
             "text_size": self.text_size.value,
-            "animation_level": self.animation_level.value,
+            "update_frequency": self.update_frequency.value,
             "color_mode": self.color_mode.value,
             "screen_reader_support": self.screen_reader_support,
             "simplified_ui": self.simplified_ui,
@@ -120,12 +120,12 @@ class AccessibilitySettings:
             except ValueError:
                 logger.warning(f"Invalid text size: {settings['text_size']}")
         
-        # Update animation level if valid
-        if "animation_level" in settings:
+        # Update update frequency if valid
+        if "update_frequency" in settings:
             try:
-                self.animation_level = AnimationLevel(settings["animation_level"])
+                self.update_frequency = UpdateFrequency(settings["update_frequency"])
             except ValueError:
-                logger.warning(f"Invalid animation level: {settings['animation_level']}")
+                logger.warning(f"Invalid update frequency: {settings['update_frequency']}")
         
         # Update color mode if valid
         if "color_mode" in settings:
@@ -171,7 +171,7 @@ class AccessibilityManager:
         self.default_settings = AccessibilitySettings(
             user_id="default",
             text_size=TextSize.MEDIUM,
-            animation_level=AnimationLevel.FULL,
+            update_frequency=UpdateFrequency.STANDARD,
             color_mode=ColorMode.NORMAL,
             screen_reader_support=False,
             simplified_ui=False,
@@ -221,7 +221,7 @@ class AccessibilityManager:
             self.settings[user_id] = AccessibilitySettings(
                 user_id=user_id,
                 text_size=self.default_settings.text_size,
-                animation_level=self.default_settings.animation_level,
+                update_frequency=self.default_settings.update_frequency,
                 color_mode=self.default_settings.color_mode,
                 screen_reader_support=self.default_settings.screen_reader_support,
                 simplified_ui=self.default_settings.simplified_ui,
@@ -245,7 +245,7 @@ class AccessibilityManager:
         self.settings[user_id] = AccessibilitySettings(
             user_id=user_id,
             text_size=self.default_settings.text_size,
-            animation_level=self.default_settings.animation_level,
+            update_frequency=self.default_settings.update_frequency,
             color_mode=self.default_settings.color_mode,
             screen_reader_support=self.default_settings.screen_reader_support,
             simplified_ui=self.default_settings.simplified_ui,

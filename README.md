@@ -6,10 +6,7 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/blob/master/LICENSE)
 [![Version](https://img.shields.io/badge/Version-v0.34.0-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/releases)
-[![Discord.py](https://img.shields.io/badge/Discord.py-2.3.0-blue.svg?style=flat-square)](https://github.com/Rapptz/discord.py)
-[![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited)
-[![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/actions)
-[![Code Style](https://img.shields.io/badge/Code%20Style-PEP8-blueviolet.svg?style=flat-square)](https://www.python.org/dev/peps/pep-0008/)
+[![Discord](https://img.shields.io/badge/Discord-Coming%20Soon-7289DA?logo=discord&logoColor=white&style=flat-square)](https://github.com/killerdash117/veramon-reunited)
 
 **A comprehensive Discord bot for monster-catching adventures in your server**
 
@@ -20,19 +17,36 @@
 ---
 
 <details open>
-<summary><h2 id="-features">🎮 Features</h2></summary>
+<summary><h2 id="-features"> 🎮 Features</h2></summary>
 
 <details open>
 <summary><h3 id="-creature-system"> 🦖 Creature System</h3></summary>
 
 - **Diverse Veramon Collection** with unique stats, types, and abilities
+  - Creatures spanning multiple elemental types and rarities
+  - Distinct evolution lines with branching paths
+  - Individual stats that affect battle performance
 - **Shiny Variants** with distinctive appearances and enhanced stats
+  - Rare color variations with boosted attributes
+  - Collectible for completionists and competitive players
 - **Evolution System** with level-based triggers
+  - Creatures evolve at specific level thresholds
+  - Evolution improves base stats and may change typing
 - **Type-Based Mechanics** with strengths and weaknesses
+  - Strategic type matchups creating a depth of gameplay
+  - Dual-typing available for certain creatures
 - **Move Learning** based on Veramon level and type
+  - New abilities unlocked as Veramon grow stronger
+  - Type-specific move sets for strategic diversity
 - **Capture System** with rarity-based catch rates
+  - Different catch rates based on creature rarity
+  - Special items to boost capture success
 - **Collection Management** with sorting and filtering options
+  - Organize Veramon by level, type, rarity, and more
+  - Filter to quickly find specific Veramon
 - **Customizable Nicknames** for personalization
+  - Make your Veramon collection uniquely yours
+  - Display nicknames in battles and trades
 
 </details>
 
@@ -351,15 +365,13 @@ These commands are restricted to bot developers only (Dev rank) and are used for
 
    # Install dependencies
    pip install -r requirements.txt
+   pip install -r requirements-dev.txt
    ```
 
 3. **Configure Environment Variables**
-   - Create a `.env` file in the root directory with the following:
-   ```
-   DISCORD_TOKEN=your_discord_bot_token
-   OWNER_ID=your_discord_user_id
-   DATABASE_PATH=data/veramon.db
-   LOG_LEVEL=INFO
+   ```bash
+   cp .env.example .env
+   # Edit .env with your Discord bot token
    ```
 
 4. **Initialize Database**
@@ -625,7 +637,7 @@ If you encounter issues not covered here:
 1. Check the [Issues page](https://github.com/killerdash117/veramon-reunited/issues) for similar problems
 2. Run `/debug_info` to generate a diagnostic report
 3. Run `/system_health` to check the status of bot systems
-4. Join our [Discord server](https://discord.gg/veramon) for community support
+4. *(Discord server coming soon)* - Community support will be available
 5. Open a new issue with detailed information about the problem
 </details>
 
@@ -649,7 +661,7 @@ If you encounter issues not covered here:
         <sub><b>killerdash117</b></sub>
       </a>
       <br>
-      <sub>Project Lead</sub>
+      <sub>Project Lead & Developer</sub>
     </td>
     <td align="center">
       <a href="https://github.com/Darkrell">
@@ -663,13 +675,26 @@ If you encounter issues not covered here:
   </tr>
 </table>
 
-### Special Thanks
-
-- All our beta testers
-- The Discord.py community for their invaluable support
-- Our server partners for hosting the bot
-
 </div>
+
+</details>
+
+---
+
+<details>
+<summary><h2 id="-upcoming-features"> 🔮 Upcoming Features</h2></summary>
+
+The Veramon Reunited project is under active development. Here are some features planned for future releases:
+
+- **Tournament System** - In-server competitions with automated brackets and rewards
+- **Advanced NPC Trainers** - AI-driven trainers with unique strategies and themed teams
+- **Legendary Quests** - Epic storylines to discover and capture legendary Veramon
+- **Guild Wars** - Competitive gameplay between player guilds with territory control
+- **Season Pass** - Optional progression system with free and premium reward tracks
+- **Mobile Companion App** - Access your Veramon collection and receive notifications on the go
+- **Community Discord Server** - Connect with other trainers, share strategies, and participate in events
+
+Development priorities are based on user feedback and community needs. Features may be added or modified based on player suggestions.
 
 </details>
 
@@ -681,9 +706,9 @@ If you encounter issues not covered here:
 
 [![Version](https://img.shields.io/badge/Version-v0.34.0-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/releases)
 [![Last Updated](https://img.shields.io/badge/Last%20Updated-April%2021%2C%202025-blue.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/commits)
-[![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289DA?logo=discord&logoColor=white&style=flat-square)](https://discord.gg/veramon)
+[![Discord](https://img.shields.io/badge/Discord-Coming%20Soon-7289DA?logo=discord&logoColor=white&style=flat-square)](https://github.com/killerdash117/veramon-reunited)
 
-### [Join Our Discord](https://discord.gg/veramon) | [Report Bugs](https://github.com/killerdash117/veramon-reunited/issues) | [Request Features](https://github.com/killerdash117/veramon-reunited/issues)
+### [Discord Server (Coming Soon)] | [Report Bugs](https://github.com/killerdash117/veramon-reunited/issues) | [Request Features](https://github.com/killerdash117/veramon-reunited/issues)
 
 </div>
 

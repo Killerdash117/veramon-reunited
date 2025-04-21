@@ -4,45 +4,18 @@
 
 <img src="https://i.imgur.com/EMNMEsp.jpeg" alt="Veramon Reunited" width="500"/>
 
-[![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/killerdash117/veramon-reunited/blob/master/LICENSE)
-[![version](https://img.shields.io/badge/version-v0.33.000-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
-[![discord.py](https://img.shields.io/badge/discord.py-2.3.0-blue.svg)](https://github.com/Rapptz/discord.py)
-[![status](https://img.shields.io/badge/status-in%20development-orange.svg)](https://github.com/killerdash117/veramon-reunited)
-[![author](https://img.shields.io/badge/author-killerdash117-purple.svg)](https://github.com/killerdash117)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/blob/master/LICENSE)
+[![Version](https://img.shields.io/badge/Version-v0.33.0-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/releases)
+[![Discord.py](https://img.shields.io/badge/Discord.py-2.3.0-blue.svg?style=flat-square)](https://github.com/Rapptz/discord.py)
+[![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited)
+[![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/actions)
+[![Code Style](https://img.shields.io/badge/Code%20Style-PEP8-blueviolet.svg?style=flat-square)](https://www.python.org/dev/peps/pep-0008/)
 
 **A comprehensive Discord bot for monster-catching adventures in your server**
 
-[Features](#-features) • [Commands](#-commands) • [Setup Guide](#-setup-guide) • [Developer Guide](#-developer-guide) • [Contributing](#-contributing) • [Contributors](#-contributors)
+[Features](#-features) • [Commands](#-commands) • [Setup Guide](#-setup-guide) • [Getting Started](#-getting-started) • [Project Structure](#-project-structure) • [Contributing](#-contributing) • [Troubleshooting](#-troubleshooting)
 
 </div>
-
----
-
-<details open>
-<summary><h2> 📚 Overview</h2></summary>
-
-**Veramon Reunited** transforms your Discord server into an immersive monster-catching RPG experience. Capture unique creatures, battle other trainers, join factions, and explore a vast world—all through intuitive Discord commands and interactive UI elements.
-
-Inspired by classic creature-collecting games but completely redesigned for Discord interactions, Veramon Reunited offers a persistent world where progress continues even when you're offline. With over 300 creatures to collect, a deep battle system using Discord buttons, faction wars, and regular events, there's always something new to discover without ever leaving your server.
-
-<details open>
-<summary><h3> 🤔 Why Choose Veramon Reunited?</h3></summary>
-
-| Feature | Description |
-|---------|-------------|
-| **Built for Discord** | Designed from the ground up for Discord's interface and social dynamics |
-| **Comprehensive Gameplay** | Deep systems for battling, trading, exploring, and collecting |
-| **Community Focus** | Parties, factions, trading, and PvP foster player interaction |
-| **Interactive UI** | Intuitive button-based controls rather than memorizing commands |
-| **Continuous Development** | Regular updates with new features and content |
-| **Balance First** | Designed for long-term engagement without pay-to-win mechanics |
-| **Accessible Design** | Easy to learn, with intuitive UI and helpful commands |
-| **Customizable Experience** | Server admins can tailor settings to their community |
-| **Admin-Friendly** | Interactive setup wizard and comprehensive management tools |
-| **Optimized Performance** | Efficient database structure and storage management |
-
-</details>
-</details>
 
 ---
 
@@ -63,7 +36,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 
 </details>
 
-<details>
+<details open>
 <summary><h3> ⚔️ Battle System</h3></summary>
 
 - **Turn-Based Combat** with strategic depth
@@ -73,6 +46,10 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 - **Multi-Battle Support** for 2v2 team battles
 - **Move Pool** with over 200 unique moves
 - **Battle Items** that provide tactical advantages
+- **Status Effects** including temporary and persistent conditions
+- **Field Conditions** that affect battle dynamics
+- **Weather System** influencing move effectiveness
+- **Critical Hit System** with modifiers and special moves
 - **Battle Logs** for tracking match history and statistics
 - **Battle Rankings** for competitive players
 - **Battle Rewards** including XP, tokens, and rare items
@@ -80,7 +57,23 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 
 </details>
 
-<details>
+<details open>
+<summary><h3> 🔄 Trading System</h3></summary>
+
+- **Secure Player-to-Player Trading** with confirmation safeguards
+- **Veramon Trading** with preview of stats and abilities
+- **Item Exchange** for consumables and evolution items
+- **Token Trading** with currency verification
+- **Trade History** for tracking past exchanges
+- **Trade Notifications** for pending and completed trades
+- **Interactive UI** for adding/removing items
+- **Trade Expiration** system to prevent abandoned trades
+- **Veramon Ownership Transfer** with database verification
+- **Recent Trades Feed** for public trade activity
+
+</details>
+
+<details open>
 <summary><h3> 🌳 Exploration System</h3></summary>
 
 - **10+ Unique Biomes** each with different Veramon spawns
@@ -448,6 +441,264 @@ Server administrators can customize the bot experience:
 ---
 
 <details>
+<summary><h2> 🚀 Getting Started</h2></summary>
+
+<details>
+<summary><h3> Quick Start Guide</h3></summary>
+
+After installation, try these commands to get started quickly:
+
+1. **Catch your first Veramon**
+   ```
+   /explore
+   ```
+   When a Veramon appears, use:
+   ```
+   /catch
+   ```
+
+2. **View your collection**
+   ```
+   /collection
+   ```
+
+3. **Start a PvE battle**
+   ```
+   /battle_pve easy
+   ```
+
+4. **Check available commands**
+   ```
+   /help
+   ```
+
+5. **Join a faction**
+   ```
+   /faction_join
+   ```
+</details>
+
+<details>
+<summary><h3> Configuration Examples</h3></summary>
+
+#### Basic Server Setup
+
+```
+/admin_config spawn_rate 15
+/admin_config pve_rewards medium
+/admin_config default_channel #veramon-catches
+```
+
+#### Advanced Battle Configuration
+
+```
+/admin_config battle_timeout 120
+/admin_config battle_rewards high
+/admin_config battle_ranking true
+```
+
+#### Economy Settings
+
+```
+/admin_config starting_tokens 500
+/admin_config catch_reward 25
+/admin_config shop_refresh 12
+```
+</details>
+
+<details>
+<summary><h3> Sample Workflows</h3></summary>
+
+#### Trading Workflow
+
+1. Initiate a trade
+   ```
+   /trade_create @UserName
+   ```
+
+2. Add a Veramon to the trade
+   ```
+   /trade_add veramon FlameRex
+   ```
+
+3. Confirm the trade
+   ```
+   /trade_confirm
+   ```
+
+4. Wait for the other user to confirm
+   
+5. Trade completes automatically once both users confirm
+
+#### Battle Tournament Setup
+
+1. Create a tournament
+   ```
+   /tournament_create name:Weekly Showdown format:single_elimination
+   ```
+
+2. Set tournament options
+   ```
+   /tournament_options max_participants:16 level_cap:50
+   ```
+
+3. Open registrations
+   ```
+   /tournament_open
+   ```
+
+4. Start the tournament
+   ```
+   /tournament_start
+   ```
+</details>
+
+</details>
+
+---
+
+<details>
+<summary><h2> 🏗️ Project Structure</h2></summary>
+
+This section provides an overview of the Veramon Reunited project structure and organization.
+
+<details>
+<summary><h3> Directory Structure</h3></summary>
+
+```
+veramon_reunited/
+├── data/                   # Game data files (Veramon database, items, etc.)
+├── src/                    # Source code
+│   ├── assets/             # Static assets (images, sounds, etc.)
+│   ├── cogs/               # Discord bot command groups
+│   │   ├── admin/          # Administrative commands
+│   │   ├── economy/        # Economy and trading commands
+│   │   ├── gameplay/       # Core gameplay commands
+│   │   └── ...             # Other command categories
+│   ├── core/               # Core bot functionality
+│   ├── data/               # Data loading and management
+│   ├── db/                 # Database operations
+│   ├── defaults/           # Default configuration
+│   ├── models/             # Data models and business logic
+│   ├── tools/              # Testing and maintenance tools
+│   ├── ui/                 # Legacy UI components
+│   ├── utils/              # Utility functions
+│   │   └── ui/             # UI components
+│   └── main.py             # Bot entry point
+├── tests/                  # Test suite
+├── .env.sample             # Environment variable template
+├── CHANGELOG.md            # Version history
+├── LICENSE                 # License information
+├── OWNERSHIP.md            # Project ownership details
+├── README.md               # Project documentation
+└── requirements.txt        # Python dependencies
+```
+</details>
+
+<details>
+<summary><h3> Database Structure</h3></summary>
+
+The Veramon bot uses SQLite for data storage with these key tables:
+
+#### Core Tables
+- **users** - Player profiles and statistics
+- **captures** - Veramon ownership and individual data
+- **items** - Player inventory items
+
+#### Battle System
+- **battles** - Battle records and metadata
+- **battle_participants** - Players/NPCs in battles
+- **battle_veramon** - Veramon details for battles
+- **battle_logs** - Turn-by-turn battle records
+
+#### Trading System
+- **trades** - Trade records and status
+- **trade_items** - Items included in trades
+
+#### World & Economy
+- **factions** - Faction data and standings
+- **faction_members** - Player faction membership
+- **shop_items** - Available shop inventory
+
+The database uses optimized indices for:
+- `captures.user_id` - Fast collection lookup
+- `battles.status` - Quick filtering of active battles
+- `trades.status` - Efficient trade status checks
+- `battle_participants.battle_id` - Fast battle participant lookup
+
+Data integrity is maintained through foreign key constraints and transaction-based operations.
+</details>
+
+<details>
+<summary><h3> Architectural Overview</h3></summary>
+
+Veramon Reunited follows a layered architecture:
+
+1. **Discord Integration Layer**
+   - **Cogs**: Command handling and Discord interactions
+   - **Event Handlers**: Discord event processing
+   - **UI Components**: Interactive Discord UI elements
+
+2. **Business Logic Layer**
+   - **Models**: Core game mechanics and data structures 
+   - **Services**: Cross-cutting operations and orchestration
+   - **Managers**: State management for long-running processes
+
+3. **Data Access Layer**
+   - **Database Managers**: Abstraction over direct SQL
+   - **Data Loaders**: Efficient data retrieval and caching
+   - **Persistence Logic**: Save and load operations
+
+4. **Infrastructure Layer**
+   - **Configuration**: Environment and server settings
+   - **Logging**: Application monitoring
+   - **Performance Metrics**: System performance tracking
+
+#### System Interactions
+
+```
+Discord Commands → Cogs → Models → Database Managers → Database
+     ↑               |       ↑           |
+     └─── UI Components ←────┴───────────┘
+```
+
+The architecture supports:
+- **Separation of Concerns**: Each component has distinct responsibilities
+- **Testability**: Components can be tested in isolation
+- **Extensibility**: New features can be added with minimal changes to existing code
+- **Performance**: Critical paths are optimized with caching and efficient database access
+</details>
+
+<details>
+<summary><h3> Key Components</h3></summary>
+
+#### Battle System
+
+The battle system is implemented across multiple files:
+- **Models**: `src/models/battle.py`, `src/models/battle_actor.py`, `src/models/battle_mechanics.py`
+- **UI**: `src/utils/ui/battle_ui.py`, `src/utils/ui/battle_ui_enhanced.py`, `src/utils/ui/battle_ui_integration.py`
+- **Cogs**: `src/cogs/gameplay/battle_cog.py`
+
+#### Trading System
+
+The trading system is implemented across:
+- **Models**: `src/models/trade.py`
+- **UI**: `src/utils/ui/trade_ui.py`, `src/utils/ui/trading_ui_enhanced.py`, `src/utils/ui/trading_ui_integration.py`
+- **Cogs**: `src/cogs/economy/trading_cog.py`
+
+#### Core Game Data
+
+Veramon data and game mechanics are defined in:
+- **Veramon Definitions**: `data/veramon_database.json`
+- **Models**: `src/models/veramon.py`
+- **Data Loading**: `src/utils/data_loader.py`, `src/utils/cache.py`
+</details>
+
+</details>
+
+---
+
+<details>
 <summary><h2> 📚 Developer Guide</h2></summary>
 
 <details>
@@ -650,3 +901,60 @@ python -m unittest tests.test_battle_system
 ### [Join Our Discord](https://discord.gg/veramon) | [Report Bugs](https://github.com/killerdash117/veramon-reunited/issues) | [Request Features](https://github.com/killerdash117/veramon-reunited/issues)
 
 </div>
+
+---
+
+<details>
+<summary><h2> 🛠️ Troubleshooting</h2></summary>
+
+<details>
+<summary><h3> Common Issues</h3></summary>
+
+#### Bot Not Responding
+- Ensure your bot token is correct in .env
+- Check Discord connection status
+- Verify the bot has proper permissions in your server
+
+#### Database Errors
+- Run `python src/tools/fix_database_indices.py` to repair database
+- Ensure SQLite is properly installed
+- Check write permissions in the data directory
+
+#### Battle System Problems
+- Install required dependency: `pip install psutil`
+- Check battle logs for errors: `/admin_logs battle_system`
+- Restart battle service: `/admin_service restart battle_system`
+
+#### Missing Veramon Data
+- Run `python src/tools/fix_data_structure.py` to repair Veramon data
+- Verify data files exist in the data directory
+- Check JSON formatting in Veramon database files
+</details>
+
+<details>
+<summary><h3> Error Codes</h3></summary>
+
+| Code | Description | Solution |
+|------|-------------|----------|
+| E001 | Discord API Rate Limit | Wait a few minutes before trying again |
+| E002 | Database Connection Failed | Check database file permissions |
+| E003 | Veramon Data Missing | Run `python src/tools/fix_data_structure.py` |
+| E004 | Battle System Error | Install psutil and restart the bot |
+| E005 | Trading System Error | Check database indices and connectivity |
+| E006 | Permission Error | Ensure bot has proper Discord permissions |
+</details>
+
+<details>
+<summary><h3> Getting Help</h3></summary>
+
+If you encounter issues not covered here:
+
+1. Check the [Issues page](https://github.com/killerdash117/veramon-reunited/issues) for similar problems
+2. Run `/debug_info` to generate a diagnostic report
+3. Join our [Discord server](https://discord.gg/veramon) for community support
+4. Open a new issue with detailed information about the problem
+</details>
+
+</details>
+
+---

@@ -10,7 +10,7 @@
 [![status](https://img.shields.io/badge/status-in%20development-orange.svg)](https://github.com/killerdash117/veramon-reunited)
 [![author](https://img.shields.io/badge/author-killerdash117-purple.svg)](https://github.com/killerdash117)
 
-**A comprehensive monster-catching adventure experience for Discord**
+**A comprehensive Discord bot for monster-catching adventures in your server**
 
 [Features](#-features) • [Commands](#-commands) • [Setup Guide](#-setup-guide) • [Developer Guide](#-developer-guide) • [Contributing](#-contributing)
 
@@ -20,14 +20,16 @@
 
 ## 🔍 Overview
 
-**Veramon Reunited** transforms your Discord server into an immersive monster-catching RPG experience. Capture unique creatures, battle other trainers, join factions, and explore a vast world—all without leaving Discord!
+**Veramon Reunited** transforms your Discord server into an immersive monster-catching RPG experience. Capture unique creatures, battle other trainers, join factions, and explore a vast world—all through intuitive Discord commands and interactive UI elements.
 
-Inspired by classic creature-collecting games but reimagined for real-time multiplayer interaction, Veramon Reunited offers a persistent world where progress continues even when you're offline. With over 300 creatures to collect, a deep battle system, faction wars, and regular events, there's always something new to discover.
+Inspired by classic creature-collecting games but completely redesigned for Discord interactions, Veramon Reunited offers a persistent world where progress continues even when you're offline. With over 300 creatures to collect, a deep battle system using Discord buttons, faction wars, and regular events, there's always something new to discover without ever leaving your server.
 
 ### Why Choose Veramon Reunited?
 
+- **Built for Discord** - Designed from the ground up for Discord's interface and social dynamics
 - **Comprehensive Gameplay** - Deep systems for battling, trading, exploring, and collecting
-- **Community Focus** - Guilds, factions, trading, and PvP foster player interaction
+- **Community Focus** - Parties, factions, trading, and PvP foster player interaction
+- **Interactive UI** - Intuitive button-based controls rather than memorizing commands
 - **Continuous Development** - Regular updates with new features and content
 - **Balance First** - Designed for long-term engagement without pay-to-win mechanics
 - **Accessible Design** - Easy to learn, with intuitive UI and helpful commands
@@ -68,11 +70,15 @@ Inspired by classic creature-collecting games but reimagined for real-time multi
 <br>
 
 - **Strategic Turn-Based Combat** with abilities and type advantages
+- **Actor-Based Architecture** providing stability and performance
+- **Resilient Persistence System** allowing battles to survive bot restarts
 - **PvP Battles** against other trainers
 - **PvE Challenges** against themed NPC trainers
 - **Multi-Battle Support** for 2v2 team battles
 - **Interactive Battle UI** with move selection and real-time feedback
 - **Type Effectiveness** creating strategic depth
+- **Advanced Status Effects** with unique durations and interactions
+- **Optimized Performance** with intelligent caching and metrics tracking
 - **Battle Rewards** including XP, tokens, and evolution opportunities
 
 </details>
@@ -231,7 +237,7 @@ All commands use Discord's slash command system for easy discovery and usage.
 | `/shop` | Browse the item shop | `/shop` |
 | `/shop [category]` | Browse a specific shop category | `/shop boosts` |
 | `/shop_buy [item_id] [quantity]` | Purchase an item | `/shop_buy token_magnet 1` |
-| `/inventory` | View your inventory | `/inventory` |
+| `/inventory` | View your items | `/inventory` |
 | `/use [item_id] [target]` | Use an item | `/use potion v12345` |
 
 </details>
@@ -505,43 +511,99 @@ The Veramon Reunited codebase is organized for maintainability and separation of
 
 ```
 veramon_reunited/
-├── data/                       # All game data
-│   ├── biomes/                 # Biome definitions
-│   ├── config.json             # Central configuration
-│   ├── events/                 # Event definitions
-│   ├── quests/                 # Quest definitions
-│   └── veramon/                # Veramon definitions
-├── src/                        # Source code
-│   ├── assets/                 # Static assets
-│   ├── cogs/                   # Discord command interfaces
-│   │   ├── admin/              # Admin commands and tools
-│   │   ├── economy/            # Economy and shop systems
-│   │   ├── events/             # Special events and tournaments
-│   │   ├── faction/            # Faction management
-│   │   ├── gameplay/           # Core gameplay commands
-│   │   ├── integration/        # External integrations
-│   │   ├── moderation/         # Moderation tools
-│   │   ├── settings/           # Configuration and settings
-│   │   └── social/             # Social features
-│   ├── core/                   # Core game systems 
-│   │   ├── battle.py           # Battle engine
-│   │   ├── evolution.py        # Evolution logic
-│   │   ├── exploration.py      # Exploration mechanics
-│   │   ├── faction_economy.py  # Faction economy system
-│   │   ├── forms.py            # Forms system
-│   │   ├── trading.py          # Trading engine
-│   │   └── weather.py          # Weather system
-│   ├── db/                     # Database
-│   ├── models/                 # Data models
-│   ├── utils/                  # Utility functions
-│   │   ├── ui/                 # UI-related utilities
-│   │   └── [other utils]
-│   └── main.py                 # Main entry point
-├── tests/                      # Test suite
-├── tools/                      # Developer tools
-│   └── examples/               # Example scripts
-└── web/                        # Web interface
+├── README.md             # Project documentation
+├── main.py               # Bot entry point
+├── src/                  # Source code
+│   ├── bot.py            # Core Discord bot configuration
+│   ├── cogs/             # Discord command modules 
+│   │   ├── admin/        # Administrative commands
+│   │   ├── gameplay/     # Core gameplay commands
+│   │   └── social/       # Community interaction commands
+│   ├── models/           # Data models
+│   │   ├── battle.py     # Battle mechanics
+│   │   ├── battle_actor.py # Actor-based battle implementation
+│   │   ├── battle_manager.py # Battle actor management
+│   │   ├── permissions.py # Permission system
+│   │   └── veramon.py    # Creature system
+│   ├── utils/            # Utility functions
+│   │   ├── actor_system.py # Actor-based architecture
+│   │   ├── battle_metrics.py # Battle performance tracking
+│   │   ├── cache_manager.py # Caching mechanisms
+│   │   ├── data_loader.py # JSON data loading
+│   │   ├── performance_monitor.py # System metrics
+│   │   └── ui_helpers.py # Discord UI utilities
+│   └── db/               # Database management
+│       ├── db.py         # Database connection
+│       ├── schema.py     # Schema definition
+│       └── cache_manager.py # Query caching
+└── data/                 # Game data (JSON)
+    ├── veramon/          # Creature definitions
+    ├── moves/            # Ability definitions
+    └── items/            # Item definitions
 ```
+
+### Key Technologies
+
+- **discord.py** - Python library for Discord API interaction
+- **Discord UI Components** - Buttons, selects, and modals for interactive gameplay
+- **SQLite** - Local database storage for user data and game state
+- **JSON** - Data storage for game assets
+- **Actor System** - Battle state management architecture
+
+### Core Systems
+
+#### Discord Integration
+
+The bot is built entirely around Discord's interface capabilities:
+
+- **Slash Commands** - All user interactions start with / commands
+- **Button Interactions** - Battle controls, team management, and navigation
+- **Embeds** - Rich visual displays for battles, profiles, and game information
+- **Ephemeral Messages** - Private responses for sensitive information
+- **Component Interactions** - Selection menus, modals for user input
+
+#### Actor-Based Architecture
+
+The battle system utilizes an actor-based architecture, providing:
+
+- **Isolation** - Each battle runs in its own isolated context
+- **Persistence** - Battles persist through bot restarts
+- **Discord Compatibility** - Designed to handle Discord's interaction timeouts
+- **Resilience** - Error handling and graceful recovery
+
+```python
+# Example of Discord command calling the actor system
+@app_commands.command(name="battle_move", description="Execute a move in battle")
+async def battle_move(self, interaction: discord.Interaction, move_name: str):
+    # Defer the response to avoid Discord timeout
+    await interaction.response.defer(ephemeral=True)
+    
+    battle_id = self.get_user_battle(str(interaction.user.id))
+    if not battle_id:
+        return await interaction.followup.send("You're not in a battle!")
+    
+    # Get the battle actor through the manager
+    battle_ref = self.battle_manager.get_battle(battle_id)
+    
+    # Send a message to the actor and await response
+    result = await battle_ref.ask({
+        "action": "execute_move",
+        "user_id": str(interaction.user.id),
+        "move_name": move_name
+    })
+    
+    # Send the result back to Discord
+    await interaction.followup.send(result["message"])
+```
+
+#### Battle Metrics and Performance
+
+The system includes comprehensive performance monitoring for Discord interactions:
+
+- **Command Timing** - Track execution time of slash commands
+- **Response Times** - Monitor time to respond to user interactions
+- **API Rate Limits** - Monitor and prevent Discord API rate limiting
+- **Memory Usage** - Track memory consumption to ensure stability
 
 ### Local Development Setup
 

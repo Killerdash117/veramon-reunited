@@ -324,21 +324,25 @@
 <summary><h2 id="-staff-commands"> 🤝 Staff Commands</h2></summary>
 
 <details>
-<summary><h3>Admin Commands</h3></summary>
+<summary><h3>User Commands</h3></summary>
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/admin_add_veramon [name] [types] [rarity]` | Add a new Veramon to the game | `/admin_add_veramon Fluffymon Fire,Flying rare` |
-| `/admin_edit_veramon [name] [field] [value]` | Edit an existing Veramon's data | `/admin_edit_veramon Fluffymon type Water,Flying` |
-| `/admin_add_ability [name] [details]` | Add a new ability to the game | `/admin_add_ability FireBlast Fire 80 0.85` |
-| `/admin_give_veramon [player] [veramon]` | Give a Veramon to a player | `/admin_give_veramon @Username Fluffymon 15 true` |
-| `/admin_spawn_rate [biome] [rarity] [percentage]` | Adjust spawn rates for a biome | `/admin_spawn_rate forest legendary 2.5` |
-| `/admin_setup` | Run the interactive setup wizard | `/admin_setup` |
-| `/admin_config [category]` | Configure bot settings | `/admin_config spawns` |
-| `/admin_roles` | Configure role permissions | `/admin_roles` |
-| `/admin_channels` | Configure channel settings | `/admin_channels` |
-| `/admin_spawn` | Force spawn a Veramon | `/admin_spawn` |
-| `/admin_event [event_id] [action]` | Manage server events | `/admin_event summer_fest start` |
+| `/user_profile` | View your profile | `/user_profile` |
+| `/user_settings` | Adjust your user settings | `/user_settings` |
+
+</details>
+
+<details>
+<summary><h3>VIP Commands</h3></summary>
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/vip_daily_bonus` | Claim enhanced daily rewards | `/vip_daily_bonus` |
+| `/vip_shiny_boost` | Activate increased shiny chance | `/vip_shiny_boost` |
+| `/vip_premium_theme [theme]` | Apply exclusive UI themes | `/vip_premium_theme sunset` |
+| `/vip_nickname_color` | Customize nickname colors | `/vip_nickname_color #FF5500` |
+| `/vip_gift [user] [item]` | Gift items to other players | `/vip_gift @Username rare_candy` |
 
 </details>
 
@@ -357,6 +361,25 @@
 | `/mod_battle_end [battle_id] [winner_id]` | Force-end a stuck battle | `/mod_battle_end 12345 @Winner` |
 | `/system_health` | Check the health of bot systems | `/system_health` |
 | `/debug_info` | Generate a diagnostic report | `/debug_info` |
+
+</details>
+
+<details>
+<summary><h3>Admin Commands</h3></summary>
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/admin_add_veramon [name] [types] [rarity]` | Add a new Veramon to the game | `/admin_add_veramon Fluffymon Fire,Flying rare` |
+| `/admin_edit_veramon [name] [field] [value]` | Edit an existing Veramon's data | `/admin_edit_veramon Fluffymon type Water,Flying` |
+| `/admin_add_ability [name] [details]` | Add a new ability to the game | `/admin_add_ability FireBlast Fire 80 0.85` |
+| `/admin_give_veramon [player] [veramon]` | Give a Veramon to a player | `/admin_give_veramon @Username Fluffymon 15 true` |
+| `/admin_spawn_rate [biome] [rarity] [percentage]` | Adjust spawn rates for a biome | `/admin_spawn_rate forest legendary 2.5` |
+| `/admin_setup` | Run the interactive setup wizard | `/admin_setup` |
+| `/admin_config [category]` | Configure bot settings | `/admin_config spawns` |
+| `/admin_roles` | Configure role permissions | `/admin_roles` |
+| `/admin_channels` | Configure channel settings | `/admin_channels` |
+| `/admin_spawn` | Force spawn a Veramon | `/admin_spawn` |
+| `/admin_event [event_id] [action]` | Manage server events | `/admin_event summer_fest start` |
 
 </details>
 

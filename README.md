@@ -343,6 +343,24 @@
 </details>
 
 <details>
+<summary><h3>Moderator Commands</h3></summary>
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/mod_warn [user_id] [reason]` | Issue a warning to a user | `/mod_warn @Username Breaking trade rules` |
+| `/mod_mute [user_id] [duration] [reason]` | Temporarily mute a user from using commands | `/mod_mute @Username 60 Spamming commands` |
+| `/mod_unmute [user_id]` | Remove a command mute from a user | `/mod_unmute @Username` |
+| `/mod_trade_view [trade_id]` | View details of any trade | `/mod_trade_view 12345` |
+| `/mod_trade_cancel [trade_id] [reason]` | Cancel a suspicious trade | `/mod_trade_cancel 12345 Potential scam` |
+| `/mod_trade_history [user_id]` | View a user's trade history | `/mod_trade_history @Username` |
+| `/mod_battle_view [battle_id]` | View details of any battle | `/mod_battle_view 12345` |
+| `/mod_battle_end [battle_id] [winner_id]` | Force-end a stuck battle | `/mod_battle_end 12345 @Winner` |
+| `/system_health` | Check the health of bot systems | `/system_health` |
+| `/debug_info` | Generate a diagnostic report | `/debug_info` |
+
+</details>
+
+<details>
 <summary><h3>Developer Commands</h3></summary>
 
 These commands are restricted to bot developers only (Dev rank) and are used for maintenance, debugging, and development purposes.
@@ -731,25 +749,6 @@ If you encounter issues not covered here:
 </table>
 
 </div>
-
-</details>
-
----
-
-<details>
-<summary><h2 id="-upcoming-features"> 🔮 Upcoming Features</h2></summary>
-
-The Veramon Reunited project is under active development. Here are some features planned for future releases:
-
-- **Tournament System** - In-server competitions with automated brackets and rewards
-- **Advanced NPC Trainers** - AI-driven trainers with unique strategies and themed teams
-- **Legendary Quests** - Epic storylines to discover and capture legendary Veramon
-- **Guild Wars** - Competitive gameplay between player guilds with territory control
-- **Faction Raids** - Cooperative battles against powerful raid bosses with faction-based rewards
-- **Breeding System** - Create new Veramon with inherited traits from parent creatures
-- **Weather System** - Dynamic weather patterns affecting spawn rates and battle conditions
-
-Development priorities are based on user feedback and community needs. Features may be added or modified based on player suggestions.
 
 </details>
 

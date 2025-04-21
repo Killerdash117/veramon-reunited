@@ -461,8 +461,14 @@ class AdminBattleSystemCog(commands.Cog):
         veramon6: str = None
     ):
         """Set a specific team for an NPC trainer."""
-        # Load Veramon data to validate entries
-        veramon_file = os.path.join(DATA_DIR, "veramon_data.json")
+        # Find veramon data file (use consolidated file if available)
+        data_dir = os.path.join(DATA_DIR)
+        complete_file = os.path.join(data_dir, "veramon_database.json")
+        
+        if os.path.exists(complete_file):
+            veramon_file = complete_file
+        else:
+            veramon_file = os.path.join(data_dir, "veramon_data.json")
         
         with open(veramon_file, 'r') as f:
             veramon_data = json.load(f)

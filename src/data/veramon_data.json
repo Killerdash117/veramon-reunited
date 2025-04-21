@@ -1,412 +1,397 @@
 {
-  "Froakid": {
-    "name": "Froakid",
+  "Embering": {
+    "name": "Embering",
+    "type": [
+      "Fire"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 45,
+      "atk": 55,
+      "def": 40,
+      "sp_atk": 60,
+      "sp_def": 40,
+      "speed": 65
+    },
+    "biomes": [
+      "volcano",
+      "plains"
+    ],
+    "flavor": "A small fire creature with a constantly burning tail. It tends to gather in warm areas during cold weather.",
+    "abilities": [
+      "Ember",
+      "Scratch",
+      "Fire Spin",
+      "Tackle"
+    ],
+    "evolution": {
+      "evolves_to": "Blazerine",
+      "level_required": 16
+    }
+  },
+  "Aqualet": {
+    "name": "Aqualet",
     "type": [
       "Water"
     ],
     "rarity": "common",
     "catch_rate": 0.75,
-    "shiny_rate": 0.0005,
+    "shiny_rate": 0.001,
     "base_stats": {
-      "hp": 45,
-      "atk": 48,
-      "def": 42,
-      "sp_atk": 50,
-      "sp_def": 45,
-      "speed": 55
+      "hp": 50,
+      "atk": 45,
+      "def": 50,
+      "sp_atk": 55,
+      "sp_def": 55,
+      "speed": 45
     },
     "biomes": [
-      "lake",
-      "forest"
+      "beach",
+      "river",
+      "lake"
     ],
-    "flavor": "A playful amphibious Veramon thriving near water.",
+    "flavor": "A small aquatic creature that can breathe both in water and on land. Its skin is always moist and slippery.",
     "abilities": [
-      "Bubble",
       "Water Gun",
-      "Quick Attack",
-      "Tackle"
+      "Tackle",
+      "Bubble",
+      "Water Pulse"
     ],
     "evolution": {
-      "evolves_to": "Froatoad",
+      "evolves_to": "Aquarell",
       "level_required": 16
     }
   },
-  "Froatoad": {
-    "name": "Froatoad",
-    "type": [
-      "Water"
-    ],
-    "rarity": "uncommon",
-    "catch_rate": 0.4,
-    "shiny_rate": 0.0005,
-    "base_stats": {
-      "hp": 65,
-      "atk": 63,
-      "def": 60,
-      "sp_atk": 70,
-      "sp_def": 65,
-      "speed": 70
-    },
-    "biomes": [
-      "lake",
-      "forest"
-    ],
-    "flavor": "A mid-sized toad with powerful water attacks and acrobatic leaping abilities.",
-    "abilities": [
-      "Bubble",
-      "Water Gun",
-      "Hydro Pump",
-      "Quick Attack",
-      "Slam"
-    ],
-    "evolution": {
-      "evolves_to": "Aquafrog",
-      "level_required": 36
-    }
-  },
-  "Aquafrog": {
-    "name": "Aquafrog",
-    "type": [
-      "Water",
-      "Fighting"
-    ],
-    "rarity": "rare",
-    "catch_rate": 0.15,
-    "shiny_rate": 0.0005,
-    "base_stats": {
-      "hp": 90,
-      "atk": 95,
-      "def": 85,
-      "sp_atk": 100,
-      "sp_def": 90,
-      "speed": 115
-    },
-    "biomes": [
-      "lake"
-    ],
-    "flavor": "A master of water combat, its powerful legs allow it to create massive tidal waves.",
-    "abilities": [
-      "Bubble",
-      "Water Gun",
-      "Hydro Pump",
-      "Tsunami",
-      "Frog Kick",
-      "Water Blade"
-    ]
-  },
-  "Blazimp": {
-    "name": "Blazimp",
-    "type": [
-      "Fire"
-    ],
-    "rarity": "uncommon",
-    "catch_rate": 0.4,
-    "shiny_rate": 0.0005,
-    "base_stats": {
-      "hp": 52,
-      "atk": 60,
-      "def": 40,
-      "sp_atk": 65,
-      "sp_def": 45,
-      "speed": 65
-    },
-    "biomes": [
-      "volcano"
-    ],
-    "flavor": "Searing hot and full of vigor, a rare sight near lava.",
-    "abilities": [
-      "Ember",
-      "Flamethrower",
-      "Scratch",
-      "Tackle",
-      "Lava Spew"
-    ],
-    "evolution": {
-      "evolves_to": "Pyrosim",
-      "level_required": 18
-    }
-  },
-  "Pyrosim": {
-    "name": "Pyrosim",
-    "type": [
-      "Fire"
-    ],
-    "rarity": "rare",
-    "catch_rate": 0.15,
-    "shiny_rate": 0.0005,
-    "base_stats": {
-      "hp": 72,
-      "atk": 85,
-      "def": 60,
-      "sp_atk": 90,
-      "sp_def": 70,
-      "speed": 80
-    },
-    "biomes": [
-      "volcano"
-    ],
-    "flavor": "Its body constantly radiates heat that can melt stone. Has a mischievous personality.",
-    "abilities": [
-      "Ember",
-      "Flamethrower",
-      "Fire Blast",
-      "Inferno",
-      "Flame Punch"
-    ],
-    "evolution": {
-      "evolves_to": "Inferape",
-      "level_required": 36
-    }
-  },
-  "Inferape": {
-    "name": "Inferape",
-    "type": [
-      "Fire",
-      "Fighting"
-    ],
-    "rarity": "legendary",
-    "catch_rate": 0.05,
-    "shiny_rate": 0.001,
-    "base_stats": {
-      "hp": 95,
-      "atk": 120,
-      "def": 80,
-      "sp_atk": 110,
-      "sp_def": 85,
-      "speed": 110
-    },
-    "biomes": [
-      "volcano"
-    ],
-    "flavor": "The ultimate fire warrior, its punches can cause volcanic eruptions and its rage is unmatched.",
-    "abilities": [
-      "Flamethrower",
-      "Fire Blast",
-      "Inferno",
-      "Blaze Kick",
-      "Flame Punch",
-      "Eruption",
-      "Rage"
-    ]
-  },
-  "Leafawn": {
-    "name": "Leafawn",
+  "Leaflet": {
+    "name": "Leaflet",
     "type": [
       "Grass"
     ],
-    "rarity": "rare",
-    "catch_rate": 0.15,
-    "shiny_rate": 0.0005,
-    "base_stats": {
-      "hp": 55,
-      "atk": 55,
-      "def": 60,
-      "sp_atk": 75,
-      "sp_def": 85,
-      "speed": 60
-    },
-    "biomes": [
-      "forest"
-    ],
-    "flavor": "Mysterious and graceful, blending with the forest.",
-    "abilities": [
-      "Vine Whip",
-      "Leaf Blade",
-      "Synthesis",
-      "Tackle",
-      "Growth"
-    ],
-    "evolution": {
-      "evolves_to": "Forestag",
-      "level_required": 24
-    }
-  },
-  "Forestag": {
-    "name": "Forestag",
-    "type": [
-      "Grass",
-      "Fairy"
-    ],
-    "rarity": "legendary",
-    "catch_rate": 0.05,
+    "rarity": "common",
+    "catch_rate": 0.75,
     "shiny_rate": 0.001,
     "base_stats": {
-      "hp": 80,
-      "atk": 85,
-      "def": 90,
-      "sp_atk": 110,
-      "sp_def": 130,
-      "speed": 95
+      "hp": 45,
+      "atk": 40,
+      "def": 45,
+      "sp_atk": 60,
+      "sp_def": 55,
+      "speed": 45
     },
     "biomes": [
-      "forest"
+      "forest",
+      "meadow",
+      "garden"
     ],
-    "flavor": "A majestic forest guardian with antlers that glow with healing light energy.",
+    "flavor": "A small leaf-like creature that basks in sunlight. Leaflets are often found in gardens where they help plants grow stronger.",
     "abilities": [
+      "Absorb",
       "Vine Whip",
-      "Leaf Blade",
-      "Solar Beam",
-      "Forest Blessing",
-      "Nature's Wrath",
-      "Healing Light"
-    ]
+      "Growth",
+      "Razor Leaf"
+    ],
+    "evolution": {
+      "evolves_to": "Vinewhip",
+      "level_required": 16
+    }
   },
-  "Voltik": {
-    "name": "Voltik",
+  "Zappawatt": {
+    "name": "Zappawatt",
     "type": [
       "Electric"
     ],
     "rarity": "common",
     "catch_rate": 0.75,
-    "shiny_rate": 0.0005,
+    "shiny_rate": 0.001,
     "base_stats": {
       "hp": 40,
-      "atk": 45,
+      "atk": 50,
       "def": 40,
-      "sp_atk": 65,
-      "sp_def": 40,
+      "sp_atk": 60,
+      "sp_def": 45,
       "speed": 70
     },
     "biomes": [
-      "mountain",
-      "city"
+      "plains",
+      "urban",
+      "power_plant"
     ],
-    "flavor": "A small electric rodent that feeds on electricity from power lines.",
+    "flavor": "Its cheeks store electricity that sometimes discharges when it's startled. It's attracted to electronic devices.",
     "abilities": [
-      "Spark",
-      "Thundershock",
+      "Thunder Shock",
       "Quick Attack",
-      "Tail Whip"
+      "Spark",
+      "Thunderbolt"
     ],
     "evolution": {
-      "evolves_to": "Electromouse",
-      "level_required": 14
+      "evolves_to": "Voltian",
+      "level_required": 16
     }
   },
-  "Electromouse": {
-    "name": "Electromouse",
-    "type": [
-      "Electric",
-      "Steel"
-    ],
-    "rarity": "rare",
-    "catch_rate": 0.15,
-    "shiny_rate": 0.0005,
-    "base_stats": {
-      "hp": 60,
-      "atk": 90,
-      "def": 65,
-      "sp_atk": 120,
-      "sp_def": 60,
-      "speed": 130
-    },
-    "biomes": [
-      "mountain",
-      "city"
-    ],
-    "flavor": "Its body can store massive amounts of electricity, enough to power a small city for hours.",
-    "abilities": [
-      "Thundershock",
-      "Thunderbolt",
-      "Thunder",
-      "Electric Field",
-      "Metal Claw",
-      "Agility"
-    ]
-  },
-  "Stoneshell": {
-    "name": "Stoneshell",
+  "Rocklet": {
+    "name": "Rocklet",
     "type": [
       "Rock"
     ],
     "rarity": "common",
     "catch_rate": 0.75,
-    "shiny_rate": 0.0005,
+    "shiny_rate": 0.001,
     "base_stats": {
-      "hp": 50,
-      "atk": 40,
-      "def": 95,
-      "sp_atk": 30,
-      "sp_def": 45,
-      "speed": 25
+      "hp": 60,
+      "atk": 65,
+      "def": 75,
+      "sp_atk": 40,
+      "sp_def": 50,
+      "speed": 30
     },
     "biomes": [
       "mountain",
-      "cave"
+      "cave",
+      "desert"
     ],
-    "flavor": "A small but sturdy rock-type that curls into an impenetrable ball when threatened.",
+    "flavor": "Its outer shell is made of compressed minerals. It rolls into a ball when threatened and can bounce surprisingly high.",
     "abilities": [
       "Rock Throw",
-      "Harden",
-      "Defense Curl",
-      "Tackle"
+      "Tackle",
+      "Rollout",
+      "Rock Polish"
     ],
     "evolution": {
-      "evolves_to": "Boulderback",
+      "evolves_to": "Boulderush",
+      "level_required": 16
+    }
+  },
+  "Psykit": {
+    "name": "Psykit",
+    "type": [
+      "Psychic"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 40,
+      "atk": 35,
+      "def": 40,
+      "sp_atk": 65,
+      "sp_def": 60,
+      "speed": 65
+    },
+    "biomes": [
+      "urban",
+      "temple",
+      "ruins"
+    ],
+    "flavor": "Its brain is highly developed even from birth. It can use telekinesis to lift objects five times its weight.",
+    "abilities": [
+      "Confusion",
+      "Teleport",
+      "Psybeam",
+      "Calm Mind"
+    ],
+    "evolution": {
+      "evolves_to": "Mentalis",
+      "level_required": 16
+    }
+  },
+  "Venomite": {
+    "name": "Venomite",
+    "type": [
+      "Poison"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 45,
+      "atk": 55,
+      "def": 45,
+      "sp_atk": 55,
+      "sp_def": 45,
+      "speed": 55
+    },
+    "biomes": [
+      "swamp",
+      "jungle",
+      "cave"
+    ],
+    "flavor": "Its body contains over a dozen different toxins. Small sacs on its skin release poison when it feels threatened.",
+    "abilities": [
+      "Poison Sting",
+      "Acid",
+      "Venoshock",
+      "Toxic"
+    ],
+    "evolution": {
+      "evolves_to": "Toxigill",
+      "level_required": 16
+    }
+  },
+  "Froslet": {
+    "name": "Froslet",
+    "type": [
+      "Ice"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 50,
+      "atk": 50,
+      "def": 50,
+      "sp_atk": 50,
+      "sp_def": 50,
+      "speed": 50
+    },
+    "biomes": [
+      "tundra",
+      "mountain_peak",
+      "arctic"
+    ],
+    "flavor": "Its body temperature is below freezing. Froslet can create small ice crystals from the moisture in the air.",
+    "abilities": [
+      "Powder Snow",
+      "Ice Shard",
+      "Icy Wind",
+      "Hail"
+    ],
+    "evolution": {
+      "evolves_to": "Glacialisk",
+      "level_required": 16
+    }
+  },
+  "Bugster": {
+    "name": "Bugster",
+    "type": [
+      "Bug"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 40,
+      "atk": 45,
+      "def": 40,
+      "sp_atk": 35,
+      "sp_def": 35,
+      "speed": 65
+    },
+    "biomes": [
+      "forest",
+      "jungle",
+      "grassland"
+    ],
+    "flavor": "It camouflages itself as a leaf or stick. Bugster can detect plant nutrients from miles away.",
+    "abilities": [
+      "Bug Bite",
+      "String Shot",
+      "Struggle Bug",
+      "Leech Life"
+    ],
+    "evolution": {
+      "evolves_to": "Chrysalid",
+      "level_required": 10
+    }
+  },
+  "Chrysalid": {
+    "name": "Chrysalid",
+    "type": [
+      "Bug"
+    ],
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
+    "base_stats": {
+      "hp": 50,
+      "atk": 35,
+      "def": 80,
+      "sp_atk": 35,
+      "sp_def": 70,
+      "speed": 30
+    },
+    "biomes": [
+      "forest",
+      "jungle"
+    ],
+    "flavor": "It remains motionless while gathering energy for evolution. The shell hardens with exposure to sunlight.",
+    "abilities": [
+      "Harden",
+      "Protect",
+      "Bug Bite"
+    ],
+    "evolution": {
+      "evolves_to": "Monarchon",
       "level_required": 20
     }
   },
-  "Boulderback": {
-    "name": "Boulderback",
+  "Sparkitty": {
+    "name": "Sparkitty",
     "type": [
-      "Rock",
-      "Ground"
+      "Electric",
+      "Normal"
     ],
-    "rarity": "uncommon",
-    "catch_rate": 0.4,
-    "shiny_rate": 0.0005,
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
     "base_stats": {
-      "hp": 95,
-      "atk": 75,
-      "def": 140,
-      "sp_atk": 40,
-      "sp_def": 70,
-      "speed": 35
+      "hp": 45,
+      "atk": 50,
+      "def": 40,
+      "sp_atk": 60,
+      "sp_def": 45,
+      "speed": 70
     },
     "biomes": [
-      "mountain",
-      "cave"
+      "urban",
+      "plains",
+      "forest"
     ],
-    "flavor": "Its massive rock shell can withstand the most powerful attacks. It's said to sleep for decades at a time.",
+    "flavor": "A playful feline whose fur generates static electricity. It's popular as a pet despite the occasional shock.",
     "abilities": [
-      "Rock Throw",
-      "Rock Slide",
-      "Earthquake",
-      "Rollout",
-      "Stone Edge",
-      "Mountain Crush"
-    ]
+      "Spark",
+      "Quick Attack",
+      "Thunder Shock",
+      "Play Rough"
+    ],
+    "evolution": {
+      "evolves_to": "Voltiger",
+      "level_required": 22
+    }
   },
-  "Shadowling": {
-    "name": "Shadowling",
+  "Pufflet": {
+    "name": "Pufflet",
     "type": [
-      "Dark",
-      "Ghost"
+      "Normal",
+      "Flying"
     ],
-    "rarity": "mythic",
-    "catch_rate": 0.01,
-    "shiny_rate": 0.002,
+    "rarity": "common",
+    "catch_rate": 0.75,
+    "shiny_rate": 0.001,
     "base_stats": {
-      "hp": 70,
-      "atk": 65,
-      "def": 65,
-      "sp_atk": 125,
-      "sp_def": 115,
-      "speed": 130
+      "hp": 45,
+      "atk": 40,
+      "def": 35,
+      "sp_atk": 40,
+      "sp_def": 45,
+      "speed": 60
     },
     "biomes": [
-      "cemetery",
-      "cave"
+      "forest",
+      "plains",
+      "urban"
     ],
-    "flavor": "A terrifying entity said to be born from the collective fears of humankind. Few have ever seen it and lived to tell the tale.",
+    "flavor": "A small, fluffy bird that collects colorful objects. It's known for its cheerful song that brings joy to listeners.",
     "abilities": [
-      "Shadow Ball",
-      "Dark Pulse",
-      "Nightmare",
-      "Dream Eater",
-      "Phantom Force",
-      "Fear Inducer",
-      "Soul Drain"
-    ]
+      "Peck",
+      "Gust",
+      "Quick Attack",
+      "Sing"
+    ],
+    "evolution": {
+      "evolves_to": "Plumella",
+      "level_required": 15
+    }
   }
 }

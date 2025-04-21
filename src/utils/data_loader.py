@@ -12,9 +12,21 @@ def load_all_veramon_data():
     base_dir = os.path.dirname(__file__)
     data_dir = os.path.abspath(os.path.join(base_dir, '..', 'data'))
     
+    # First try loading the consolidated file
+    complete_data_path = os.path.join(data_dir, 'veramon_database.json')
+    combined_data = {}
+    
+    if os.path.exists(complete_data_path):
+        try:
+            with open(complete_data_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Error loading consolidated data file: {e}")
+            print("Falling back to loading individual files.")
+    
+    # Fallback: load individual files
     # Start with the main veramon_data.json
     main_data_path = os.path.join(data_dir, 'veramon_data.json')
-    combined_data = {}
     
     if os.path.exists(main_data_path):
         with open(main_data_path, 'r', encoding='utf-8') as f:

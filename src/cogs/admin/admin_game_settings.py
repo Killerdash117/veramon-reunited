@@ -374,7 +374,10 @@ class AdminGameSettingsCog(commands.Cog):
             # Determine which files to export
             files_to_export = []
             if data_type == "veramon" or data_type == "all":
-                files_to_export.append("veramon_data.json")
+                if os.path.exists(os.path.join(DATA_DIR, "veramon_database.json")):
+                    files_to_export.append("veramon_database.json")
+                else:
+                    files_to_export.append("veramon_data.json")
             if data_type == "abilities" or data_type == "all":
                 files_to_export.append("abilities.json")
             if data_type == "items" or data_type == "all":
@@ -445,7 +448,7 @@ class AdminGameSettingsCog(commands.Cog):
         try:
             # Determine the file mapping
             file_mappings = {
-                "veramon": "veramon_data.json",
+                "veramon": "veramon_database.json" if os.path.exists(os.path.join(DATA_DIR, "veramon_database.json")) else "veramon_data.json",
                 "abilities": "abilities.json",
                 "items": "items.json",
                 "biomes": "biomes.json"

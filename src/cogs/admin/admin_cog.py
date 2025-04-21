@@ -45,7 +45,14 @@ class AdminCog(commands.Cog):
     ):
         """Add a new Veramon to the game data."""
         # First, check if the Veramon already exists
-        veramon_file = os.path.join(DATA_DIR, "veramon_data.json")
+        # Find veramon data file (use consolidated file if available)
+        data_dir = os.path.join(DATA_DIR)
+        complete_file = os.path.join(data_dir, "veramon_database.json")
+        
+        if os.path.exists(complete_file):
+            veramon_file = complete_file
+        else:
+            veramon_file = os.path.join(data_dir, "veramon_data.json")
         
         with open(veramon_file, 'r') as f:
             veramon_data = json.load(f)
@@ -156,7 +163,14 @@ class AdminCog(commands.Cog):
     ):
         """Edit an existing Veramon's data."""
         # Load Veramon data
-        veramon_file = os.path.join(DATA_DIR, "veramon_data.json")
+        # Find veramon data file (use consolidated file if available)
+        data_dir = os.path.join(DATA_DIR)
+        complete_file = os.path.join(data_dir, "veramon_database.json")
+        
+        if os.path.exists(complete_file):
+            veramon_file = complete_file
+        else:
+            veramon_file = os.path.join(data_dir, "veramon_data.json")
         
         with open(veramon_file, 'r') as f:
             veramon_data = json.load(f)
@@ -409,7 +423,14 @@ class AdminCog(commands.Cog):
     ):
         """Give a Veramon to a player."""
         # Load Veramon data
-        veramon_file = os.path.join(DATA_DIR, "veramon_data.json")
+        # Find veramon data file (use consolidated file if available)
+        data_dir = os.path.join(DATA_DIR)
+        complete_file = os.path.join(data_dir, "veramon_database.json")
+        
+        if os.path.exists(complete_file):
+            veramon_file = complete_file
+        else:
+            veramon_file = os.path.join(data_dir, "veramon_data.json")
         
         with open(veramon_file, 'r') as f:
             veramon_data = json.load(f)

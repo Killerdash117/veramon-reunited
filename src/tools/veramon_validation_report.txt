@@ -1,0 +1,7 @@
+VERAMON DATA VALIDATION REPORT
+============================
+
+Total errors: 2
+
+1. Veramon Chronox: Invalid 'rarity' value 'mythical'. Valid values: common, uncommon, rare, legendary, mythic
+2. Veramon Elementus: Invalid 'rarity' value 'mythical'. Valid values: common, uncommon, rare, legendary, mythic

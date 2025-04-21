@@ -22,11 +22,25 @@ class AutocompleteHandlers:
         Autocomplete for Veramon names.
         Provides suggestions for Veramon names based on the user's input.
         """
-        # Load Veramon data
-        data_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "veramon_data.json")
-        with open(data_path, 'r') as f:
-            veramon_data = json.load(f)
-            
+        # Load Veramon data from consolidated file with fallback
+        data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
+        complete_data_path = os.path.join(data_dir, "veramon_database.json")
+        
+        if os.path.exists(complete_data_path):
+            try:
+                with open(complete_data_path, 'r') as f:
+                    veramon_data = json.load(f)
+            except Exception:
+                # Fallback to original file
+                original_data_path = os.path.join(data_dir, "veramon_data.json")
+                with open(original_data_path, 'r') as f:
+                    veramon_data = json.load(f)
+        else:
+            # If consolidated file doesn't exist, use original
+            original_data_path = os.path.join(data_dir, "veramon_data.json")
+            with open(original_data_path, 'r') as f:
+                veramon_data = json.load(f)
+                
         # Filter Veramon names based on current input
         matches = []
         for name in veramon_data.keys():

@@ -245,8 +245,21 @@ def get_veramon_data(veramon_name: str = None) -> Dict[str, Any]:
     def load_veramon_data():
         import os
         import json
-        data_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "veramon_data.json")
-        with open(data_path, 'r') as f:
+        data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
+        
+        # First try the consolidated file
+        complete_data_path = os.path.join(data_dir, "veramon_database.json")
+        if os.path.exists(complete_data_path):
+            try:
+                with open(complete_data_path, 'r') as f:
+                    return json.load(f)
+            except Exception:
+                # Fallback to original file if error occurs
+                pass
+        
+        # Fallback to original file
+        original_data_path = os.path.join(data_dir, "veramon_data.json")
+        with open(original_data_path, 'r') as f:
             return json.load(f)
             
     all_data = cache.get_or_set("veramon:all", load_veramon_data, ttl=3600)  # Cache for 1 hour

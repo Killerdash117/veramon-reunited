@@ -164,7 +164,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 - **Enhanced Selection Menus** with category support
 - **Theme Preview System** to test before applying
 - **Styled Embeds** with consistent visual language
-- **Animated UI Elements** for battles and special events
+- **Visual State Changes** for battles and special events
 - **Color Customization** for indicators and highlights
 - **Accessibility Options** with high-contrast themes
 - **UI Integration** with all major game systems

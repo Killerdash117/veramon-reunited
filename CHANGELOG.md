@@ -140,7 +140,7 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
 - **Accessibility Features**
   - Implemented comprehensive accessibility settings for improved user experience
   - Added high contrast mode, text size options, and screen reader support
-  - Created reduced animation mode for performance and accessibility
+  - Created reduced visual update mode for performance and accessibility
   - Implemented settings menu navigation with interactive buttons
   - Added categorized settings display for easy navigation
   - Created theme preview system for testing themes before applying
@@ -357,7 +357,7 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
 - **Accessibility Features**
   - Implemented accessibility settings for improved user experience
   - Added high contrast mode, text size options, and screen reader support
-  - Created reduced animation mode for performance and accessibility
+  - Created reduced visual update mode for performance and accessibility
   - Implemented settings menu navigation with interactive buttons
   - Added categorized settings display for easy navigation
   - Created theme preview system for testing themes before applying

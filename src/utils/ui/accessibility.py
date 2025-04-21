@@ -23,10 +23,10 @@ class TextSize(Enum):
     EXTRA_LARGE = "extra_large"
 
 class AnimationLevel(Enum):
-    """Animation level options."""
-    FULL = "full"          # All animations
-    REDUCED = "reduced"    # Minimal animations
-    NONE = "none"          # No animations
+    """Visual update frequency options."""
+    FULL = "full"          # All visual updates
+    REDUCED = "reduced"    # Only essential visual updates
+    NONE = "none"          # Minimal visual updates
 
 class ColorMode(Enum):
     """Color mode options."""

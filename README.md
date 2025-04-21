@@ -12,34 +12,34 @@
 
 **A comprehensive Discord bot for monster-catching adventures in your server**
 
-[Features](#-features) • [Commands](#-commands) • [Setup Guide](#-setup-guide) • [Developer Guide](#-developer-guide) • [Contributing](#-contributing)
+[Features](#-features) • [Commands](#-commands) • [Setup Guide](#-setup-guide) • [Developer Guide](#-developer-guide) • [Contributing](#-contributing) • [Contributors](#-contributors)
 
 </div>
 
 ---
 
 <details open>
-<summary><h2>🔍 Overview</h2></summary>
+<summary><h2> 📚 Overview</h2></summary>
 
 **Veramon Reunited** transforms your Discord server into an immersive monster-catching RPG experience. Capture unique creatures, battle other trainers, join factions, and explore a vast world—all through intuitive Discord commands and interactive UI elements.
 
 Inspired by classic creature-collecting games but completely redesigned for Discord interactions, Veramon Reunited offers a persistent world where progress continues even when you're offline. With over 300 creatures to collect, a deep battle system using Discord buttons, faction wars, and regular events, there's always something new to discover without ever leaving your server.
 
 <details open>
-<summary><h3>✨ Why Choose Veramon Reunited?</h3></summary>
+<summary><h3> 🤔 Why Choose Veramon Reunited?</h3></summary>
 
 | Feature | Description |
 |---------|-------------|
-| **🎮 Built for Discord** | Designed from the ground up for Discord's interface and social dynamics |
-| **🌟 Comprehensive Gameplay** | Deep systems for battling, trading, exploring, and collecting |
-| **👥 Community Focus** | Parties, factions, trading, and PvP foster player interaction |
-| **🖱️ Interactive UI** | Intuitive button-based controls rather than memorizing commands |
-| **🚀 Continuous Development** | Regular updates with new features and content |
-| **⚖️ Balance First** | Designed for long-term engagement without pay-to-win mechanics |
-| **👍 Accessible Design** | Easy to learn, with intuitive UI and helpful commands |
-| **⚙️ Customizable Experience** | Server admins can tailor settings to their community |
-| **🛡️ Admin-Friendly** | Interactive setup wizard and comprehensive management tools |
-| **⚡ Optimized Performance** | Efficient database structure and storage management |
+| **Built for Discord** | Designed from the ground up for Discord's interface and social dynamics |
+| **Comprehensive Gameplay** | Deep systems for battling, trading, exploring, and collecting |
+| **Community Focus** | Parties, factions, trading, and PvP foster player interaction |
+| **Interactive UI** | Intuitive button-based controls rather than memorizing commands |
+| **Continuous Development** | Regular updates with new features and content |
+| **Balance First** | Designed for long-term engagement without pay-to-win mechanics |
+| **Accessible Design** | Easy to learn, with intuitive UI and helpful commands |
+| **Customizable Experience** | Server admins can tailor settings to their community |
+| **Admin-Friendly** | Interactive setup wizard and comprehensive management tools |
+| **Optimized Performance** | Efficient database structure and storage management |
 
 </details>
 </details>
@@ -47,10 +47,10 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 ---
 
 <details open>
-<summary><h2>✨ Features</h2></summary>
+<summary><h2> 🎮 Features</h2></summary>
 
 <details open>
-<summary><h3>🦄 Creature System</h3></summary>
+<summary><h3> 🦖 Creature System</h3></summary>
 
 - **300+ Unique Veramons** with detailed stats, types, and abilities
 - **Shiny Variants** with distinctive appearances and enhanced stats
@@ -64,7 +64,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>⚔️ Battle System</h3></summary>
+<summary><h3> ⚔️ Battle System</h3></summary>
 
 - **Turn-Based Combat** with strategic depth
 - **Type Effectiveness** system with multipliers
@@ -76,11 +76,12 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 - **Battle Logs** for tracking match history and statistics
 - **Battle Rankings** for competitive players
 - **Battle Rewards** including XP, tokens, and rare items
+- **Enhanced Battle UI** with animated health bars and interactive controls
 
 </details>
 
 <details>
-<summary><h3>🌍 Exploration System</h3></summary>
+<summary><h3> 🌳 Exploration System</h3></summary>
 
 - **10+ Unique Biomes** each with different Veramon spawns
 - **Weather System** affecting spawn rates and types
@@ -94,7 +95,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>🤝 Social Features</h3></summary>
+<summary><h3> 👥 Social Features</h3></summary>
 
 - **Trading System** for exchanging Veramon and items
 - **Guild System** for team-based gameplay
@@ -109,7 +110,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>💰 Economy & Progression</h3></summary>
+<summary><h3> 💸 Economy & Progression</h3></summary>
 
 - **Token Economy** with multiple ways to earn and spend
 - **Item Shop** with rotating inventory
@@ -124,7 +125,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>🛠️ Administrative Tools</h3></summary>
+<summary><h3> 🛠️ Administrative Tools</h3></summary>
 
 - **Setup Wizard** for easy server configuration
 - **Customizable Settings** for spawn rates, rewards, and more
@@ -138,15 +139,72 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 
 </details>
 
+<details>
+<summary><h3> 📈 Trading System</h3></summary>
+
+- **Direct Player Trading** with security verification
+- **Enhanced Trading UI** with side-by-side comparison views
+- **Trade History** for tracking past exchanges
+- **Item and Veramon Trading** with multi-select capability
+- **Trade Confirmation** requiring both parties' approval
+- **Visual Trade Verification** showing exactly what's being traded
+- **Scam Protection** with multiple safeguards
+- **Recent Trades Log** viewable through commands
+- **Trade Metrics** tracking popular trades and values
+
+</details>
+
+<details>
+<summary><h3> 🎨 UI & Theming System</h3></summary>
+
+- **Customizable Themes** with different color schemes and styles
+- **Personal Theme Settings** saved per user
+- **Interactive UI Components** with modern Discord features
+- **Carousel Views** for browsing collections and items
+- **Enhanced Selection Menus** with category support
+- **Theme Preview System** to test before applying
+- **Styled Embeds** with consistent visual language
+- **Animated UI Elements** for battles and special events
+- **Color Customization** for indicators and highlights
+- **Accessibility Options** with high-contrast themes
+- **UI Integration** with all major game systems
+
+</details>
+
+<details>
+<summary><h3> 🌐 Accessibility Features</h3></summary>
+
+- **Comprehensive Accessibility Settings** - Complete settings panel with multiple options
+- **Text Size Options** - Small, Medium, Large, and Extra Large text for all UI elements
+- **Color Vision Deficiency Support**:
+  - Deuteranopia mode (green-blind friendly)
+  - Protanopia mode (red-blind friendly)
+  - Tritanopia mode (blue-blind friendly)
+  - Monochrome/grayscale mode
+- **High Contrast Mode** - Enhanced visibility with maximized contrast
+- **Animation Controls** - Full, reduced, or no animations based on user preference
+- **Simplified UI Mode** - Cleaner layouts with reduced visual complexity
+- **Extended Interaction Timeouts** - Longer response windows for battles and trades
+- **Extra Button Spacing** - Improved motor accessibility for button interactions
+- **Screen Reader Support** - Enhanced descriptions and alt text for images
+- **Shortcut Buttons Panel** - Quick access to common accessibility settings
+- **Command Aliases** - Simple text commands for quick accessibility adjustments
+- **Theme Integration** - Accessibility settings applied consistently across all UI elements
+- **Persistence** - Settings saved per user across sessions
+
+Access these features with the `/accessibility` command or use the `!shortcuts` command for quick access to essential options.
+
+</details>
+
 </details>
 
 ---
 
 <details>
-<summary><h2>🎮 Commands</h2></summary>
+<summary><h2> 📚 Commands</h2></summary>
 
 <details>
-<summary><h3>🏆 Getting Started</h3></summary>
+<summary><h3> Getting Started</h3></summary>
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -160,7 +218,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>🗺️ Exploration</h3></summary>
+<summary><h3> Exploration</h3></summary>
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -173,7 +231,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>⚔️ Battle System</h3></summary>
+<summary><h3> Battle System</h3></summary>
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -186,7 +244,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>💰 Economy & Shopping</h3></summary>
+<summary><h3> Economy & Shopping</h3></summary>
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -200,7 +258,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>🤝 Social & Guilds</h3></summary>
+<summary><h3> Social & Guilds</h3></summary>
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -214,7 +272,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>⚡ Faction System</h3></summary>
+<summary><h3> Faction System</h3></summary>
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -231,7 +289,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>💎 VIP Commands</h3></summary>
+<summary><h3> VIP Commands</h3></summary>
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -243,7 +301,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>🛡️ Moderation Commands</h3></summary>
+<summary><h3> Moderation Commands</h3></summary>
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -256,7 +314,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>🛠️ Administration Commands</h3></summary>
+<summary><h3> Administration Commands</h3></summary>
 
 | Command | Description | Example |
 |---------|-------------|---------|
@@ -277,10 +335,10 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 ---
 
 <details>
-<summary><h2>🚀 Setup Guide</h2></summary>
+<summary><h2> 📚 Setup Guide</h2></summary>
 
 <details>
-<summary><h3>⚙️ Installation for Bot Developers</h3></summary>
+<summary><h3> Installation for Bot Developers</h3></summary>
 
 1. **Clone the Repository**
    ```bash
@@ -323,7 +381,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>🔧 Adding to Your Server</h3></summary>
+<summary><h3> Adding to Your Server</h3></summary>
 
 1. **[Click Here to Invite the Bot](https://discord.com/)**
 2. Select the server you wish to add Veramon Reunited to
@@ -333,7 +391,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>🧙‍♂️ Quick Setup</h3></summary>
+<summary><h3> Quick Setup</h3></summary>
 
 1. Run the interactive setup wizard with `/setup`
 2. Follow the step-by-step prompts to configure:
@@ -349,7 +407,7 @@ Inspired by classic creature-collecting games but completely redesigned for Disc
 </details>
 
 <details>
-<summary><h3>⚙️ Manual Setup</h3></summary>
+<summary><h3> Manual Setup</h3></summary>
 
 If you prefer a more hands-on approach, you can also set up the bot manually:
 
@@ -367,7 +425,7 @@ If you prefer a more hands-on approach, you can also set up the bot manually:
 </details>
 
 <details>
-<summary><h3>🔧 Server Configuration</h3></summary>
+<summary><h3> Server Configuration</h3></summary>
 
 Server administrators can customize the bot experience:
 
@@ -390,10 +448,10 @@ Server administrators can customize the bot experience:
 ---
 
 <details>
-<summary><h2>🧩 Developer Guide</h2></summary>
+<summary><h2> 📚 Developer Guide</h2></summary>
 
 <details>
-<summary><h3>📁 Project Structure</h3></summary>
+<summary><h3> Project Structure</h3></summary>
 
 The Veramon Reunited codebase is organized for maintainability and separation of concerns:
 
@@ -433,7 +491,7 @@ veramon_reunited/
 </details>
 
 <details>
-<summary><h3>🛠️ Key Technologies</h3></summary>
+<summary><h3> Key Technologies</h3></summary>
 
 | Technology | Purpose |
 |------------|---------|
@@ -448,7 +506,7 @@ veramon_reunited/
 </details>
 
 <details>
-<summary><h3>⚙️ Core Systems</h3></summary>
+<summary><h3> Core Systems</h3></summary>
 
 #### Discord Integration
 
@@ -507,7 +565,7 @@ The system includes comprehensive performance monitoring for Discord interaction
 </details>
 
 <details>
-<summary><h3>🧪 Testing</h3></summary>
+<summary><h3> Testing</h3></summary>
 
 #### Running Tests
 
@@ -533,10 +591,10 @@ python -m unittest tests.test_battle_system
 ---
 
 <details>
-<summary><h2>👥 Contributing</h2></summary>
+<summary><h2> 🤝 Contributing</h2></summary>
 
 <details>
-<summary><h3>🤝 How to Contribute</h3></summary>
+<summary><h3> How to Contribute</h3></summary>
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -547,7 +605,7 @@ python -m unittest tests.test_battle_system
 </details>
 
 <details>
-<summary><h3>📝 Contribution Guidelines</h3></summary>
+<summary><h3> Contribution Guidelines</h3></summary>
 
 - Follow the existing code style and conventions
 - Write clear, descriptive commit messages
@@ -558,7 +616,7 @@ python -m unittest tests.test_battle_system
 </details>
 
 <details>
-<summary><h3>🔍 Code Review Process</h3></summary>
+<summary><h3> Code Review Process</h3></summary>
 
 1. All PRs require review from at least one maintainer
 2. Automated tests must pass
@@ -566,6 +624,16 @@ python -m unittest tests.test_battle_system
 4. Changes should maintain or improve code quality
 
 </details>
+
+</details>
+
+---
+
+<details>
+<summary><h2> 👥 Contributors</h2></summary>
+
+- **killerdash117** - Project founder and lead developer
+- **Darkrell** - Tester and server provider
 
 </details>
 

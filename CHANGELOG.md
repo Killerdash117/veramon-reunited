@@ -5,7 +5,7 @@ This document tracks all notable changes to the Veramon Reunited Discord bot.
 <div align="center">
 
 ![Version Status](https://img.shields.io/badge/Current%20Version-v0.33.000-brightgreen.svg)
-![Updated](https://img.shields.io/badge/Last%20Updated-April%2019%2C%202025-blue.svg)
+![Updated](https://img.shields.io/badge/Last%20Updated-April%2021%2C%202025-blue.svg)
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg)
 
 </div>
@@ -71,6 +71,17 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
   - Optimized repetitive code patterns for improved execution time
   - Implemented intelligent caching for frequently accessed battle data
   - Added comprehensive performance monitoring and metrics
+  
+- **Discord UI Enhancements**
+  - Implemented comprehensive UI theming system with customizable themes
+  - Created enhanced selection menus with multi-select support and categories
+  - Added carousel views for Veramon displays and item selection
+  - Developed modernized battle UI with animated health bars and effects
+  - Enhanced trading UI with side-by-side comparisons and visual confirmations
+  - Created a central UI registry for consistent component styling
+  - Added settings interface for user theme customization
+  - Implemented theme preview and customization options
+  - Integrated all UI components with the actor-based architecture
 
 #### 🔄 Changed
 - **Battle System Refactoring**
@@ -97,7 +108,7 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
 </details>
 
 <details>
-<summary><h3>v0.33.000 - April 19, 2025</h3></summary>
+<summary><h3>v0.33.000 - April 21, 2025</h3></summary>
 
 > *Setup Wizard & Database Management Improvements*
 
@@ -125,6 +136,24 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
   - Added rate limiting for database operations
   - Enhanced permission validation for administrative actions
   - Added security measures to prevent profile stalking and data scraping
+
+- **Accessibility Features**
+  - Implemented comprehensive accessibility settings for improved user experience
+  - Added high contrast mode, text size options, and screen reader support
+  - Created reduced animation mode for performance and accessibility
+  - Implemented settings menu navigation with interactive buttons
+  - Added categorized settings display for easy navigation
+  - Created theme preview system for testing themes before applying
+  - Added simplified UI mode for improved readability
+  - Implemented extended interaction timeouts for users who need more time
+  - Added support for color blindness with specialized color modes
+  - Integrated accessibility settings with battle and trading interfaces
+  - Created color vision deficiency accommodations (deuteranopia, protanopia, tritanopia)
+  - Added alt text support for Veramon and item descriptions
+  - Implemented extra button spacing option for improved motor accessibility
+  - Created `/accessibility` command with comprehensive settings menu
+  - Implemented quick-access commands and shortcut buttons for common accessibility settings
+  - Added persistence system for user accessibility preferences
 </details>
 </details>
 
@@ -332,6 +361,15 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
   - Implemented settings menu navigation with interactive buttons
   - Added categorized settings display for easy navigation
   - Created theme preview system for testing themes before applying
+  - Added simplified UI mode for improved readability
+  - Implemented extended interaction timeouts for users who need more time
+  - Added support for color blindness with specialized color modes
+  - Integrated accessibility settings with battle and trading interfaces
+  - Created color vision deficiency accommodations (deuteranopia, protanopia, tritanopia)
+  - Added alt text support for Veramon and item descriptions
+  - Implemented extra button spacing option for improved motor accessibility
+  - Created `/accessibility` command with comprehensive settings menu
+  - Implemented quick-access commands for common accessibility settings
 </details>
 </details>
 

@@ -11,6 +11,7 @@ import asyncio
 import sys
 from discord.ext import commands
 from dotenv import load_dotenv
+from src.utils.ui.accessibility_shortcuts import setup_shortcut_handler
 
 # Veramon Reunited - Version v0.33.000
 # Created by killerdash117
@@ -45,6 +46,9 @@ async def load_extensions():
         
         # Economy cogs
         'cogs.economy.economy_cog',    # Updated path to economy cog
+        
+        # User cogs
+        'cogs.user.accessibility_cog', # Accessibility features
         
         # Admin cogs
         'cogs.admin.admin_cog',
@@ -109,6 +113,7 @@ async def main():
     async with bot:
         await setup_database()
         await load_extensions()
+        setup_shortcut_handler(bot)  # Initialize shortcut handler with bot parameter
         await bot.start(TOKEN)
 
 if __name__ == "__main__":

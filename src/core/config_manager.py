@@ -1,5 +1,6 @@
 """
 Configuration Manager for Veramon Reunited
+ 2025 killerdash117 | https://github.com/killerdash117
 
 This module provides utilities for loading, saving, and managing
 the bot's configuration settings.

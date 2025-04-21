@@ -1,3 +1,11 @@
+"""
+Catching and Exploration System for Veramon Reunited
+ 2025 killerdash117 | https://github.com/killerdash117
+
+This module handles all mechanics related to exploring biomes,
+encountering wild Veramon, and capturing them.
+"""
+
 import json
 import os
 import random

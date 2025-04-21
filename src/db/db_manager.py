@@ -1,5 +1,6 @@
 """
 Database Manager for Veramon Reunited
+ 2025 killerdash117 | https://github.com/killerdash117
 
 This module provides centralized database management capabilities, including:
 - Connection pooling
@@ -7,6 +8,7 @@ This module provides centralized database management capabilities, including:
 - Migration management
 - Utilities for backup, restore, and resetting data
 - Transaction management
+- Performance optimization with caching
 """
 
 import os
@@ -16,12 +18,18 @@ import time
 import shutil
 import gzip
 import zlib
+import logging
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, List, Optional, Any, Tuple, Set, Union, Callable
 from pathlib import Path
+from functools import wraps
 
 from src.db.db import get_connection  # Import existing connection function
 from src.utils.config_manager import get_config
+from src.db.cache_manager import get_cache_manager
+
+# Set up logging
+logger = logging.getLogger("db_manager")
 
 # Database version tracking
 CURRENT_DB_VERSION = "1.0.0"
@@ -33,8 +41,30 @@ DEFAULT_CONFIG = {
     "auto_vacuum_days": 7,            # Days between automatic vacuum operations
     "max_backup_age_days": 30,        # Max age for auto backups before pruning
     "log_retention_days": 14,         # Days to keep log entries before cleanup
-    "temp_data_retention_days": 7     # Days to keep temporary data
+    "temp_data_retention_days": 7,     # Days to keep temporary data
+    "enable_query_caching": True,     # Whether to enable query caching
+    "cache_ttl_seconds": 300,         # Default TTL for cached queries (5 minutes)
+    "cache_frequent_user_data": True  # Whether to cache frequently accessed user data
 }
+
+# Decorator to time database operations for performance monitoring
+def time_database_operation(operation_name: str = None):
+    """Decorator to time database operations for performance monitoring."""
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            result = func(*args, **kwargs)
+            elapsed_time = time.time() - start_time
+            
+            # Log slow queries (more than 100ms)
+            if elapsed_time > 0.1:
+                op_name = operation_name or func.__name__
+                logger.warning(f"Slow database operation: {op_name} took {elapsed_time:.4f}s")
+                
+            return result
+        return wrapper
+    return decorator
 
 class DatabaseManager:
     """
@@ -52,6 +82,12 @@ class DatabaseManager:
         
         # Ensure backup directory exists
         os.makedirs(self.backup_dir, exist_ok=True)
+        
+        # Get cache manager
+        self.cache_manager = get_cache_manager()
+        
+        # Track modified tables for cache invalidation
+        self._modified_tables: Set[str] = set()
         
         # Check if automatic maintenance is needed
         self._check_auto_maintenance()
@@ -79,7 +115,7 @@ class DatabaseManager:
                 
                 # Run vacuum if it's been too long
                 if days_since_vacuum >= self.config["auto_vacuum_days"]:
-                    print(f"Running automatic vacuum (last run: {days_since_vacuum} days ago)")
+                    logger.info(f"Running automatic vacuum (last run: {days_since_vacuum} days ago)")
                     self.vacuum_database()
             
             # Prune old backups
@@ -89,7 +125,7 @@ class DatabaseManager:
             self._cleanup_logs()
             
         except Exception as e:
-            print(f"Error during auto maintenance check: {e}")
+            logger.error(f"Error during auto maintenance check: {e}")
     
     def _prune_old_backups(self) -> None:
         """Remove old backups to save space."""
@@ -121,12 +157,12 @@ class DatabaseManager:
             for backup in backups_to_delete:
                 try:
                     os.remove(backup["path"])
-                    print(f"Pruned old backup: {backup['filename']}")
+                    logger.info(f"Pruned old backup: {backup['filename']}")
                 except Exception as e:
-                    print(f"Failed to delete backup {backup['path']}: {e}")
+                    logger.error(f"Failed to delete backup {backup['path']}: {e}")
         
         except Exception as e:
-            print(f"Error during backup pruning: {e}")
+            logger.error(f"Error during backup pruning: {e}")
     
     def _is_auto_backup(self, filename: str) -> bool:
         """Check if a backup was automatically created vs user-created."""
@@ -173,14 +209,14 @@ class DatabaseManager:
             
             total_deleted = security_logs_deleted + transaction_logs_deleted + battle_logs_deleted
             if total_deleted > 0:
-                print(f"Cleaned up {total_deleted} old log entries")
+                logger.info(f"Cleaned up {total_deleted} old log entries")
             
         except Exception as e:
-            print(f"Error during log cleanup: {e}")
+            logger.error(f"Error during log cleanup: {e}")
     
     def initialize_database(self) -> None:
         """Initialize the database with all required tables."""
-        print("Initializing database...")
+        logger.info("Initializing database...")
         
         # Create tables for all game systems
         self._initialize_core_tables()
@@ -195,7 +231,7 @@ class DatabaseManager:
         # Set database version
         self._set_db_version(CURRENT_DB_VERSION)
         
-        print("Database initialization complete.")
+        logger.info("Database initialization complete.")
     
     def reset_database(self, confirm_text: str = None) -> bool:
         """
@@ -208,7 +244,7 @@ class DatabaseManager:
             bool: True if reset was successful
         """
         if confirm_text != "CONFIRM_RESET":
-            print("Reset cancelled: Confirmation text not provided.")
+            logger.warning("Reset cancelled: Confirmation text not provided.")
             return False
         
         # Create a backup before resetting
@@ -271,7 +307,7 @@ class DatabaseManager:
             os.remove(backup_path)
             backup_path += ".gz"
         
-        print(f"Database backup created at {backup_path}")
+        logger.info(f"Database backup created at {backup_path}")
         return backup_path
     
     def restore_backup(self, backup_path: str, confirm_text: str = None) -> bool:
@@ -286,11 +322,11 @@ class DatabaseManager:
             bool: True if restore was successful
         """
         if confirm_text != "CONFIRM_RESTORE":
-            print("Restore cancelled: Confirmation text not provided.")
+            logger.warning("Restore cancelled: Confirmation text not provided.")
             return False
         
         if not os.path.exists(backup_path):
-            print(f"Restore failed: Backup file {backup_path} not found.")
+            logger.error(f"Restore failed: Backup file {backup_path} not found.")
             return False
         
         # Create a backup of current state before restoring
@@ -308,7 +344,7 @@ class DatabaseManager:
                     f_out.write(f_in.read())
                 backup_path = decompressed_path
             except Exception as e:
-                print(f"Error decompressing backup: {e}")
+                logger.error(f"Error decompressing backup: {e}")
                 return False
         
         # Restore from backup
@@ -321,7 +357,7 @@ class DatabaseManager:
             except:
                 pass
         
-        print(f"Database restored from {backup_path}")
+        logger.info(f"Database restored from {backup_path}")
         return True
     
     def list_backups(self) -> List[Dict[str, Any]]:
@@ -362,7 +398,7 @@ class DatabaseManager:
             bool: True if clear was successful
         """
         if not confirm:
-            print(f"Clear cancelled: Confirmation not provided.")
+            logger.warning(f"Clear cancelled: Confirmation not provided.")
             return False
         
         try:
@@ -372,7 +408,7 @@ class DatabaseManager:
             # Check if table exists
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (table_name,))
             if not cursor.fetchone():
-                print(f"Table {table_name} does not exist.")
+                logger.warning(f"Table {table_name} does not exist.")
                 return False
             
             # Clear the table
@@ -382,11 +418,11 @@ class DatabaseManager:
             cursor.execute(f"DELETE FROM sqlite_sequence WHERE name=?", (table_name,))
             
             conn.commit()
-            print(f"Table {table_name} cleared successfully.")
+            logger.info(f"Table {table_name} cleared successfully.")
             return True
             
         except Exception as e:
-            print(f"Error clearing table {table_name}: {e}")
+            logger.error(f"Error clearing table {table_name}: {e}")
             return False
         finally:
             conn.close()
@@ -460,10 +496,10 @@ class DatabaseManager:
             # Update last vacuum time
             self._set_metadata_value("last_vacuum_time", datetime.now().isoformat())
             
-            print("Database vacuum completed successfully.")
+            logger.info("Database vacuum completed successfully.")
             return True
         except Exception as e:
-            print(f"Error during database vacuum: {e}")
+            logger.error(f"Error during database vacuum: {e}")
             return False
     
     def analyze_database_usage(self) -> Dict[str, Any]:
@@ -586,7 +622,7 @@ class DatabaseManager:
             conn.close()
             
         except Exception as e:
-            print(f"Error analyzing database: {e}")
+            logger.error(f"Error analyzing database: {e}")
             results["error"] = str(e)
         
         return results
@@ -643,11 +679,11 @@ class DatabaseManager:
             
             total_deleted = spawn_deleted + battles_deleted + trades_deleted + events_deleted
             if total_deleted > 0:
-                print(f"Cleaned up {total_deleted} temporary data records")
+                logger.info(f"Cleaned up {total_deleted} temporary data records")
             
             return True
         except Exception as e:
-            print(f"Error cleaning temporary data: {e}")
+            logger.error(f"Error cleaning temporary data: {e}")
             return False
     
     def _get_metadata_value(self, key: str) -> Optional[str]:
@@ -1099,6 +1135,369 @@ class DatabaseManager:
         
         conn.commit()
         conn.close()
+
+    def execute_query(self, query: str, params: Tuple = None, fetch: str = "all", 
+                      cacheable: bool = False, tables: List[str] = None,
+                      ttl: int = None) -> Any:
+        """
+        Execute a database query with caching support.
+        
+        Args:
+            query: SQL query to execute
+            params: Query parameters
+            fetch: Fetch mode ('all', 'one', or None for no fetch)
+            cacheable: Whether this query result can be cached
+            tables: Tables this query depends on (for invalidation)
+            ttl: Time to live in seconds for cached result
+            
+        Returns:
+            Query results based on fetch mode
+        """
+        # Only use cache for SELECT queries that are marked as cacheable
+        is_select = query.strip().upper().startswith("SELECT")
+        use_cache = (
+            self.config.get("enable_query_caching", True) and 
+            cacheable and 
+            is_select and 
+            fetch in ("all", "one")
+        )
+        
+        result = None
+        cache_hit = False
+        
+        # Try to get from cache
+        if use_cache:
+            cached_result = self.cache_manager.get_query_result(query, params)
+            if cached_result is not None:
+                result = cached_result
+                cache_hit = True
+        
+        # Execute the query if not cached
+        if not cache_hit:
+            conn = get_connection()
+            cursor = conn.cursor()
+            
+            start_time = time.time()
+            cursor.execute(query, params or ())
+            
+            if fetch == "all":
+                result = cursor.fetchall()
+            elif fetch == "one":
+                result = cursor.fetchone()
+            else:
+                result = None
+                
+            # Track slow queries
+            elapsed_time = time.time() - start_time
+            if elapsed_time > 0.1:  # Log queries taking more than 100ms
+                logger.warning(f"Slow query: {query} took {elapsed_time:.4f}s")
+            
+            # If this is a write operation, track modified tables for cache invalidation
+            if not is_select and tables:
+                self._modified_tables.update(tables)
+                
+            # Cache the result if appropriate
+            if use_cache and result is not None:
+                ttl = ttl or self.config.get("cache_ttl_seconds", 300)
+                self.cache_manager.cache_query_result(query, params, result, ttl, tables)
+                
+            conn.close()
+            
+        return result
+        
+    def execute_script(self, script: str, params: Dict[str, Any] = None) -> None:
+        """
+        Execute a SQL script with parameter substitution.
+        
+        Args:
+            script: SQL script to execute
+            params: Parameters to substitute in the script
+        """
+        # Substitute parameters if provided
+        if params:
+            for key, value in params.items():
+                placeholder = f":{key}"
+                # Convert value to string if not None
+                if value is not None:
+                    script = script.replace(placeholder, str(value))
+                else:
+                    script = script.replace(placeholder, "NULL")
+                    
+        conn = get_connection()
+        start_time = time.time()
+        
+        try:
+            conn.executescript(script)
+            conn.commit()
+            
+            # Track slow script execution
+            elapsed_time = time.time() - start_time
+            if elapsed_time > 1.0:  # Log scripts taking more than 1s
+                logger.warning(f"Slow script execution took {elapsed_time:.4f}s")
+                
+        except Exception as e:
+            conn.rollback()
+            logger.error(f"Error executing script: {e}")
+            raise
+        finally:
+            conn.close()
+    
+    def transaction(self) -> 'DatabaseTransaction':
+        """
+        Create a transaction context for executing multiple queries atomically.
+        
+        Returns:
+            DatabaseTransaction object
+        
+        Usage:
+            with db_manager.transaction() as tx:
+                tx.execute("INSERT INTO ...", params)
+                tx.execute("UPDATE ...", params)
+        """
+        return DatabaseTransaction(self)
+        
+    def invalidate_cache_for_tables(self, tables: List[str]) -> None:
+        """
+        Invalidate cache for specific tables.
+        
+        Args:
+            tables: List of table names to invalidate
+        """
+        if not tables:
+            return
+            
+        self.cache_manager.invalidate_tables(tables)
+        logger.debug(f"Invalidated cache for tables: {', '.join(tables)}")
+    
+    def clear_all_caches(self) -> None:
+        """Clear all database caches."""
+        self.cache_manager.clear_all_caches()
+        logger.info("Cleared all database caches")
+        
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """
+        Get database cache statistics.
+        
+        Returns:
+            Dictionary with cache statistics
+        """
+        return self.cache_manager.get_cache_stats()
+        
+    # User data methods with caching
+    
+    def get_user(self, user_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get user data with caching support.
+        
+        Args:
+            user_id: Discord user ID
+            
+        Returns:
+            User data dictionary or None if not found
+        """
+        # Try to get from cache first
+        if self.config.get("cache_frequent_user_data", True):
+            cached_user = self.cache_manager.get_user_data(user_id)
+            if cached_user is not None:
+                return cached_user
+                
+        # Query from database if not in cache
+        result = self.execute_query(
+            "SELECT * FROM users WHERE user_id = ?", 
+            (user_id,), 
+            fetch="one",
+            cacheable=True,
+            tables=["users"]
+        )
+        
+        if result:
+            # Convert to dictionary
+            columns = [col[0] for col in result.description] if hasattr(result, 'description') else []
+            user_data = dict(zip(columns, result))
+            
+            # Cache the result
+            if self.config.get("cache_frequent_user_data", True):
+                self.cache_manager.cache_user_data(user_id, user_data)
+                
+            return user_data
+        
+        return None
+    
+    def update_user(self, user_id: str, updates: Dict[str, Any]) -> bool:
+        """
+        Update user data and invalidate cache.
+        
+        Args:
+            user_id: Discord user ID
+            updates: Dictionary of column names and values to update
+            
+        Returns:
+            True if update was successful
+        """
+        if not updates:
+            return False
+            
+        # Build SET clause for UPDATE statement
+        set_clauses = []
+        params = []
+        
+        for key, value in updates.items():
+            set_clauses.append(f"{key} = ?")
+            params.append(value)
+            
+        # Add user_id to params
+        params.append(user_id)
+        
+        query = f"UPDATE users SET {', '.join(set_clauses)} WHERE user_id = ?"
+        
+        result = self.execute_query(query, tuple(params), fetch=None, tables=["users"])
+        
+        # Invalidate cache for this user
+        self.cache_manager.invalidate_user_data(user_id)
+        
+        return True
+    
+    # Veramon data methods with caching
+    
+    def get_veramon(self, veramon_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get Veramon data with caching support.
+        
+        Args:
+            veramon_id: Veramon instance ID
+            
+        Returns:
+            Veramon data dictionary or None if not found
+        """
+        # Try to get from cache first
+        cached_veramon = self.cache_manager.get_veramon_data(veramon_id)
+        if cached_veramon is not None:
+            return cached_veramon
+                
+        # Query from database if not in cache
+        result = self.execute_query(
+            "SELECT * FROM user_veramon WHERE id = ?", 
+            (veramon_id,), 
+            fetch="one",
+            cacheable=True,
+            tables=["user_veramon"]
+        )
+        
+        if result:
+            # Convert to dictionary
+            columns = [col[0] for col in result.description] if hasattr(result, 'description') else []
+            veramon_data = dict(zip(columns, result))
+            
+            # Cache the result
+            self.cache_manager.cache_veramon_data(veramon_id, veramon_data)
+                
+            return veramon_data
+        
+        return None
+    
+    def update_veramon(self, veramon_id: str, updates: Dict[str, Any]) -> bool:
+        """
+        Update Veramon data and invalidate cache.
+        
+        Args:
+            veramon_id: Veramon instance ID
+            updates: Dictionary of column names and values to update
+            
+        Returns:
+            True if update was successful
+        """
+        if not updates:
+            return False
+            
+        # Build SET clause for UPDATE statement
+        set_clauses = []
+        params = []
+        
+        for key, value in updates.items():
+            set_clauses.append(f"{key} = ?")
+            params.append(value)
+            
+        # Add veramon_id to params
+        params.append(veramon_id)
+        
+        query = f"UPDATE user_veramon SET {', '.join(set_clauses)} WHERE id = ?"
+        
+        result = self.execute_query(query, tuple(params), fetch=None, tables=["user_veramon"])
+        
+        # Invalidate cache for this Veramon
+        self.cache_manager.invalidate_veramon_data(veramon_id)
+        
+        return True
+
+class DatabaseTransaction:
+    """
+    Context manager for database transactions.
+    
+    This class allows for executing multiple queries as a single atomic transaction.
+    """
+    
+    def __init__(self, db_manager: DatabaseManager):
+        self.db_manager = db_manager
+        self.conn = None
+        self.cursor = None
+        self.modified_tables: Set[str] = set()
+        
+    def __enter__(self) -> 'DatabaseTransaction':
+        """Start a new transaction."""
+        self.conn = get_connection()
+        self.cursor = self.conn.cursor()
+        return self
+        
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Commit or rollback the transaction."""
+        if exc_type is None:
+            # Commit if no exception
+            self.conn.commit()
+            
+            # Invalidate cache for modified tables
+            if self.modified_tables:
+                self.db_manager.invalidate_cache_for_tables(list(self.modified_tables))
+        else:
+            # Rollback on exception
+            self.conn.rollback()
+            
+        self.conn.close()
+        
+    def execute(self, query: str, params: Tuple = None, fetch: str = None, 
+                tables: List[str] = None) -> Any:
+        """
+        Execute a query within this transaction.
+        
+        Args:
+            query: SQL query to execute
+            params: Query parameters
+            fetch: Fetch mode ('all', 'one', or None for no fetch)
+            tables: Tables affected by this query (for cache invalidation)
+            
+        Returns:
+            Query results based on fetch mode
+        """
+        # Track modified tables for cache invalidation
+        is_select = query.strip().upper().startswith("SELECT")
+        if not is_select and tables:
+            self.modified_tables.update(tables)
+            
+        # Execute the query
+        start_time = time.time()
+        self.cursor.execute(query, params or ())
+        
+        result = None
+        if fetch == "all":
+            result = self.cursor.fetchall()
+        elif fetch == "one":
+            result = self.cursor.fetchone()
+            
+        # Track slow queries
+        elapsed_time = time.time() - start_time
+        if elapsed_time > 0.1:  # Log queries taking more than 100ms
+            logger.warning(f"Slow query in transaction: {query} took {elapsed_time:.4f}s")
+            
+        return result
 
 # Singleton instance
 _db_manager = None

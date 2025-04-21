@@ -1,5 +1,6 @@
 """
 Setup Cog for Veramon Reunited
+ 2025 killerdash117 | https://github.com/killerdash117
 
 This module provides an interactive setup command for configuring the bot
 with a step-by-step UI interface. Both admins and developers can use this

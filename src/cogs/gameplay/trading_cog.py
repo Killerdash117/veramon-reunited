@@ -1,6 +1,14 @@
+"""
+Trading System for Veramon Reunited
+ 2025 killerdash117 | https://github.com/killerdash117
+
+This module implements a comprehensive trading system allowing players
+to safely exchange their captured Veramon with other players.
+"""
+
 import discord
-from discord.ext import commands
 from discord import app_commands
+from discord.ext import commands
 import json
 import sqlite3
 from typing import Dict, List, Optional, Union

@@ -1,5 +1,6 @@
 """
 Security Integration for Veramon Reunited
+ 2025 killerdash117 | https://github.com/killerdash117
 
 This module provides the entry points to integrate all security subsystems
 into the main codebase. It serves as the primary interface for security validations

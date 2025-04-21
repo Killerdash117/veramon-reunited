@@ -7,17 +7,31 @@ import random
 import asyncio
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Union, Any
+import time
 
 from src.db.db import get_connection
 from src.models.permissions import require_permission_level, PermissionLevel
 from src.models.veramon import Veramon
 from src.models.battle import Battle, BattleType, BattleStatus, ParticipantStatus, ActionType
+from src.models.battle_manager import BattleManager
+from src.utils.actor_system import get_actor_system
 from src.utils.data_loader import load_all_veramon_data, load_abilities_data
+from src.utils.performance_monitor import PerformanceMonitor
+from src.utils.battle_metrics import BattleMetrics
 from src.core.security_integration import get_security_integration
 
 # Load data using the data loader utility
 VERAMON_DATA = load_all_veramon_data()
 ABILITIES_DATA = load_abilities_data()
+
+# Initialize actor system
+actor_system = get_actor_system()
+
+# Initialize performance monitor
+performance_monitor = PerformanceMonitor()
+
+# Initialize battle metrics
+battle_metrics = BattleMetrics()
 
 # Type effectiveness data
 TYPE_EFFECTIVENESS = {
@@ -282,9 +296,32 @@ class EnhancedBattleCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.active_battles = {}  # battle_id -> Battle object
-        self.battle_messages = {}  # battle_id -> message_id
         self.active_views = {}     # battle_id -> {user_id -> BattleView}
+        self.pve_cooldowns = {}
+        self.pvp_invites = {}
         
+        # Initialize the battle manager
+        self.battle_manager = BattleManager.get_instance()
+        
+        # Initialize performance monitoring
+        self.performance_monitor = PerformanceMonitor.get_instance()
+        
+        # Initialize battle metrics
+        self.battle_metrics = BattleMetrics.get_instance()
+        
+        # Start the battle manager when the cog is loaded
+        asyncio.create_task(self.start_battle_manager())
+        
+    async def start_battle_manager(self):
+        """Start the battle manager when the cog is loaded."""
+        await self.battle_manager.start()
+        print("Battle Manager started successfully")
+        
+    async def cog_unload(self):
+        """Stop the battle manager when the cog is unloaded."""
+        await self.battle_manager.stop()
+        print("Battle Manager stopped successfully")
+
     @app_commands.command(name="battle_pve", description="Challenge an NPC trainer to a battle")
     @app_commands.describe(
         difficulty="Difficulty level of the NPC trainer"
@@ -1135,71 +1172,105 @@ class EnhancedBattleCog(commands.Cog):
             )
             return False
             
-        # Get battle
-        battle = self.active_battles.get(battle_id)
-        if not battle:
-            battle = await self.get_battle(battle_id)
-            if not battle:
-                await interaction.response.send_message("Battle not found.", ephemeral=True)
-                return False
-                
-        # Check if it's the user's turn
-        if battle.current_turn != user_id:
-            await interaction.response.send_message("It's not your turn!", ephemeral=True)
+        # Get battle actor reference
+        battle_ref = await self.battle_manager.get_battle(battle_id)
+        if not battle_ref:
+            await interaction.response.send_message("Battle not found!", ephemeral=True)
             return False
+            
+        # Record start time for monitoring
+        start_time = time.time()
         
-        # Execute the move
-        battle.execute_move(user_id, move_name, target_ids)
+        # Execute the move through the actor
+        result = await battle_ref.ask({
+            "action": "execute_move",
+            "user_id": user_id,
+            "move_name": move_name,
+            "target_ids": target_ids
+        })
+        
+        # Record performance metrics
+        elapsed = time.time() - start_time
+        self.performance_monitor.record_command_execution(f"execute_move:{move_name}", elapsed)
+        
+        # Check for errors
+        if "error" in result:
+            await interaction.response.send_message(f"Error: {result['error']}", ephemeral=True)
+            return False
+            
+        # Get updated battle state
+        battle_state = await battle_ref.ask({
+            "action": "get_battle_state",
+            "user_id": user_id
+        })
         
         # Check if the battle is over
-        if battle.status == BattleStatus.COMPLETED.value:
+        if battle_state.get("status") == BattleStatus.COMPLETED.value:
             channel = interaction.channel
-            await self._handle_battle_end(channel, battle)
+            await self._handle_battle_end(channel, battle_state)
             return True
         
-        # Update the battle state
-        await self._send_battle_update(interaction.channel, battle)
+        # Update the battle state for all players
+        await self._send_battle_update(interaction.channel, battle_state)
         return True
         
     async def switch_veramon(self, interaction: discord.Interaction, battle_id: int, user_id: str, slot: int):
-        """Switch active Veramon in battle."""
-        user_id_str = str(user_id)
+        """Switch to a different Veramon in battle."""
+        # Security validation for battle action
+        security = get_security_integration()
+        action_data = {"slot": slot}
+        validation_result = await security.validate_battle_action(
+            user_id, battle_id, "switch", action_data
+        )
         
-        # Check if battle exists
-        if battle_id not in self.active_battles:
-            await interaction.response.send_message("Battle not found!")
-            return
+        if not validation_result["valid"]:
+            await interaction.response.send_message(
+                validation_result["error"],
+                ephemeral=True
+            )
+            return False
             
-        battle = self.active_battles[battle_id]
-        
-        # Check if it's user's turn
-        if battle.current_turn != user_id_str:
-            await interaction.response.send_message("It's not your turn!", ephemeral=True)
-            return
+        # Get battle actor reference
+        battle_ref = await self.battle_manager.get_battle(battle_id)
+        if not battle_ref:
+            await interaction.response.send_message("Battle not found!", ephemeral=True)
+            return False
             
-        # Execute the switch
-        result = battle.switch_veramon(user_id_str, slot)
+        # Record start time for monitoring
+        start_time = time.time()
         
-        if not result["success"]:
-            await interaction.response.send_message(result["message"], ephemeral=True)
-            return
+        # Execute switch through the actor
+        result = await battle_ref.ask({
+            "action": "switch_veramon",
+            "user_id": user_id,
+            "veramon_id": str(slot)  # In the actor model, this is veramon_id
+        })
+        
+        # Record performance metrics
+        elapsed = time.time() - start_time
+        self.performance_monitor.record_command_execution("switch_veramon", elapsed)
+        
+        # Check for errors
+        if "error" in result:
+            await interaction.response.send_message(f"Error: {result['error']}", ephemeral=True)
+            return False
             
-        # Update battle in database
-        conn = get_connection()
-        cursor = conn.cursor()
+        # Get updated battle state
+        battle_state = await battle_ref.ask({
+            "action": "get_battle_state",
+            "user_id": user_id
+        })
         
-        cursor.execute("""
-            UPDATE battles
-            SET battle_data = ?, updated_at = ?
-            WHERE battle_id = ?
-        """, (json.dumps(battle.to_dict()), datetime.utcnow().isoformat(), battle_id))
+        # Check if the battle is over
+        if battle_state.get("status") == BattleStatus.COMPLETED.value:
+            channel = interaction.channel
+            await self._handle_battle_end(channel, battle_state)
+            return True
         
-        conn.commit()
-        conn.close()
-        
-        # Update battle state for all players
-        await self._send_battle_update(interaction.channel, battle)
-        
+        # Update the battle state for all players
+        await self._send_battle_update(interaction.channel, battle_state)
+        return True
+
     async def attempt_flee(self, interaction: discord.Interaction, battle_id: int, user_id: str):
         """Attempt to flee from a PVE battle."""
         user_id_str = str(user_id)
@@ -1330,77 +1401,91 @@ class EnhancedBattleCog(commands.Cog):
             color=discord.Color.blue()
         )
         
-    async def _send_battle_update(self, channel, battle):
-        """Send battle update to all participants."""
+    async def _send_battle_update(self, channel, battle_state):
+        """Send battle update to all participants based on battle state."""
+        # Extract battle_id and participants from battle state
+        battle_id = battle_state.get("battle_id")
+        participants = battle_state.get("participants", {})
+        
+        # Start performance timing
+        start_time = time.time()
+        
         # Create embeds for each player
-        for user_id in battle.participants:
+        for user_id in participants:
             # Skip NPC participants
             if user_id.startswith("npc_"):
                 continue
                 
             # Get user's view
-            view = self.active_views.get(battle.battle_id, {}).get(user_id)
+            view = self.active_views.get(battle_id, {}).get(user_id)
             if not view:
-                view = BattleView(self, battle.battle_id, user_id)
-                if battle.battle_id not in self.active_views:
-                    self.active_views[battle.battle_id] = {}
-                self.active_views[battle.battle_id][user_id] = view
+                view = BattleView(self, battle_id, user_id)
+                if battle_id not in self.active_views:
+                    self.active_views[battle_id] = {}
+                self.active_views[battle_id][user_id] = view
                 
-            # Create user's embed
-            embed = self._create_battle_state_embed(battle, user_id)
+            # Create embed for this player
+            embed = self._create_battle_state_embed(battle_state, user_id)
             
             try:
-                member = await self.bot.fetch_user(int(user_id))
+                # Find the member
+                guild = channel.guild
+                member = guild.get_member(int(user_id))
+                
                 if member:
                     # Check if this is the player's turn
-                    if battle.current_turn == user_id:
+                    if battle_state.get("current_turn") == user_id:
                         await channel.send(f"{member.mention}, it's your turn!", embed=embed, view=view)
                     else:
                         await channel.send(f"Battle update for {member.mention}", embed=embed, view=view)
             except Exception as e:
                 print(f"Error sending battle update: {e}")
                 
+        # Record performance
+        elapsed = time.time() - start_time
+        self.performance_monitor.record_operation("send_battle_update", elapsed)
+                
         # Check for battle end
-        if battle.status == BattleStatus.COMPLETED:
-            await self._handle_battle_end(channel, battle)
+        if battle_state.get("status") == BattleStatus.COMPLETED.value:
+            await self._handle_battle_end(channel, battle_state)
             
-    def _create_battle_state_embed(self, battle, user_id: str) -> discord.Embed:
+    def _create_battle_state_embed(self, battle_state, user_id: str) -> discord.Embed:
         """Create an embed showing the current battle state for a specific user."""
         # Create base embed
-        if battle.battle_type == BattleType.PVE:
+        if battle_state.get("battle_type") == "pve":
             title = "Battle vs. NPC Trainer"
         else:
             title = "PvP Battle"
             
         embed = discord.Embed(
             title=title,
-            description=f"Turn {battle.turn_number} - " + 
-                       (f"Your turn!" if battle.current_turn == user_id else f"<@{battle.current_turn}>'s turn"),
+            description=f"Turn {battle_state.get('turn_number', 0)} - " + 
+                       (f"Your turn!" if battle_state.get("current_turn") == user_id else f"<@{battle_state.get('current_turn')}>'s turn"),
             color=discord.Color.blue()
         )
         
         # Add user's active Veramon
-        if user_id in battle.active_veramon and battle.active_veramon[user_id] is not None:
-            slot = battle.active_veramon[user_id]
-            if user_id in battle.veramon and slot < len(battle.veramon[user_id]):
-                veramon = battle.veramon[user_id][slot]
+        if user_id in battle_state.get("active_veramon", {}) and battle_state.get("active_veramon", {}).get(user_id) is not None:
+            slot = battle_state.get("active_veramon", {}).get(user_id)
+            if user_id in battle_state.get("veramon", {}) and slot < len(battle_state.get("veramon", {}).get(user_id, [])):
+                veramon = battle_state.get("veramon", {}).get(user_id, [])[slot]
                 if veramon:
                     embed.add_field(
                         name="Your Active Veramon",
                         value=(
-                            f"**{veramon.display_name}** (Lv. {veramon.level})\n"
-                            f"HP: {veramon.current_hp}/{veramon.max_hp}\n"
-                            f"Moves: {', '.join(veramon.moves)}"
+                            f"**{veramon.get('display_name', veramon.get('name', f'Veramon {slot+1}'))}** (Lv. {veramon.get('level', 0)})\n"
+                            f"HP: {veramon.get('current_hp', 0)}/{veramon.get('max_hp', 0)}\n"
+                            f"Moves: {', '.join(veramon.get('moves', []))}"
                         ),
                         inline=False
                     )
         
         # Add opponent's active Veramon
-        for pid in battle.participants:
-            if pid != user_id and pid in battle.active_veramon and battle.active_veramon[pid] is not None:
-                slot = battle.active_veramon[pid]
-                if pid in battle.veramon and slot < len(battle.veramon[pid]):
-                    veramon = battle.veramon[pid][slot]
+        for pid in battle_state.get("participants", {}):
+            if pid != user_id and pid in battle_state.get("active_veramon", {}) and battle_state.get("active_veramon", {}).get(pid) is not None:
+                slot = battle_state.get("active_veramon", {}).get(pid)
+                if pid in battle_state.get("veramon", {}) and slot < len(battle_state.get("veramon", {}).get(pid, [])):
+                    veramon = battle_state.get("veramon", {}).get(pid, [])[slot]
                     if veramon:
                         name = "Opponent's Veramon"
                         if pid.startswith("npc_"):
@@ -1408,16 +1493,16 @@ class EnhancedBattleCog(commands.Cog):
                         embed.add_field(
                             name=name,
                             value=(
-                                f"**{veramon.display_name}** (Lv. {veramon.level})\n"
-                                f"HP: {veramon.current_hp}/{veramon.max_hp}"
+                                f"**{veramon.get('display_name', veramon.get('name', 'Opponent'))}** (Lv. {veramon.get('level', 0)})\n"
+                                f"HP: {veramon.get('current_hp', 0)}/{veramon.get('max_hp', 0)}"
                             ),
                             inline=False
                         )
         
         # Add recent battle logs
-        if battle.battle_log:
+        if battle_state.get("battle_log"):
             # Get last 3 logs
-            recent_logs = battle.battle_log[-3:]
+            recent_logs = battle_state.get("battle_log", [])[-3:]
             log_texts = []
             
             for log in recent_logs:
@@ -1501,10 +1586,10 @@ class EnhancedBattleCog(commands.Cog):
                     
                     # Get Veramon name for the new slot
                     new_veramon_name = "a different Veramon"
-                    if log["actor_id"] in battle.veramon and new_slot < len(battle.veramon[log["actor_id"]]):
-                        new_veramon = battle.veramon[log["actor_id"]][new_slot]
+                    if log["actor_id"] in battle_state.get("veramon", {}) and new_slot < len(battle_state.get("veramon", {}).get(log["actor_id"], [])):
+                        new_veramon = battle_state.get("veramon", {}).get(log["actor_id"], [])[new_slot]
                         if new_veramon:
-                            new_veramon_name = new_veramon.display_name
+                            new_veramon_name = new_veramon.get("display_name", new_veramon.get("name", "Opponent"))
                             
                     log_texts.append(f"{actor_name} switched to **{new_veramon_name}**!")
                 elif log["action_type"] == "flee":
@@ -1524,13 +1609,13 @@ class EnhancedBattleCog(commands.Cog):
         
         return embed
         
-    async def _handle_battle_end(self, channel, battle):
+    async def _handle_battle_end(self, channel, battle_state):
         """Handle the end of a battle."""
         # Award XP and rewards
-        winner_id = battle.winner_id
+        winner_id = battle_state.get("winner_id")
         
         # For a draw or cancelled battle, no rewards
-        if winner_id == "draw" or battle.status == BattleStatus.CANCELLED:
+        if winner_id == "draw" or battle_state.get("status") == BattleStatus.CANCELLED.value:
             await channel.send("The battle ended with no winner.")
             return
             
@@ -1553,38 +1638,38 @@ class EnhancedBattleCog(commands.Cog):
             return
             
         # For PvP battles, give rewards to winner
-        if battle.battle_type == BattleType.PVP:
+        if battle_state.get("battle_type") == "pvp":
             # Calculate XP and tokens based on battle difficulty
             xp_gained = 100  # Base XP
             tokens_gained = 20  # Base tokens
             
             # Adjust based on opponent's Veramon
-            opponent_id = next((pid for pid in battle.participants if pid != winner_id), None)
-            if opponent_id and opponent_id in battle.veramon:
+            opponent_id = next((pid for pid in battle_state.get("participants", {}) if pid != winner_id), None)
+            if opponent_id and opponent_id in battle_state.get("veramon", {}):
                 # Calculate average level of opponent's Veramon
-                opponent_veramon = [v for v in battle.veramon[opponent_id] if v is not None]
+                opponent_veramon = [v for v in battle_state.get("veramon", {}).get(opponent_id, []) if v is not None]
                 if opponent_veramon:
-                    avg_level = sum(v.level for v in opponent_veramon) / len(opponent_veramon)
+                    avg_level = sum(v.get("level", 0) for v in opponent_veramon) / len(opponent_veramon)
                     xp_gained += int(avg_level * 5)
                     tokens_gained += int(avg_level)
                     
             # Award XP to winner's Veramon
-            if winner_id in battle.veramon:
-                winner_veramon = [v for v in battle.veramon[winner_id] if v is not None]
+            if winner_id in battle_state.get("veramon", {}):
+                winner_veramon = [v for v in battle_state.get("veramon", {}).get(winner_id, []) if v is not None]
                 
                 # Update each Veramon's XP
                 xp_entries = []
                 for veramon in winner_veramon:
-                    if veramon and veramon.capture_id:
+                    if veramon and veramon.get("capture_id"):
                         # Split XP among participating Veramon
                         veramon_xp = xp_gained // len(winner_veramon)
                         
                         # Apply XP gain
-                        new_level, evolved, evolution_name = veramon.gain_experience(veramon_xp)
+                        new_level, evolved, evolution_name = veramon.get("gain_experience", lambda x: (veramon.get("level", 0), False, None))(veramon_xp)
                         
                         # Store results for database update
                         xp_entries.append({
-                            "capture_id": veramon.capture_id,
+                            "capture_id": veramon.get("capture_id"),
                             "xp_gained": veramon_xp,
                             "new_level": new_level,
                             "evolved": evolved,
@@ -1659,12 +1744,12 @@ class EnhancedBattleCog(commands.Cog):
                     # Get EconomyCog to update quest progress
                     economy_cog = self.bot.get_cog("EconomyCog")
                     if economy_cog:
-                        battle_win_type = "pvp_win" if battle.battle_type == BattleType.PVP.value else "battle_win"
+                        battle_win_type = "pvp_win" if battle_state.get("battle_type") == "pvp" else "battle_win"
                         completed_quests = await economy_cog.update_quest_progress(
                             winner_id, 
                             battle_win_type, 
                             1, 
-                            battle_type=battle.battle_type
+                            battle_type=battle_state.get("battle_type")
                         )
                         
                         # If any quests were completed, add to the embed
@@ -1685,11 +1770,11 @@ class EnhancedBattleCog(commands.Cog):
         await channel.send(embed=embed)
         
         # Clean up battle
-        if battle.battle_id in self.active_battles:
-            del self.active_battles[battle.battle_id]
+        if battle_state.get("battle_id") in self.active_battles:
+            del self.active_battles[battle_state.get("battle_id")]
         
-        if battle.battle_id in self.active_views:
-            del self.active_views[battle.battle_id]
+        if battle_state.get("battle_id") in self.active_views:
+            del self.active_views[battle_state.get("battle_id")]
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(EnhancedBattleCog(bot))

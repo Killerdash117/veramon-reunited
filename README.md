@@ -8,6 +8,7 @@
 [![version](https://img.shields.io/badge/version-v0.33.000-brightgreen.svg)](https://github.com/killerdash117/veramon-reunited/releases)
 [![discord.py](https://img.shields.io/badge/discord.py-2.3.0-blue.svg)](https://github.com/Rapptz/discord.py)
 [![status](https://img.shields.io/badge/status-in%20development-orange.svg)](https://github.com/killerdash117/veramon-reunited)
+[![author](https://img.shields.io/badge/author-killerdash117-purple.svg)](https://github.com/killerdash117)
 
 **A comprehensive monster-catching adventure experience for Discord**
 

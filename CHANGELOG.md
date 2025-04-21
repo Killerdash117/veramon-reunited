@@ -27,6 +27,27 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
 
 ## Release History
 
+### Unreleased
+
+#### Added
+- Actor-based architecture for the battle system, providing better isolation and potential for distributed scaling
+- Persistence system for battles, allowing them to survive bot restarts
+- Automatic battle recovery when the bot restarts
+- Graceful shutdown handling to save battle state
+- Performance optimizations for repetitive code patterns
+- Enhanced status effect processing using constants and loops
+
+#### Changed
+- Refactored the battle system to use message passing between isolated components
+- Improved error handling and recovery throughout the battle system
+- Enhanced type effectiveness calculations with proper type chart
+- Updated damage calculation formula for more consistent results
+
+#### Fixed
+- Battles no longer lost when the bot restarts
+- Improved handling of status effects and their durations
+- Enhanced battle cleanup to properly remove completed battles
+
 ### v0.33.000 - April 19, 2025
 
 > *Setup Wizard & Database Management Improvements*

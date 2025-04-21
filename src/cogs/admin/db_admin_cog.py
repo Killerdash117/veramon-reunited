@@ -1,8 +1,9 @@
 """
-Database administration commands for Veramon Reunited bot.
+Database Admin Cog for Veramon Reunited
+ 2025 killerdash117 | https://github.com/killerdash117
 
-This module provides Discord commands for server administrators to manage
-the SQLite database, including backup, restore, table management, and diagnostics.
+This module provides administrative commands for managing the database,
+including backups, restores, and maintenance functions.
 """
 
 import os

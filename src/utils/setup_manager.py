@@ -1,5 +1,6 @@
 """
 Setup Manager for Veramon Reunited
+ 2025 killerdash117 | https://github.com/killerdash117
 
 This module manages the setup process, tracking setup state and providing
 utilities for configuring the bot through the setup wizard.

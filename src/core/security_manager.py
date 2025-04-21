@@ -1,5 +1,6 @@
 """
 Security Manager for Veramon Reunited
+ 2025 killerdash117 | https://github.com/killerdash117
 
 This module provides centralized security functions for validating
 user actions, preventing exploits, and enforcing rate limits across

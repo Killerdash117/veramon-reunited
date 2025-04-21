@@ -1,14 +1,22 @@
+"""
+Veramon Reunited - Discord Bot
+ 2025 killerdash117 | https://github.com/killerdash117
+
+This file is part of Veramon Reunited, a Discord bot created by killerdash117.
+All rights reserved. See OWNERSHIP.md for usage terms.
+"""
+
 import os
 import asyncio
 import sys
 from discord.ext import commands
 from dotenv import load_dotenv
 
-# Veramon Reunited - Version v0.32.002
-# Created by Killerdash117
+# Veramon Reunited - Version v0.33.000
+# Created by killerdash117
 
 # Current version of the bot
-VERSION = "v0.32.002"
+VERSION = "v0.33.000"
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")

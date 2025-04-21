@@ -1,20 +1,20 @@
 """
 Setup UI Views for Veramon Reunited
+ 2025 killerdash117 | https://github.com/killerdash117
 
-This module provides Discord UI components for the interactive setup wizard,
-including views, buttons, dropdowns, and modals for configuring the bot.
+This module provides the UI components for the interactive setup wizard,
+including buttons, dropdowns, and other interactive elements.
 """
 
 import discord
-from discord.ui import View, Button, Select, Modal, TextInput
+from discord import ui
 from typing import Dict, List, Optional, Any, Union, Callable
-import asyncio
 import logging
 
-from src.core.config_manager import get_config, save_config
+from src.core.config_manager import get_config, save_config, get_config_value, set_config_value
 
 # Set up logging
-logger = logging.getLogger("setup")
+logger = logging.getLogger("setup_views")
 
 class MainSetupView(discord.ui.View):
     """
@@ -55,7 +55,7 @@ class MainSetupView(discord.ui.View):
         self.add_item(SetupCategoryButton(
             "Economy Settings", 
             discord.ButtonStyle.primary, 
-            "💰",
+            "💸",
             self.category_status.get("economy_settings", False),
             EconomySettingsView
         ))
@@ -64,7 +64,7 @@ class MainSetupView(discord.ui.View):
         self.add_item(SetupCategoryButton(
             "Spawn Settings", 
             discord.ButtonStyle.primary, 
-            "🦄",
+            "🐲",
             self.category_status.get("spawn_settings", False),
             SpawnSettingsView
         ))
@@ -73,7 +73,7 @@ class MainSetupView(discord.ui.View):
         self.add_item(SetupCategoryButton(
             "Channel Setup", 
             discord.ButtonStyle.primary, 
-            "📝",
+            "📢",
             self.category_status.get("channel_setup", False),
             ChannelSetupView
         ))
@@ -82,7 +82,7 @@ class MainSetupView(discord.ui.View):
         self.add_item(SetupCategoryButton(
             "Role Config", 
             discord.ButtonStyle.primary, 
-            "👑",
+            "👥",
             self.category_status.get("role_config", False),
             RoleConfigView
         ))
@@ -153,7 +153,7 @@ class MainSetupView(discord.ui.View):
         # Ask for confirmation
         confirm_view = ConfirmView("Are you sure you want to discard all unsaved changes?")
         await interaction.response.send_message(
-            "⚠️ This will discard all unsaved configuration changes. Are you sure?",
+            " This will discard all unsaved configuration changes. Are you sure?",
             view=confirm_view,
             ephemeral=True
         )
@@ -165,17 +165,17 @@ class MainSetupView(discord.ui.View):
             # Discard changes
             self.setup_manager.discard_changes(str(self.user_id))
             await interaction.followup.send(
-                "✅ All unsaved changes have been discarded.",
+                " All unsaved changes have been discarded.",
                 ephemeral=True
             )
         elif confirm_view.value is False:
             await interaction.followup.send(
-                "✅ Operation cancelled. Your changes are still pending.",
+                " Operation cancelled. Your changes are still pending.",
                 ephemeral=True
             )
         else:  # None - timed out
             await interaction.followup.send(
-                "❌ Confirmation timed out. Your changes are still pending.",
+                " Confirmation timed out. Your changes are still pending.",
                 ephemeral=True
             )
     
@@ -307,7 +307,7 @@ class BaseSetupView(discord.ui.View):
         """Save changes for this specific category."""
         # This should be implemented by subclasses to gather and save settings
         await interaction.response.send_message(
-            "❌ Save not implemented for this category.",
+            " Save not implemented for this category.",
             ephemeral=True
         )
     
@@ -450,7 +450,7 @@ class GeneralSettingsView(BaseSetupView):
                 setup_data["temp_config"]["prefix"] = new_prefix
             
             await interaction.response.edit_message(view=self)
-            await interaction.followup.send("✅ Prefix updated!", ephemeral=True)
+            await interaction.followup.send(" Prefix updated!", ephemeral=True)
         
         modal.on_submit = on_submit
         await interaction.response.send_modal(modal)
@@ -465,7 +465,7 @@ class GeneralSettingsView(BaseSetupView):
             setup_data["temp_config"]["bot_status"] = selected_status
         
         await interaction.response.defer()
-        await interaction.followup.send(f"✅ Bot status set to: {selected_status}", ephemeral=True)
+        await interaction.followup.send(f" Bot status set to: {selected_status}", ephemeral=True)
     
     async def change_status_message(self, interaction: discord.Interaction):
         """Open modal to change bot status message."""
@@ -490,7 +490,7 @@ class GeneralSettingsView(BaseSetupView):
                 setup_data["temp_config"]["bot_status_message"] = new_message
             
             await interaction.response.defer()
-            await interaction.followup.send(f"✅ Status message updated to: {new_message}", ephemeral=True)
+            await interaction.followup.send(f" Status message updated to: {new_message}", ephemeral=True)
         
         modal.on_submit = on_submit
         await interaction.response.send_modal(modal)
@@ -541,7 +541,7 @@ class GeneralSettingsView(BaseSetupView):
             
             # Re-display the main settings view
             await interaction.response.edit_message(view=self)
-            await interaction.followup.send(f"✅ Timezone set to: {selected_timezone}", ephemeral=True)
+            await interaction.followup.send(f" Timezone set to: {selected_timezone}", ephemeral=True)
         
         select.callback = select_callback
         
@@ -556,7 +556,7 @@ class GeneralSettingsView(BaseSetupView):
         setup_data = self.setup_manager.get_setup_data(str(self.user_id))
         if not setup_data:
             await interaction.response.send_message(
-                "❌ No active setup session found.",
+                " No active setup session found.",
                 ephemeral=True
             )
             return

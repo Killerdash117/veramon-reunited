@@ -78,6 +78,40 @@
 </details>
 
 <details open>
+<summary><h3 id="-faction-system"> ⚔️ Faction System</h3></summary>
+
+- **Faction Selection** choose your allegiance among competing groups
+  - Join server-wide factions with unique themes and benefits
+  - Climb the ranks from Recruit to Leader based on contribution
+  - Receive faction-specific bonuses to catching and battles
+- **Advanced Rank System**
+  - Hierarchical ranks with customizable permissions
+  - Leadership opportunities with treasury and member management
+  - Rank-based ability unlocks for progression motivation
+- **Territory Control**
+  - Capture and defend strategic locations across biomes
+  - Earn passive bonuses from controlled territories
+  - Special Veramon spawns in faction-controlled areas
+- **Faction Wars**
+  - Declare war on rival factions to capture territories
+  - Participate in PvP and PvE challenges to earn war points
+  - Win rewards and fame for your faction through victory
+- **Faction Treasury**
+  - Shared economy with group funding for upgrades
+  - Contribute resources to unlock faction-wide benefits
+  - Fund wars, territory claims, and special events
+- **Faction Buffs & Upgrades**
+  - Temporary buffs for catch rates, XP, battle advantages
+  - Permanent upgrades that grow your faction's power
+  - Stack bonuses for maximum efficiency
+- **Faction Challenges**
+  - Complete tasks to earn points for your faction
+  - Daily and weekly challenges for active participation
+  - Special rewards for top-performing factions
+
+</details>
+
+<details open>
 <summary><h3 id="-exploration-system"> 🗺️ Exploration System</h3></summary>
 
 - **Multiple Biomes** each with different Veramon spawns
@@ -231,6 +265,27 @@
 </details>
 
 <details>
+<summary><h3>Faction Commands</h3></summary>
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `/faction_list` | View all available factions | `/faction_list` |
+| `/faction_info [faction_name]` | View faction details | `/faction_info Mystic` |
+| `/faction_join [faction_name]` | Join a faction | `/faction_join Valor` |
+| `/faction_create [name] [desc] [motto] [color]` | Create a new faction (Admin) | `/faction_create Instinct "Electric types" "Trust your instincts" #FFCC00` |
+| `/faction_upgrade [upgrade_name]` | Purchase a faction upgrade | `/faction_upgrade treasury_capacity` |
+| `/faction_upgrades` | View available faction upgrades | `/faction_upgrades` |
+| `/faction_buff [buff_type] [duration]` | Activate a faction-wide buff | `/faction_buff xp 24` |
+| `/faction_buffs` | View active faction buffs | `/faction_buffs` |
+| `/faction_war [target_faction]` | Declare war on another faction | `/faction_war Valor` |
+| `/faction_declare_war [target] [territory]` | Declare war over a territory | `/faction_declare_war 2 5` |
+| `/faction_war_status` | Check status of active faction wars | `/faction_war_status` |
+| `/faction_territories` | View all territories and ownership | `/faction_territories` |
+| `/faction_claim_territory [territory_id]` | Claim an uncontrolled territory | `/faction_claim_territory 3` |
+
+</details>
+
+<details>
 <summary><h3>Trading Commands</h3></summary>
 
 | Command | Description | Example |
@@ -318,7 +373,7 @@ These commands are restricted to bot developers only (Dev rank) and are used for
 <summary><h3>Installation for Server Owners</h3></summary>
 
 1. **Invite the Bot to Your Server**
-   - Use [this invite link](https://discord.com/oauth2/authorize?client_id=123456789012345678&permissions=8&scope=bot%20applications.commands) to add Veramon Reunited to your server
+   - Use [this invite link](https://github.com/killerdash117/veramon-reunited) to add Veramon Reunited to your server
    - Ensure it has the necessary permissions (Send Messages, Embed Links, Attach Files, etc.)
 
 2. **Run Initial Setup**
@@ -690,9 +745,9 @@ The Veramon Reunited project is under active development. Here are some features
 - **Advanced NPC Trainers** - AI-driven trainers with unique strategies and themed teams
 - **Legendary Quests** - Epic storylines to discover and capture legendary Veramon
 - **Guild Wars** - Competitive gameplay between player guilds with territory control
-- **Season Pass** - Optional progression system with free and premium reward tracks
-- **Mobile Companion App** - Access your Veramon collection and receive notifications on the go
-- **Community Discord Server** - Connect with other trainers, share strategies, and participate in events
+- **Faction Raids** - Cooperative battles against powerful raid bosses with faction-based rewards
+- **Breeding System** - Create new Veramon with inherited traits from parent creatures
+- **Weather System** - Dynamic weather patterns affecting spawn rates and battle conditions
 
 Development priorities are based on user feedback and community needs. Features may be added or modified based on player suggestions.
 
@@ -713,5 +768,5 @@ Development priorities are based on user feedback and community needs. Features 
 </div>
 
 <div align="right">
-<a href="#-table-of-contents">Back to Top ⬆️</a>
+<a href="#">Back to Top ⬆️</a>
 </div>

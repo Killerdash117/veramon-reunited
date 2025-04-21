@@ -10,7 +10,7 @@
 
 **A comprehensive Discord bot for monster-catching adventures in your server**
 
-[Features](#-features) • [Commands](#-commands) • [Staff Commands](#-staff-commands) • [Setup Guide](#-setup-guide) • [Getting Started](#-getting-started) • [Project Structure](#-project-structure) • [Contributing](#-contributing) • [Troubleshooting](#-troubleshooting)
+[Features](#-features) • [Commands](#-commands) • [Rank-Specific Commands](#-rank-specific-commands) • [Setup Guide](#-setup-guide) • [Getting Started](#-getting-started) • [Project Structure](#-project-structure) • [Contributing](#-contributing) • [Troubleshooting](#-troubleshooting)
 
 </div>
 
@@ -321,7 +321,7 @@
 ---
 
 <details>
-<summary><h2 id="-staff-commands"> 🤝 Staff Commands</h2></summary>
+<summary><h2 id="-rank-specific-commands"> 🤝 Rank-Specific Commands</h2></summary>
 
 <details>
 <summary><h3>User Commands</h3></summary>

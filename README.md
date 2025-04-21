@@ -321,7 +321,7 @@
 ---
 
 <details>
-<summary><h2 id="-rank-specific-commands"> 🤝 Rank-Specific Commands</h2></summary>
+<summary><h2 id="-rank-specific-commands"> 🏅 Rank-Specific Commands</h2></summary>
 
 <details>
 <summary><h3>User Commands</h3></summary>

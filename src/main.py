@@ -13,11 +13,11 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from src.utils.ui.accessibility_shortcuts import setup_shortcut_handler
 
-# Veramon Reunited - Version v0.34.0
+# Veramon Reunited - Version v0.44.0
 # Created by killerdash117
 
 # Current version of the bot
-VERSION = "v0.34.0"
+VERSION = "v0.44.0"
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")

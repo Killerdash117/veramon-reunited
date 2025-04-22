@@ -32,8 +32,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=builder /root/.local /home/veramon/.local
 ENV PATH=/home/veramon/.local/bin:$PATH
 
-# Create necessary directories for battle system, trades and data persistence
-RUN mkdir -p /app/data/battles /app/data/trades /app/data/backups /app/data/quests /app/logs \
+# Create necessary directories for battle system, trades, faction, event systems and data persistence
+RUN mkdir -p /app/data/battles /app/data/trades /app/data/backups /app/data/quests /app/data/factions /app/data/events /app/logs \
     && chown -R veramon:veramon /app
 
 # Copy application code

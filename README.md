@@ -5,7 +5,7 @@
 <img src="https://i.imgur.com/EMNMEsp.jpeg" alt="Veramon Reunited" width="500"/>
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/blob/master/LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.2.0-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/releases)
+[![Version](https://img.shields.io/badge/Version-0.44.0-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/releases)
 [![Discord](https://img.shields.io/badge/Discord-Coming%20Soon-7289DA?logo=discord&logoColor=white&style=flat-square)](https://github.com/killerdash117/veramon-reunited)
 
 **A comprehensive Discord bot for monster-catching adventures in your server**
@@ -393,7 +393,7 @@ These commands are restricted to bot developers only (Dev rank) and are used for
 | `/dev_debug [module]` | Enable debug mode for a module | `/dev_debug battle` |
 | `/dev_error_log [count]` | View recent error logs | `/dev_error_log 5` |
 | `/dev_memory_usage` | View memory usage statistics | `/dev_memory_usage` |
-| `/dev_migration [version]` | Run database migrations | `/dev_migration 1.2.0` |
+| `/dev_migration [version]` | Run database migrations | `/dev_migration 0.44.0` |
 | `/dev_rebuild_indices` | Rebuild database indices | `/dev_rebuild_indices` |
 | `/dev_test_data [amount]` | Generate test data | `/dev_test_data 10` |
 | `/dev_reload [module]` | Reload a specific code module | `/dev_reload battle_cog` |
@@ -919,7 +919,7 @@ If you encounter issues not covered here:
 
 ## 📊 Project Status
 
-[![Version](https://img.shields.io/badge/Version-1.2.0-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/releases)
+[![Version](https://img.shields.io/badge/Version-0.44.0-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/releases)
 [![Last Updated](https://img.shields.io/badge/Last%20Updated-April%2022%2C%202025-blue.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/commits)
 [![Discord](https://img.shields.io/badge/Discord-Coming%20Soon-7289DA?logo=discord&logoColor=white&style=flat-square)](https://github.com/killerdash117/veramon-reunited)
 

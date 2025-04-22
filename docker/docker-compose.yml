@@ -12,6 +12,10 @@ services:
       - ../logs:/app/logs:rw
       - ../trading-data:/app/trading-data:rw
       - ../battle-system-data:/app/battle-system-data:rw
+      - ../factions-data:/app/factions-data:rw
+      - ../events-data:/app/events-data:rw
+      - ../quests-data:/app/quests-data:rw
+      - ../tournament-data:/app/tournament-data:rw
     env_file:
       - ../.env
     environment:

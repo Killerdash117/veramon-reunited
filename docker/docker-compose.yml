@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  bot:
+    build: 
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: veramon-bot
+    restart: unless-stopped
+    volumes:
+      - ../data:/app/data:rw
+      - ../logs:/app/logs:rw
+      - ../trading-data:/app/trading-data:rw
+      - ../battle-system-data:/app/battle-system-data:rw
+    env_file:
+      - ../.env
+    environment:
+      - TZ=UTC
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.socket().connect(('discord.com', 443))"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    command: ["python", "-m", "src.main"]

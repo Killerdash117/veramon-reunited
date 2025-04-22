@@ -5,7 +5,7 @@
 <img src="https://i.imgur.com/EMNMEsp.jpeg" alt="Veramon Reunited" width="500"/>
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/blob/master/LICENSE)
-[![Version](https://img.shields.io/badge/Version-v0.34.0-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/releases)
+[![Version](https://img.shields.io/badge/Version-1.2.0-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/releases)
 [![Discord](https://img.shields.io/badge/Discord-Coming%20Soon-7289DA?logo=discord&logoColor=white&style=flat-square)](https://github.com/killerdash117/veramon-reunited)
 
 **A comprehensive Discord bot for monster-catching adventures in your server**
@@ -530,6 +530,141 @@ These commands are restricted to bot developers only (Dev rank) and are used for
 ---
 
 <details>
+<summary><h2 id="-deployment"> 🚀 Deployment Options</h2></summary>
+
+Veramon Reunited is designed to be deployed using Docker for reliable and consistent operation. There are two main approaches to deploying the bot:
+
+<details>
+<summary><h3>Option 1: Local Machine Deployment (Simple)</h3></summary>
+
+This approach is perfect for individual server owners or developers who want a straightforward setup:
+
+1. **Prerequisites**:
+   - Docker and Docker Compose installed on your machine
+   - A valid Discord bot token in your `.env` file
+
+2. **Build and Run**:
+   ```bash
+   # Build and start in detached mode
+   docker-compose -f docker/docker-compose.yml up -d
+   
+   # Check the logs
+   docker-compose -f docker/docker-compose.yml logs -f
+   
+   # Stop the bot
+   docker-compose -f docker/docker-compose.yml down
+   
+   # Restart after changes
+   docker-compose -f docker/docker-compose.yml restart
+   ```
+
+3. **Benefits**:
+   - Persistent data storage via volume mounts
+   - Automatic restart if the bot crashes
+   - Easy to update (just pull changes and restart)
+   - Isolated environment for clean operation
+
+4. **Updating**:
+   ```bash
+   git pull
+   docker-compose -f docker/docker-compose.yml down
+   docker-compose -f docker/docker-compose.yml up -d --build
+   ```
+</details>
+
+<details>
+<summary><h3>Option 2: CI/CD Pipeline (Advanced)</h3></summary>
+
+For larger projects or teams that want automated deployments:
+
+1. **Prerequisites**:
+   - GitHub repository for your bot
+   - A server (VPS) with Docker installed
+   - DockerHub account (or other container registry)
+   - Configured secrets in GitHub repository
+
+2. **How It Works**:
+   - Push changes to your main branch
+   - GitHub Actions builds a Docker image
+   - Image is pushed to DockerHub
+   - Deployment server pulls the new image
+   - Bot is automatically restarted with new version
+
+3. **Setup**:
+   - Configure GitHub secrets:
+     - `DOCKERHUB_USERNAME`
+     - `DOCKERHUB_TOKEN`
+     - `SERVER_HOST`
+     - `SERVER_USERNAME` 
+     - `SERVER_KEY`
+   - Ensure the `.github/workflows/deploy.yml` file is configured
+
+4. **Benefits**:
+   - Fully automated deployments
+   - Test integration before deployment
+   - Version control for releases
+   - Multiple environment support (staging, production)
+</details>
+
+<details>
+<summary><h3>Configuration Files</h3></summary>
+
+The repository includes ready-to-use configuration files for both options:
+
+- `docker/Dockerfile`: Defines the container build process
+- `docker/docker-compose.yml`: Simplifies local deployment
+- `.github/workflows/deploy.yml`: GitHub Actions workflow for CI/CD
+- `.env.example`: Template for required environment variables
+
+All Docker-related files are organized in the `docker` directory for cleaner project structure, while maintaining full support for the bot's enhanced battle system and trading functionality.
+</details>
+
+<details>
+<summary><h3>Troubleshooting</h3></summary>
+
+#### Common Issues
+
+1. **Bot not starting:** Check the logs with `docker-compose -f docker/docker-compose.yml logs -f`
+2. **Database errors:** Ensure the data directory has the correct permissions
+3. **Missing environment variables:** Make sure all required variables are set in .env
+4. **Discord connection issues:** Verify your bot token and internet connectivity
+
+#### Container Health Check
+
+The Docker container includes a health check that verifies connectivity to Discord. If the container is marked as unhealthy:
+
+```bash
+# Check container status
+docker ps
+
+# View detailed health check results
+docker inspect --format='{{json .State.Health}}' veramon-bot | jq
+```
+
+#### Maintenance
+
+**Database Backups**
+
+The data directory is mounted as a volume, but it's recommended to set up regular backups:
+
+```bash
+# Manual backup
+docker-compose -f docker/docker-compose.yml exec bot sh -c "sqlite3 /app/data/veramon_reunited.db .dump > /app/data/backups/backup_$(date +%Y%m%d).sql"
+```
+
+#### Security Considerations
+
+- Never commit your `.env` file to version control
+- Use a dedicated user with limited permissions for the bot
+- Regularly update the base Docker image and dependencies
+- Monitor the bot's resource usage to prevent potential DoS attacks
+</details>
+
+</details>
+
+---
+
+<details>
 <summary><h2 id="-project-structure"> 🏗️ Project Structure</h2></summary>
 
 ```
@@ -558,6 +693,9 @@ veramon-reunited/
 │   ├── functional/        # Functional tests
 │   ├── integration/       # Integration tests
 │   └── unit/              # Unit tests
+├── docker/                # Docker configuration
+│   ├── Dockerfile         # Container build process
+│   └── docker-compose.yml # Local deployment configuration
 ├── .env.example           # Example environment variables
 ├── requirements.txt       # Dependencies
 ├── requirements-dev.txt   # Development dependencies
@@ -781,8 +919,8 @@ If you encounter issues not covered here:
 
 ## 📊 Project Status
 
-[![Version](https://img.shields.io/badge/Version-v0.34.0-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/releases)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-April%2021%2C%202025-blue.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/commits)
+[![Version](https://img.shields.io/badge/Version-1.2.0-brightgreen.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/releases)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-April%2022%2C%202025-blue.svg?style=flat-square)](https://github.com/killerdash117/veramon-reunited/commits)
 [![Discord](https://img.shields.io/badge/Discord-Coming%20Soon-7289DA?logo=discord&logoColor=white&style=flat-square)](https://github.com/killerdash117/veramon-reunited)
 
 ### [Discord Server (Coming Soon)] | [Report Bugs](https://github.com/killerdash117/veramon-reunited/issues) | [Request Features](https://github.com/killerdash117/veramon-reunited/issues)

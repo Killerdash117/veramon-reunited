@@ -4,8 +4,8 @@ This document tracks all notable changes to the Veramon Reunited Discord bot.
 
 <div align="center">
 
-![Version Status](https://img.shields.io/badge/Current%20Version-v0.34.0-brightgreen.svg)
-![Updated](https://img.shields.io/badge/Last%20Updated-April%2021%2C%202025-blue.svg)
+![Version Status](https://img.shields.io/badge/Current%20Version-v1.2.0-brightgreen.svg)
+![Updated](https://img.shields.io/badge/Last%20Updated-April%2022%2C%202025-blue.svg)
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg)
 
 </div>
@@ -16,7 +16,7 @@ This document tracks all notable changes to the Veramon Reunited Discord bot.
 
 > **Upcoming Features & Improvements**
 
-### Next Major Release (v0.35.0)
+### Next Major Release (v1.3.0)
 * **Tournament System 2.0** - In-server tournaments with automated brackets
 * **Strategic NPC Trainers** - Pattern-based battle strategies with difficulty scaling 
 * **Party System Improvements** - Small team gameplay for friend groups
@@ -30,14 +30,66 @@ Veramon Reunited uses semantic versioning to indicate the scope of each update:
 
 | Version Format | Impact | Description |
 |----------------|--------|-------------|
-| `0.05+` | Major | Significant new features and systems |
-| `0.01+` | Minor | Improvements to existing features |
-| `0.001+` | Patch | Bug fixes and small updates |
+| `1.0+` | Major | Significant new features and systems |
+| `0.1+` | Minor | Improvements to existing features |
+| `0.01+` | Patch | Bug fixes and small updates |
 | `1.0+` | Milestone | New generation/evolution of the bot |
 
 ---
 
 ## 📋 Release History
+
+<details>
+<summary><h3>v1.2.0 - April 22, 2025</h3></summary>
+
+> *Enhanced Deployment System & Docker Optimization*
+
+<details>
+<summary><b>Release Details</b></summary>
+
+#### ✨ Added
+- **Docker Deployment Optimization**
+  - Implemented secure multi-stage Docker builds for smaller image size and enhanced security
+  - Created optimized Docker configuration with non-root user for better security
+  - Added dedicated data volumes for battle system and trading persistence
+  - Implemented automatic health checks for battle and trading systems
+  - Integrated backup solution for battle logs and trade history
+  - Set up proper volume permissions for seamless battle system operation
+
+- **CI/CD Pipeline Enhancements**
+  - Implemented automated testing in the deployment pipeline
+  - Added error handling and rollback mechanisms for failed deployments
+  - Set up proper tagging for version control
+  - Configured caching for faster builds
+  - Added post-deployment health verification
+
+- **Documentation & Tooling**
+  - Created comprehensive deployment guide in README
+  - Added detailed troubleshooting instructions for common deployment issues
+  - Created Docker-specific utility scripts for backups and maintenance
+  - Implemented health check script to verify battle system and trading functionality
+
+#### 🔄 Changed
+- **Project Structure**
+  - Moved all Docker configuration to dedicated `docker/` directory
+  - Updated environment variable handling for better security
+  - Optimized Docker Compose configuration for resource efficiency
+  - Updated README with comprehensive deployment documentation
+
+- **Performance Optimizations**
+  - Optimized container resource allocation for battle system performance
+  - Improved database persistence for reliable trade tracking
+  - Enhanced logging configuration for better diagnostics
+  - Added memory limits for better server resource management
+
+#### 🐛 Fixed
+- Fixed permissions issues affecting battle system database
+- Addressed Docker volume mapping for proper data persistence
+- Resolved inconsistencies in deployment documentation
+- Fixed environment variable handling for smoother deployments
+
+</details>
+</details>
 
 <details>
 <summary><h3>v0.34.0 - April 21, 2025</h3></summary>

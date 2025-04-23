@@ -1,0 +1,146 @@
+name: Auto Deploy Veramon Bot
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+        
+    - name: Create mock .env file for testing
+      run: |
+        echo "BOT_TOKEN=mock_token_for_ci" > .env
+        echo "COMMAND_PREFIX=!" >> .env
+        echo "DATABASE_PATH=data/veramon_reunited.db" >> .env
+        echo "DEBUG_MODE=True" >> .env
+        echo "MAINTENANCE_MODE=False" >> .env
+        echo "LOG_LEVEL=INFO" >> .env
+        
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        
+    - name: Test with pytest
+      continue-on-error: true
+      run: |
+        pip install pytest
+        if [ -d tests ]; then pytest -v; fi
+  
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set current date as env variable
+      run: echo "BUILD_DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./docker/Dockerfile
+        push: true
+        tags: |
+          ${{ secrets.DOCKER_USERNAME }}/veramon-bot:latest
+          ${{ secrets.DOCKER_USERNAME }}/veramon-bot:${{ env.BUILD_DATE }}
+        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/veramon-bot:buildcache
+        cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/veramon-bot:buildcache,mode=max
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment: ${{ github.event.inputs.environment || 'production' }}
+    
+    steps:
+    - name: Deploy to server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_KEY }}
+        script: |
+          # Create deployment directory if needed
+          mkdir -p /opt/veramon-bot
+          cd /opt/veramon-bot
+          
+          # Backup previous .env file if it exists
+          if [ -f .env ]; then
+            cp .env .env.backup
+          else
+            # Create .env file if it doesn't exist
+            cat > .env << 'EOF'
+            BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+            COMMAND_PREFIX=!
+            DATABASE_PATH=data/veramon_reunited.db
+            DEBUG_MODE=False
+            MAINTENANCE_MODE=False
+            LOG_LEVEL=INFO
+            EOF
+          fi
+          
+          # Create necessary directories
+          mkdir -p data logs battle-system battle-trading factions events quests tournaments
+          chmod -R 777 data logs battle-system battle-trading factions events quests tournaments
+          
+          # Download the latest docker-compose file
+          wget -O docker-compose.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker/docker-compose.yml
+          
+          # Pull the new image
+          docker pull ${{ secrets.DOCKER_USERNAME }}/veramon-bot:latest
+          
+          # Restart the container
+          docker-compose down || true
+          docker-compose up -d
+          
+          # Check if the bot is running properly
+          sleep 10
+          if ! docker ps | grep veramon-bot; then
+            echo "Error: Bot failed to start"
+            docker logs veramon-bot --tail 50
+            exit 1
+          fi
+          
+          # Clean up old images
+          docker image prune -af --filter "until=24h"
+          
+          echo "Deployment successful!"

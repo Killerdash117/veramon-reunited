@@ -152,6 +152,55 @@ def close_all_connections():
                 
         _active_connections = 0
 
+def create_tables():
+    """
+    Create all database tables if they don't exist.
+    This is a convenience function used by admin tools to initialize or reset tables.
+    
+    Note: For a complete initialization, use the db_manager.initialize_database() function instead.
+    This function only creates basic tables needed for admin functionality.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    # Create game settings table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS game_settings (
+            key TEXT PRIMARY KEY,
+            value TEXT NOT NULL,
+            description TEXT,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_by TEXT
+        )
+    """)
+    
+    # Create developers table if it doesn't exist
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS developers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id TEXT UNIQUE NOT NULL,
+            permission_level TEXT NOT NULL,
+            added_at TIMESTAMP NOT NULL,
+            added_by TEXT NOT NULL,
+            notes TEXT
+        )
+    """)
+    
+    # Create system logs table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS system_logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            log_type TEXT NOT NULL,
+            message TEXT NOT NULL,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            user_id TEXT,
+            details TEXT
+        )
+    """)
+    
+    conn.commit()
+    conn.close()
+
 def initialize_db():
     conn = get_connection()
     cursor = conn.cursor()
@@ -517,5 +566,6 @@ def initialize_db():
     conn.close()
 
 if __name__ == "__main__":
+    create_tables()
     initialize_db()
     print("Database initialized.")

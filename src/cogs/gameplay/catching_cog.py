@@ -17,9 +17,9 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from utils.helpers import weighted_choice
-from utils.data_loader import load_all_veramon_data, load_biomes_data, load_items_data
-from db.db import get_connection
+from src.utils.helpers import weighted_choice
+from src.utils.data_loader import load_all_veramon_data, load_biomes_data, load_items_data
+from src.db.db import get_connection
 from src.models.permissions import require_permission_level, PermissionLevel
 from src.models.veramon import Veramon
 from src.utils.config_manager import get_config

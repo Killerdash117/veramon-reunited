@@ -12,7 +12,7 @@ from typing import Dict, Any, Optional, List
 import json
 import os
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 # Set up logging
 logger = logging.getLogger('veramon.ui_theme')
@@ -48,8 +48,8 @@ class Theme:
     name: str
     description: str
     colors: Dict[ThemeColorType, int]
-    button_style: ButtonStyle = ButtonStyle()
-    embed_style: Dict[str, Any] = None
+    button_style: ButtonStyle = field(default_factory=ButtonStyle)
+    embed_style: Dict[str, Any] = field(default_factory=dict)
     icon_set: str = "default"
     font_family: str = "default"
     

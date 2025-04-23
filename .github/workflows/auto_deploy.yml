@@ -72,7 +72,7 @@ jobs:
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        password: ${{ secrets.DOCKER_TOKEN }}
     
     - name: Build and push
       uses: docker/build-push-action@v4
@@ -98,6 +98,7 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SERVER_KEY }}
+        script_stop: true
         script: |
           # Create deployment directory if needed
           mkdir -p /opt/veramon-bot
@@ -109,13 +110,13 @@ jobs:
           else
             # Create .env file if it doesn't exist
             cat > .env << 'EOF'
-            BOT_TOKEN=${{ secrets.BOT_TOKEN }}
-            COMMAND_PREFIX=!
-            DATABASE_PATH=data/veramon_reunited.db
-            DEBUG_MODE=False
-            MAINTENANCE_MODE=False
-            LOG_LEVEL=INFO
-            EOF
+          BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+          COMMAND_PREFIX=!
+          DATABASE_PATH=data/veramon_reunited.db
+          DEBUG_MODE=False
+          MAINTENANCE_MODE=False
+          LOG_LEVEL=INFO
+          EOF
           fi
           
           # Create necessary directories

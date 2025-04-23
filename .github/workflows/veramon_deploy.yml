@@ -101,7 +101,7 @@ jobs:
         echo "chmod -R 777 data logs battle-system battle-trading factions events quests tournaments"
         echo ""
         echo "# Create .env file"
-        echo "cat > .env << EOF"
+        echo "cat > .env << 'EOF'"
         echo "BOT_TOKEN=\${{ secrets.BOT_TOKEN }}"
         echo "COMMAND_PREFIX=!"
         echo "DATABASE_PATH=data/veramon_reunited.db"

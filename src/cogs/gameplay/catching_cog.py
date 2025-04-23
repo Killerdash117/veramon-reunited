@@ -74,6 +74,9 @@ class CatchingCog(commands.Cog):
         self.last_weather_update = 0  # Timestamp of last weather update
         self.weather_update_interval = get_config("weather", "min_weather_duration_hours", 3) * 3600  # Update weather every hour
         self.unlocked_special_areas = {}  # Tracks unlocked special areas per user
+        
+        # Add RARITY_WEIGHTS as a class attribute for tests
+        self.RARITY_WEIGHTS = RARITY_WEIGHTS
 
     def _get_current_time_of_day(self):
         """Get the current time of day based on real-world time."""
@@ -88,6 +91,125 @@ class CatchingCog(commands.Cog):
         else:
             return TimeOfDay.NIGHT
     
+    def _get_time_of_day(self):
+        """Alias for _get_current_time_of_day for test compatibility."""
+        return self._get_current_time_of_day()
+        
+    def has_achievement(self, user_id, achievement_id):
+        """
+        Check if a user has a specific achievement.
+        
+        Args:
+            user_id (str): The Discord user ID
+            achievement_id (str): The achievement ID to check
+            
+        Returns:
+            bool: True if the user has the achievement, False otherwise
+        """
+        # This would normally query the achievement database
+        # For testing purposes, we'll simulate achievement checking
+        conn = get_connection()
+        cursor = conn.cursor()
+        
+        try:
+            cursor.execute(
+                "SELECT 1 FROM user_achievements WHERE user_id = ? AND achievement_id = ?",
+                (user_id, achievement_id)
+            )
+            result = cursor.fetchone() is not None
+            return result
+        except Exception as e:
+            print(f"Error checking achievement: {e}")
+            return False
+        finally:
+            cursor.close()
+            conn.close()
+            
+    def _generate_spawn(self, biome_key):
+        """
+        Generate a random Veramon spawn for the given biome.
+        
+        Args:
+            biome_key (str): The biome key to generate a spawn for
+            
+        Returns:
+            dict: A dictionary containing spawn information
+        """
+        # Get biome data
+        biome_data = self.biomes.get(biome_key, {})
+        if not biome_data:
+            return None
+            
+        # Get spawn table for this biome
+        spawn_table = biome_data.get('spawn_table', {})
+        if not spawn_table:
+            return None
+            
+        # Apply weather effects on spawn rates
+        weather = self.current_weather.get(biome_key)
+        type_modifiers = {}
+        
+        if weather and weather in biome_data.get('weather_effects', {}):
+            weather_effects = biome_data['weather_effects'][weather]
+            type_modifiers = weather_effects.get('spawn_modifiers', {})
+        
+        # Choose a rarity tier based on weights
+        rarity_weights = []
+        for rarity, weight in self.RARITY_WEIGHTS.items():
+            if rarity in spawn_table:
+                rarity_weights.append((rarity, weight))
+                
+        chosen_rarity = weighted_choice(rarity_weights)
+        if not chosen_rarity or chosen_rarity not in spawn_table:
+            return None
+            
+        # Choose a Veramon from the rarity tier
+        potential_spawns = spawn_table[chosen_rarity]
+        if not potential_spawns:
+            return None
+            
+        # Apply type modifiers to the spawn weights
+        spawn_weights = []
+        for veramon_id in potential_spawns:
+            veramon_data = self.veramon_data.get(veramon_id)
+            if not veramon_data:
+                continue
+                
+            # Start with base weight of 1
+            weight = 1.0
+            
+            # Apply type modifiers
+            for type_name in veramon_data.get('type', []):
+                if type_name.lower() in type_modifiers:
+                    weight *= type_modifiers[type_name.lower()]
+                    
+            spawn_weights.append((veramon_id, weight))
+            
+        chosen_veramon_id = weighted_choice(spawn_weights)
+        veramon_data = self.veramon_data.get(chosen_veramon_id, {})
+        
+        # Check for shiny
+        shiny_rate = veramon_data.get('shiny_rate', 0.01)  # Default 1% chance
+        
+        # Thunderstorm doubles shiny chance
+        if weather == WeatherType.THUNDERSTORM.value:
+            shiny_rate *= 2
+            
+        is_shiny = random.random() < shiny_rate
+        
+        # Generate the spawn
+        spawn = {
+            'id': chosen_veramon_id,
+            'name': veramon_data.get('name', chosen_veramon_id),
+            'types': veramon_data.get('type', ['Normal']),
+            'rarity': chosen_rarity,
+            'shiny': is_shiny,
+            'level': random.randint(1, 5),  # Random level 1-5 for wild spawns
+            'biome': biome_key
+        }
+        
+        return spawn
+
     def _update_weather(self):
         """Update weather conditions for all biomes."""
         current_time = time.time()

@@ -177,7 +177,19 @@ jobs:
         
         chmod +x deploy.sh
         
-        # Attempt to deploy using password
+        # Debug GitHub secrets (without showing their values)
+        echo "Checking if SERVER_HOST is set..."
+        if [ -z "${{ secrets.SERVER_HOST }}" ]; then
+          echo "ERROR: SERVER_HOST is empty!"
+        else
+          echo "SERVER_HOST is set. Attempting SSH connection."
+        fi
+        
+        # Attempt to deploy using password with explicit variables
+        SERVER_HOST="${{ secrets.SERVER_HOST }}"
+        SERVER_USER="${{ secrets.SERVER_USERNAME }}"
         export SSHPASS="${{ secrets.SERVER_PASSWORD }}"
-        sshpass -e scp -o StrictHostKeyChecking=no deploy.sh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}:/tmp/deploy.sh
-        sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "cd /tmp && bash deploy.sh"
+        
+        echo "Connecting to $SERVER_USER@$SERVER_HOST..."
+        sshpass -e scp -o StrictHostKeyChecking=no deploy.sh "$SERVER_USER@$SERVER_HOST:/tmp/deploy.sh"
+        sshpass -e ssh -o StrictHostKeyChecking=no "$SERVER_USER@$SERVER_HOST" "cd /tmp && bash deploy.sh"

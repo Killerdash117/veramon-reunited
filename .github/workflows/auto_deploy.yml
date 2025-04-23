@@ -117,9 +117,11 @@ jobs:
     - name: Attempt auto deployment
       continue-on-error: true
       run: |
-        # Create deployment script
+        # Create deployment script with debugging
         cat > deploy.sh << 'EOF'
         #!/bin/bash
+        set -x  # Enable command echo for debugging
+        
         mkdir -p ${{ secrets.DEPLOY_PATH }}
         cd ${{ secrets.DEPLOY_PATH }}
         
@@ -128,9 +130,9 @@ jobs:
         BOT_TOKEN=${{ secrets.BOT_TOKEN }}
         COMMAND_PREFIX=!
         DATABASE_PATH=data/veramon_reunited.db
-        DEBUG_MODE=False
+        DEBUG_MODE=True
         MAINTENANCE_MODE=False
-        LOG_LEVEL=INFO
+        LOG_LEVEL=DEBUG
         ENVEOF
         
         # Create necessary directories
@@ -139,12 +141,38 @@ jobs:
         
         # Get docker-compose file
         wget -O docker-compose.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker/docker-compose.yml
+        echo "Docker compose file contents:"
+        cat docker-compose.yml
         
-        # Restart the container
+        # Check if Docker image exists
+        echo "Checking if Docker image exists..."
+        if docker pull ${{ secrets.DOCKERHUB_USERNAME }}/veramon-bot:latest; then
+          echo "Docker image found and pulled successfully"
+        else
+          echo "Docker image not found or failed to pull"
+          echo "Attempting to build image locally..."
+          
+          # Try to clone the repo and build image locally
+          cd /tmp
+          git clone https://github.com/${{ github.repository }}.git veramon-clone
+          cd veramon-clone
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/veramon-bot:latest -f docker/Dockerfile .
+          cd ${{ secrets.DEPLOY_PATH }}
+        fi
+        
+        # Restart the container with logs
         docker-compose down || true
         docker-compose up -d
         
-        echo "Deployment completed successfully!"
+        # Wait for container to start and collect logs
+        sleep 15
+        echo "Container status:"
+        docker ps -a | grep veramon
+        
+        echo "Container logs:"
+        docker logs veramon-bot
+        
+        echo "Deployment completed!"
         EOF
         
         chmod +x deploy.sh

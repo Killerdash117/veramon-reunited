@@ -34,6 +34,15 @@ jobs:
         pip install -r requirements.txt
         if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
         
+    - name: Create mock .env file for testing
+      run: |
+        echo "BOT_TOKEN=mock_token_for_ci" > .env
+        echo "COMMAND_PREFIX=!" >> .env
+        echo "DATABASE_PATH=data/veramon_reunited.db" >> .env
+        echo "DEBUG_MODE=True" >> .env
+        echo "MAINTENANCE_MODE=False" >> .env
+        echo "LOG_LEVEL=INFO" >> .env
+        
     - name: Lint with flake8
       run: |
         pip install flake8

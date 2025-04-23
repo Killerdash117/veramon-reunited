@@ -78,10 +78,13 @@ def initialize_pool():
             _connection_pool.put(connection)
             _active_connections += 1
 
-def get_connection() -> PooledConnection:
+def get_connection(timeout: float = 5.0) -> PooledConnection:
     """
     Get a connection from the pool or create a new one if needed.
     
+    Args:
+        timeout: Timeout in seconds for database operations (default: 5.0)
+        
     Returns:
         A pooled database connection.
     
@@ -96,7 +99,7 @@ def get_connection() -> PooledConnection:
     
     # Try to get a connection from the pool
     try:
-        connection = _connection_pool.get(block=True, timeout=TIMEOUT)
+        connection = _connection_pool.get(block=True, timeout=timeout)
         return PooledConnection(connection)
     except Empty:
         # If pool is empty but we can create more connections

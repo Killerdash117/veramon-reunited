@@ -1,6 +1,8 @@
 from enum import Enum
 from functools import wraps
 from typing import Callable, List, Union, Optional, Dict, Set
+import os
+import logging
 
 import discord
 from discord import app_commands
@@ -9,11 +11,13 @@ from discord.ext import commands
 
 class PermissionLevel(Enum):
     """Permission levels for command access."""
+    NONE = -1  # No access
     USER = 0  # Basic gameplay access
     VIP = 1   # Premium features
     MOD = 2   # Moderation tools
     ADMIN = 3 # Administrative control
     DEV = 4   # Full developer access
+    OWNER = 5 # Bot owner
 
 
 # Role name mappings for each permission level
@@ -88,6 +92,11 @@ PERMISSION_DESCRIPTIONS = {
         - Reload bot modules with `/reload`
         - Execute custom queries with `/query`
         - Full bypass of all restrictions
+    """,
+    PermissionLevel.OWNER: """
+        **Owner**: Bot owner
+        - All DEV permissions
+        - Bot owner access
     """
 }
 
@@ -191,6 +200,14 @@ PERMISSION_PERKS = {
         "shiny_multiplier": 2.0,  # +100% shiny rate
         "xp_multiplier": 2.0,     # +100% XP gain
         "max_guild_members": 15   # Can create guilds with 15 slots
+    },
+    PermissionLevel.OWNER: {
+        "spawn_cooldown": 0,      # No cooldown between spawns
+        "daily_tokens": 500,      # Maximum daily tokens for owner
+        "catch_multiplier": 2.0,  # +100% catch rate (guaranteed for common)
+        "shiny_multiplier": 2.0,  # +100% shiny rate
+        "xp_multiplier": 2.0,     # +100% XP gain
+        "max_guild_members": 20   # Can create guilds with 20 slots
     }
 }
 
@@ -300,3 +317,48 @@ def get_available_commands(level: PermissionLevel) -> Set[str]:
         if req_level.value <= level.value:
             commands.add(cmd)
     return commands
+
+
+async def get_permission_level(interaction: discord.Interaction) -> PermissionLevel:
+    """Get the permission level for a user.
+    
+    Args:
+        interaction: The Discord interaction
+        
+    Returns:
+        The permission level of the user
+    """
+    if interaction.guild is None:
+        # In DMs, only the bot owner is considered admin
+        return PermissionLevel.NONE
+        
+    user_id = str(interaction.user.id)
+    
+    # Check if user is the bot owner
+    if user_id == os.getenv("BOT_OWNER_ID"):
+        return PermissionLevel.OWNER
+        
+    # Check if user is server owner
+    if interaction.guild.owner_id == interaction.user.id:
+        return PermissionLevel.ADMIN
+        
+    # Query database for developer status
+    from src.db.db import get_connection
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("SELECT permission_level FROM developers WHERE user_id = ?", (user_id,))
+        result = cursor.fetchone()
+        
+        if result:
+            try:
+                return PermissionLevel(result[0])
+            except (ValueError, KeyError):
+                return PermissionLevel.NONE
+    except Exception as e:
+        logging.error(f"Error checking permission level: {e}")
+    finally:
+        conn.close()
+        
+    return PermissionLevel.NONE

@@ -222,8 +222,8 @@ class DatabaseManager:
             # Check for locked database and make a backup if needed
             if os.path.exists("data/veramon_reunited.db"):
                 try:
-                    # Try to open with timeout
-                    conn = sqlite3.connect("data/veramon_reunited.db", timeout=10.0)
+                    # Try to open with default settings
+                    conn = sqlite3.connect("data/veramon_reunited.db")
                     conn.close()
                 except sqlite3.OperationalError as e:
                     if "database is locked" in str(e):
@@ -249,8 +249,8 @@ class DatabaseManager:
                         except Exception as rm_err:
                             logger.error(f"Failed to remove locked database: {rm_err}")
             
-            # Get a connection with extended timeout
-            conn = get_connection(timeout=30.0)
+            # Get a connection
+            conn = get_connection()
             self.cursor = conn.cursor()
             
             # Create tables for all game systems

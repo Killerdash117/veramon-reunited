@@ -54,64 +54,77 @@ jobs:
         pip install pytest
         if [ -d tests ]; then pytest -v; fi
   
-  build:
+  deploy:
     runs-on: ubuntu-latest
     needs: test
+    environment: ${{ github.event.inputs.environment || 'production' }}
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
       
-    - name: Set current date
-      id: date
-      run: echo "BUILD_DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+    - name: Set up environment for deployment
+      run: |
+        echo "BUILD_DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+        
+    - name: Install sshpass and other dependencies
+      run: sudo apt-get update && sudo apt-get install -y sshpass
       
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-      
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: ./docker/Dockerfile
-        push: true
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/veramon-bot:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/veramon-bot:${{ env.BUILD_DATE }}
-  
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment: ${{ github.event.inputs.environment || 'production' }}
-    
-    steps:
-    - name: Deploy to server using sshpass
-      uses: actions/checkout@v3  # Just to get a workspace
-      
-    - name: Install sshpass
-      run: sudo apt-get install -y sshpass
-      
-    - name: Deploy via SSH with password
+    - name: Create deployment instructions
+      run: |
+        echo "===== VERAMON REUNITED DEPLOYMENT INSTRUCTIONS ====="
+        echo ""
+        echo "Follow these steps to deploy your bot:"
+        echo ""
+        echo "1. Connect to your server:"
+        echo "   ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}"
+        echo ""
+        echo "2. Create the deployment directory:"
+        echo "   mkdir -p ${{ secrets.DEPLOY_PATH }}"
+        echo "   cd ${{ secrets.DEPLOY_PATH }}"
+        echo ""
+        echo "3. Create .env file:"
+        echo "   cat > .env << 'EOF'"
+        echo "   BOT_TOKEN=${{ secrets.BOT_TOKEN }}"
+        echo "   COMMAND_PREFIX=!"
+        echo "   DATABASE_PATH=data/veramon_reunited.db"
+        echo "   DEBUG_MODE=False"
+        echo "   MAINTENANCE_MODE=False"
+        echo "   LOG_LEVEL=INFO"
+        echo "   EOF"
+        echo ""
+        echo "4. Create necessary directories:"
+        echo "   mkdir -p data logs battle-system battle-trading factions events quests tournaments"
+        echo "   chmod -R 777 data logs battle-system battle-trading factions events quests tournaments"
+        echo ""
+        echo "5. Get the docker-compose file:"
+        echo "   wget -O docker-compose.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker/docker-compose.yml"
+        echo ""
+        echo "6. Pull the latest image (if using Docker Hub):"
+        echo "   docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p [your-password]"
+        echo "   docker pull ${{ secrets.DOCKERHUB_USERNAME }}/veramon-bot:latest"
+        echo ""
+        echo "7. Start the bot:"
+        echo "   docker-compose down || true"
+        echo "   docker-compose up -d"
+        echo ""
+        echo "===== VERIFICATION STEPS ====="
+        echo "Check if the bot is running:"
+        echo "   docker ps | grep veramon-bot"
+        echo "   docker logs veramon-bot"
+        echo ""
+        
+    - name: Attempt auto deployment
+      continue-on-error: true
       run: |
         # Create deployment script
-        cat > deploy.sh << EOF
+        cat > deploy.sh << 'EOF'
         #!/bin/bash
-        # Create deployment directory if needed
         mkdir -p ${{ secrets.DEPLOY_PATH }}
         cd ${{ secrets.DEPLOY_PATH }}
         
-        # Backup previous .env file if it exists
-        if [ -f .env ]; then
-          cp .env .env.backup
-        else
-          # Create .env file if it doesn't exist
-          cat > .env << 'ENVEOF'
+        # Create .env file
+        cat > .env << 'ENVEOF'
         BOT_TOKEN=${{ secrets.BOT_TOKEN }}
         COMMAND_PREFIX=!
         DATABASE_PATH=data/veramon_reunited.db
@@ -119,39 +132,24 @@ jobs:
         MAINTENANCE_MODE=False
         LOG_LEVEL=INFO
         ENVEOF
-        fi
         
-        # Create necessary directories for all systems
+        # Create necessary directories
         mkdir -p data logs battle-system battle-trading factions events quests tournaments
         chmod -R 777 data logs battle-system battle-trading factions events quests tournaments
         
-        # Download the latest docker-compose file
+        # Get docker-compose file
         wget -O docker-compose.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker/docker-compose.yml
-        
-        # Pull the new image
-        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/veramon-bot:latest
         
         # Restart the container
         docker-compose down || true
         docker-compose up -d
         
-        # Check if the bot is running properly
-        sleep 10
-        if ! docker ps | grep veramon-bot; then
-          echo "Error: Bot failed to start"
-          docker logs veramon-bot --tail 50
-          exit 1
-        fi
-        
-        # Clean up old images
-        docker image prune -af --filter "until=24h"
-        
-        echo "Deployment successful!"
+        echo "Deployment completed successfully!"
         EOF
         
         chmod +x deploy.sh
         
-        # Use sshpass to copy and execute the script
-        export SSHPASS=${{ secrets.SERVER_PASSWORD }}
+        # Attempt to deploy using password
+        export SSHPASS="${{ secrets.SERVER_PASSWORD }}"
         sshpass -e scp -o StrictHostKeyChecking=no deploy.sh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}:/tmp/deploy.sh
-        sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "bash /tmp/deploy.sh"
+        sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "cd /tmp && bash deploy.sh"

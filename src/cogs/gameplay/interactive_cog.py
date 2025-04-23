@@ -10,6 +10,7 @@ from src.utils.interactive_ui import InteractiveView, NavigableView, NavigationT
 from src.utils.interactive_components import MainMenuView, ExplorationView, EncounterView
 from src.utils.dm_handler import dm_handler
 from src.models.permissions import require_permission_level, PermissionLevel, is_vip, is_admin
+from src.db.db import Database
 
 logger = logging.getLogger('veramon.interactive')
 

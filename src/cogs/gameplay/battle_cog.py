@@ -8,6 +8,10 @@ import asyncio
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Union, Any
 import time
+import os
+
+# Define constants
+DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data")
 
 from src.db.db import get_connection
 from src.models.permissions import require_permission_level, PermissionLevel

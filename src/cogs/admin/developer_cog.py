@@ -5,10 +5,13 @@ import os
 import json
 import datetime
 import traceback
-from typing import Optional, List, Dict, Any
+import sys
+import importlib
+from typing import Optional, List, Dict, Any, Literal
 
 from src.utils.config_manager import get_config, update_config
 from src.models.permissions import is_dev
+from src.db.db import get_connection
 
 class DeveloperCog(commands.Cog):
     """
@@ -304,7 +307,6 @@ class DeveloperCog(commands.Cog):
                 # Try to reload a specific module
                 module_path = f"src.{module}"
                 if module_path in sys.modules:
-                    import importlib
                     importlib.reload(sys.modules[module_path])
                     
                     await interaction.response.send_message(

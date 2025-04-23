@@ -37,6 +37,13 @@ class ColorMode(Enum):
     TRITANOPIA = "tritanopia"     # Blue-blind friendly
     MONOCHROME = "monochrome"     # Grayscale mode
 
+class AnimationLevel(Enum):
+    """Animation level options for UI elements."""
+    FULL = "full"               # All animations enabled
+    REDUCED = "reduced"         # Minimal animations for important elements
+    NONE = "none"               # No animations, static UI only
+    CRITICAL_ONLY = "critical"  # Only animations that convey critical information
+
 @dataclass
 class AccessibilitySettings:
     """User accessibility settings."""
@@ -44,6 +51,7 @@ class AccessibilitySettings:
     text_size: TextSize = TextSize.MEDIUM
     update_frequency: UpdateFrequency = UpdateFrequency.STANDARD
     color_mode: ColorMode = ColorMode.NORMAL
+    animation_level: AnimationLevel = AnimationLevel.FULL
     screen_reader_support: bool = False
     simplified_ui: bool = False
     extra_button_spacing: bool = False
@@ -72,6 +80,11 @@ class AccessibilitySettings:
             color_mode = ColorMode(data.get("color_mode", ColorMode.NORMAL.value))
         except ValueError:
             color_mode = ColorMode.NORMAL
+            
+        try:
+            animation_level = AnimationLevel(data.get("animation_level", AnimationLevel.FULL.value))
+        except ValueError:
+            animation_level = AnimationLevel.FULL
         
         # Extract boolean settings with defaults
         screen_reader = data.get("screen_reader_support", False)
@@ -88,6 +101,7 @@ class AccessibilitySettings:
             text_size=text_size,
             update_frequency=update_frequency,
             color_mode=color_mode,
+            animation_level=animation_level,
             screen_reader_support=screen_reader,
             simplified_ui=simplified_ui,
             extra_button_spacing=extra_spacing,
@@ -103,6 +117,7 @@ class AccessibilitySettings:
             "text_size": self.text_size.value,
             "update_frequency": self.update_frequency.value,
             "color_mode": self.color_mode.value,
+            "animation_level": self.animation_level.value,
             "screen_reader_support": self.screen_reader_support,
             "simplified_ui": self.simplified_ui,
             "extra_button_spacing": self.extra_button_spacing,
@@ -133,6 +148,13 @@ class AccessibilitySettings:
                 self.color_mode = ColorMode(settings["color_mode"])
             except ValueError:
                 logger.warning(f"Invalid color mode: {settings['color_mode']}")
+        
+        # Update animation level if valid
+        if "animation_level" in settings:
+            try:
+                self.animation_level = AnimationLevel(settings["animation_level"])
+            except ValueError:
+                logger.warning(f"Invalid animation level: {settings['animation_level']}")
         
         # Update boolean settings
         for key in [
@@ -173,6 +195,7 @@ class AccessibilityManager:
             text_size=TextSize.MEDIUM,
             update_frequency=UpdateFrequency.STANDARD,
             color_mode=ColorMode.NORMAL,
+            animation_level=AnimationLevel.FULL,
             screen_reader_support=False,
             simplified_ui=False,
             extra_button_spacing=False,
@@ -223,6 +246,7 @@ class AccessibilityManager:
                 text_size=self.default_settings.text_size,
                 update_frequency=self.default_settings.update_frequency,
                 color_mode=self.default_settings.color_mode,
+                animation_level=self.default_settings.animation_level,
                 screen_reader_support=self.default_settings.screen_reader_support,
                 simplified_ui=self.default_settings.simplified_ui,
                 extra_button_spacing=self.default_settings.extra_button_spacing,
@@ -247,6 +271,7 @@ class AccessibilityManager:
             text_size=self.default_settings.text_size,
             update_frequency=self.default_settings.update_frequency,
             color_mode=self.default_settings.color_mode,
+            animation_level=self.default_settings.animation_level,
             screen_reader_support=self.default_settings.screen_reader_support,
             simplified_ui=self.default_settings.simplified_ui,
             extra_button_spacing=self.default_settings.extra_button_spacing,

@@ -214,142 +214,177 @@ class DatabaseManager:
         except Exception as e:
             logger.error(f"Error during log cleanup: {e}")
     
-    def initialize_database(self) -> None:
+    def initialize_database(self):
         """Initialize the database with all required tables."""
         logger.info("Initializing database...")
         
-        conn = get_connection()
-        self.cursor = conn.cursor()
+        try:
+            # Check for locked database and make a backup if needed
+            if os.path.exists("data/veramon_reunited.db"):
+                try:
+                    # Try to open with timeout
+                    conn = sqlite3.connect("data/veramon_reunited.db", timeout=10.0)
+                    conn.close()
+                except sqlite3.OperationalError as e:
+                    if "database is locked" in str(e):
+                        logger.warning("Database appears to be locked. Creating backup and new database.")
+                        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                        backup_path = f"data/backups/veramon_reunited_{timestamp}.db"
+                        
+                        # Ensure backup directory exists
+                        os.makedirs("data/backups", exist_ok=True)
+                        
+                        # Try to copy the database file directly
+                        try:
+                            import shutil
+                            shutil.copy2("data/veramon_reunited.db", backup_path)
+                            logger.info(f"Created backup at {backup_path}")
+                        except Exception as copy_err:
+                            logger.error(f"Failed to create backup: {copy_err}")
+                        
+                        # Remove the locked database
+                        try:
+                            os.remove("data/veramon_reunited.db")
+                            logger.info("Removed locked database file")
+                        except Exception as rm_err:
+                            logger.error(f"Failed to remove locked database: {rm_err}")
+            
+            # Get a connection with extended timeout
+            conn = get_connection(timeout=30.0)
+            self.cursor = conn.cursor()
+            
+            # Create tables for all game systems
+            self.cursor.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    user_id TEXT PRIMARY KEY,
+                    username TEXT NOT NULL,
+                    tokens INTEGER DEFAULT 0,
+                    xp INTEGER DEFAULT 0,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    last_daily TIMESTAMP,
+                    last_explore TIMESTAMP
+                )
+            """)
+            
+            # Create developers table for admin permissions
+            self.cursor.execute("""
+                CREATE TABLE IF NOT EXISTS developers (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT UNIQUE NOT NULL,
+                    permission_level TEXT NOT NULL,
+                    added_at TIMESTAMP NOT NULL,
+                    added_by TEXT NOT NULL,
+                    notes TEXT
+                )
+            """)
+            
+            # Create the bot owner as a developer with OWNER permission level if not exists
+            self.cursor.execute("""
+                INSERT OR IGNORE INTO developers (user_id, permission_level, added_at, added_by, notes)
+                VALUES (?, 'OWNER', datetime('now'), 'SYSTEM', 'Bot owner, automatically added during initialization')
+            """, (self.get_bot_owner_id(),))
+            
+            # Create veramon_data table to store all veramon species data
+            self.cursor.execute("""
+                CREATE TABLE IF NOT EXISTS veramon_data (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT UNIQUE NOT NULL,
+                    types TEXT NOT NULL,
+                    description TEXT,
+                    abilities TEXT,
+                    evolution_level INTEGER,
+                    evolution_target TEXT,
+                    rarity TEXT DEFAULT 'common',
+                    base_hp INTEGER DEFAULT 100,
+                    base_attack INTEGER DEFAULT 50,
+                    base_defense INTEGER DEFAULT 50,
+                    base_special_attack INTEGER DEFAULT 50,
+                    base_special_defense INTEGER DEFAULT 50,
+                    base_speed INTEGER DEFAULT 50,
+                    catch_rate REAL DEFAULT 0.2,
+                    image_url TEXT
+                )
+            """)
+            
+            # Create captures table to store user captures
+            self.cursor.execute("""
+                CREATE TABLE IF NOT EXISTS captures (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT NOT NULL,
+                    veramon_name TEXT NOT NULL,
+                    nickname TEXT,
+                    level INTEGER DEFAULT 1,
+                    xp INTEGER DEFAULT 0,
+                    hp INTEGER,
+                    attack INTEGER,
+                    defense INTEGER,
+                    special_attack INTEGER,
+                    special_defense INTEGER,
+                    speed INTEGER,
+                    nature TEXT,
+                    caught_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    shiny BOOLEAN DEFAULT 0,
+                    form TEXT DEFAULT 'normal',
+                    biome TEXT,
+                    favorite BOOLEAN DEFAULT 0,
+                    moves TEXT,
+                    FOREIGN KEY (user_id) REFERENCES users(user_id),
+                    FOREIGN KEY (veramon_name) REFERENCES veramon_data(name)
+                )
+            """)
+            
+            # Create teams table for battle teams
+            self.cursor.execute("""
+                CREATE TABLE IF NOT EXISTS teams (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT NOT NULL,
+                    team_name TEXT NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    UNIQUE(user_id, team_name),
+                    FOREIGN KEY (user_id) REFERENCES users(user_id)
+                )
+            """)
+            
+            # Create team_members table to link teams and captures
+            self.cursor.execute("""
+                CREATE TABLE IF NOT EXISTS team_members (
+                    team_id INTEGER NOT NULL,
+                    capture_id INTEGER NOT NULL,
+                    position INTEGER NOT NULL,
+                    PRIMARY KEY (team_id, position),
+                    FOREIGN KEY (team_id) REFERENCES teams(id),
+                    FOREIGN KEY (capture_id) REFERENCES captures(id)
+                )
+            """)
+            
+            # Create battles table
+            self.cursor.execute("""
+                CREATE TABLE IF NOT EXISTS battles (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    battle_type TEXT NOT NULL,
+                    participant1_id TEXT NOT NULL,
+                    participant2_id TEXT,
+                    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    ended_at TIMESTAMP,
+                    winner_id TEXT,
+                    status TEXT DEFAULT 'pending',
+                    log TEXT,
+                    FOREIGN KEY (participant1_id) REFERENCES users(user_id),
+                    FOREIGN KEY (participant2_id) REFERENCES users(user_id),
+                    FOREIGN KEY (winner_id) REFERENCES users(user_id)
+                )
+            """)
+            
+            # Set database version
+            self._set_db_version(CURRENT_DB_VERSION)
+            
+            conn.commit()
+            conn.close()
+            
+            logger.info("Database initialization complete.")
         
-        # Create tables for all game systems
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                user_id TEXT PRIMARY KEY,
-                username TEXT NOT NULL,
-                tokens INTEGER DEFAULT 0,
-                xp INTEGER DEFAULT 0,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                last_daily TIMESTAMP,
-                last_explore TIMESTAMP
-            )
-        """)
-        
-        # Create developers table for admin permissions
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS developers (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id TEXT UNIQUE NOT NULL,
-                permission_level TEXT NOT NULL,
-                added_at TIMESTAMP NOT NULL,
-                added_by TEXT NOT NULL,
-                notes TEXT
-            )
-        """)
-        
-        # Create the bot owner as a developer with OWNER permission level if not exists
-        self.cursor.execute("""
-            INSERT OR IGNORE INTO developers (user_id, permission_level, added_at, added_by, notes)
-            VALUES (?, 'OWNER', datetime('now'), 'SYSTEM', 'Bot owner, automatically added during initialization')
-        """, (self.get_bot_owner_id(),))
-        
-        # Create veramon_data table to store all veramon species data
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS veramon_data (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT UNIQUE NOT NULL,
-                types TEXT NOT NULL,
-                description TEXT,
-                abilities TEXT,
-                evolution_level INTEGER,
-                evolution_target TEXT,
-                rarity TEXT DEFAULT 'common',
-                base_hp INTEGER DEFAULT 100,
-                base_attack INTEGER DEFAULT 50,
-                base_defense INTEGER DEFAULT 50,
-                base_special_attack INTEGER DEFAULT 50,
-                base_special_defense INTEGER DEFAULT 50,
-                base_speed INTEGER DEFAULT 50,
-                catch_rate REAL DEFAULT 0.2,
-                image_url TEXT
-            )
-        """)
-        
-        # Create captures table to store user captures
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS captures (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id TEXT NOT NULL,
-                veramon_name TEXT NOT NULL,
-                nickname TEXT,
-                level INTEGER DEFAULT 1,
-                xp INTEGER DEFAULT 0,
-                hp INTEGER,
-                attack INTEGER,
-                defense INTEGER,
-                special_attack INTEGER,
-                special_defense INTEGER,
-                speed INTEGER,
-                nature TEXT,
-                caught_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                shiny BOOLEAN DEFAULT 0,
-                form TEXT DEFAULT 'normal',
-                biome TEXT,
-                favorite BOOLEAN DEFAULT 0,
-                moves TEXT,
-                FOREIGN KEY (user_id) REFERENCES users(user_id),
-                FOREIGN KEY (veramon_name) REFERENCES veramon_data(name)
-            )
-        """)
-        
-        # Create teams table for battle teams
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS teams (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id TEXT NOT NULL,
-                team_name TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(user_id, team_name),
-                FOREIGN KEY (user_id) REFERENCES users(user_id)
-            )
-        """)
-        
-        # Create team_members table to link teams and captures
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS team_members (
-                team_id INTEGER NOT NULL,
-                capture_id INTEGER NOT NULL,
-                position INTEGER NOT NULL,
-                PRIMARY KEY (team_id, position),
-                FOREIGN KEY (team_id) REFERENCES teams(id),
-                FOREIGN KEY (capture_id) REFERENCES captures(id)
-            )
-        """)
-        
-        # Create battles table
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS battles (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                battle_type TEXT NOT NULL,
-                participant1_id TEXT NOT NULL,
-                participant2_id TEXT,
-                started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                ended_at TIMESTAMP,
-                winner_id TEXT,
-                status TEXT DEFAULT 'pending',
-                log TEXT,
-                FOREIGN KEY (participant1_id) REFERENCES users(user_id),
-                FOREIGN KEY (participant2_id) REFERENCES users(user_id),
-                FOREIGN KEY (winner_id) REFERENCES users(user_id)
-            )
-        """)
-        
-        # Set database version
-        self._set_db_version(CURRENT_DB_VERSION)
-        
-        conn.commit()
-        conn.close()
-        
-        logger.info("Database initialization complete.")
+        except Exception as e:
+            logger.error(f"Error initializing database: {e}")
     
     def reset_database(self, confirm_text: str = None) -> bool:
         """

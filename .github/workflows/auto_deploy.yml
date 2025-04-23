@@ -62,29 +62,28 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       
-    - name: Set current date as env variable
+    - name: Set current date
+      id: date
       run: echo "BUILD_DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
       
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-    
-    - name: Login to DockerHub
-      uses: docker/login-action@v2
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_TOKEN }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
     
-    - name: Build and push
-      uses: docker/build-push-action@v4
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+      
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
       with:
         context: .
         file: ./docker/Dockerfile
         push: true
         tags: |
-          ${{ secrets.DOCKER_USERNAME }}/veramon-bot:latest
-          ${{ secrets.DOCKER_USERNAME }}/veramon-bot:${{ env.BUILD_DATE }}
-        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/veramon-bot:buildcache
-        cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/veramon-bot:buildcache,mode=max
+          ${{ secrets.DOCKERHUB_USERNAME }}/veramon-bot:latest
+          ${{ secrets.DOCKERHUB_USERNAME }}/veramon-bot:${{ env.BUILD_DATE }}
   
   deploy:
     runs-on: ubuntu-latest
@@ -92,56 +91,67 @@ jobs:
     environment: ${{ github.event.inputs.environment || 'production' }}
     
     steps:
-    - name: Deploy to server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USERNAME }}
-        key: ${{ secrets.SERVER_KEY }}
-        script_stop: true
-        script: |
-          # Create deployment directory if needed
-          mkdir -p /opt/veramon-bot
-          cd /opt/veramon-bot
-          
-          # Backup previous .env file if it exists
-          if [ -f .env ]; then
-            cp .env .env.backup
-          else
-            # Create .env file if it doesn't exist
-            cat > .env << 'EOF'
-          BOT_TOKEN=${{ secrets.BOT_TOKEN }}
-          COMMAND_PREFIX=!
-          DATABASE_PATH=data/veramon_reunited.db
-          DEBUG_MODE=False
-          MAINTENANCE_MODE=False
-          LOG_LEVEL=INFO
-          EOF
-          fi
-          
-          # Create necessary directories
-          mkdir -p data logs battle-system battle-trading factions events quests tournaments
-          chmod -R 777 data logs battle-system battle-trading factions events quests tournaments
-          
-          # Download the latest docker-compose file
-          wget -O docker-compose.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker/docker-compose.yml
-          
-          # Pull the new image
-          docker pull ${{ secrets.DOCKER_USERNAME }}/veramon-bot:latest
-          
-          # Restart the container
-          docker-compose down || true
-          docker-compose up -d
-          
-          # Check if the bot is running properly
-          sleep 10
-          if ! docker ps | grep veramon-bot; then
-            echo "Error: Bot failed to start"
-            docker logs veramon-bot --tail 50
-            exit 1
-          fi
-          
-          # Clean up old images
-          docker image prune -af --filter "until=24h"
-          
-          echo "Deployment successful!"
+    - name: Deploy to server using sshpass
+      uses: actions/checkout@v3  # Just to get a workspace
+      
+    - name: Install sshpass
+      run: sudo apt-get install -y sshpass
+      
+    - name: Deploy via SSH with password
+      run: |
+        # Create deployment script
+        cat > deploy.sh << EOF
+        #!/bin/bash
+        # Create deployment directory if needed
+        mkdir -p ${{ secrets.DEPLOY_PATH }}
+        cd ${{ secrets.DEPLOY_PATH }}
+        
+        # Backup previous .env file if it exists
+        if [ -f .env ]; then
+          cp .env .env.backup
+        else
+          # Create .env file if it doesn't exist
+          cat > .env << 'ENVEOF'
+        BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+        COMMAND_PREFIX=!
+        DATABASE_PATH=data/veramon_reunited.db
+        DEBUG_MODE=False
+        MAINTENANCE_MODE=False
+        LOG_LEVEL=INFO
+        ENVEOF
+        fi
+        
+        # Create necessary directories for all systems
+        mkdir -p data logs battle-system battle-trading factions events quests tournaments
+        chmod -R 777 data logs battle-system battle-trading factions events quests tournaments
+        
+        # Download the latest docker-compose file
+        wget -O docker-compose.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker/docker-compose.yml
+        
+        # Pull the new image
+        docker pull ${{ secrets.DOCKERHUB_USERNAME }}/veramon-bot:latest
+        
+        # Restart the container
+        docker-compose down || true
+        docker-compose up -d
+        
+        # Check if the bot is running properly
+        sleep 10
+        if ! docker ps | grep veramon-bot; then
+          echo "Error: Bot failed to start"
+          docker logs veramon-bot --tail 50
+          exit 1
+        fi
+        
+        # Clean up old images
+        docker image prune -af --filter "until=24h"
+        
+        echo "Deployment successful!"
+        EOF
+        
+        chmod +x deploy.sh
+        
+        # Use sshpass to copy and execute the script
+        export SSHPASS=${{ secrets.SERVER_PASSWORD }}
+        sshpass -e scp -o StrictHostKeyChecking=no deploy.sh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}:/tmp/deploy.sh
+        sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "bash /tmp/deploy.sh"

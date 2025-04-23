@@ -25,7 +25,7 @@ VERSION = "v0.44.0"
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 
-intents = commands.Intents.default()
+intents = discord.Intents.default()
 intents.message_content = True
 intents.guilds = True
 

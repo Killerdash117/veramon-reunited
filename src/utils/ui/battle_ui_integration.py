@@ -119,7 +119,7 @@ class BattleUIIntegration:
         # Create the embed with theme
         embed = theme.create_embed(
             title=title,
-            description=f"Turn {turn_count}\n{'Your turn' if current_turn == user_id else \"Opponent's turn\"}",
+            description=f"Turn {turn_count}\n" + ("Your turn" if current_turn == user_id else "Opponent's turn"),
             color_type=ThemeColorType.DANGER if battle_type == "wild" else ThemeColorType.PRIMARY
         )
         

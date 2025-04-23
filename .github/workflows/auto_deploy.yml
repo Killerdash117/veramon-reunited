@@ -1,4 +1,4 @@
-name: Auto Deploy Veramon Bot
+name: Veramon Bot Deployment
 
 on:
   push:
@@ -54,142 +54,68 @@ jobs:
         pip install pytest
         if [ -d tests ]; then pytest -v; fi
   
-  deploy:
+  generate_deployment_guide:
     runs-on: ubuntu-latest
     needs: test
-    environment: ${{ github.event.inputs.environment || 'production' }}
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      
-    - name: Set up environment for deployment
+    
+    - name: Generate detailed deployment guide
       run: |
-        echo "BUILD_DATE=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
-        
-    - name: Install sshpass and other dependencies
-      run: sudo apt-get update && sudo apt-get install -y sshpass
-      
-    - name: Create deployment instructions
-      run: |
-        echo "===== VERAMON REUNITED DEPLOYMENT INSTRUCTIONS ====="
+        echo "===== VERAMON REUNITED DEPLOYMENT GUIDE ====="
         echo ""
-        echo "Follow these steps to deploy your bot:"
+        echo "Follow these steps to manually deploy your Veramon bot:"
         echo ""
-        echo "1. Connect to your server:"
-        echo "   ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}"
+        echo "1. Connect to your server via SSH"
         echo ""
         echo "2. Create the deployment directory:"
-        echo "   mkdir -p ${{ secrets.DEPLOY_PATH }}"
-        echo "   cd ${{ secrets.DEPLOY_PATH }}"
+        echo "   mkdir -p /opt/veramon-bot"
+        echo "   cd /opt/veramon-bot"
         echo ""
-        echo "3. Create .env file:"
+        echo "3. Create the .env file with your bot token and settings:"
         echo "   cat > .env << 'EOF'"
-        echo "   BOT_TOKEN=${{ secrets.BOT_TOKEN }}"
+        echo "   BOT_TOKEN=your_discord_bot_token_here"
         echo "   COMMAND_PREFIX=!"
         echo "   DATABASE_PATH=data/veramon_reunited.db"
-        echo "   DEBUG_MODE=False"
+        echo "   DEBUG_MODE=True"
         echo "   MAINTENANCE_MODE=False"
-        echo "   LOG_LEVEL=INFO"
+        echo "   LOG_LEVEL=DEBUG"
         echo "   EOF"
         echo ""
-        echo "4. Create necessary directories:"
+        echo "4. Create necessary directories for all systems:"
         echo "   mkdir -p data logs battle-system battle-trading factions events quests tournaments"
         echo "   chmod -R 777 data logs battle-system battle-trading factions events quests tournaments"
         echo ""
         echo "5. Get the docker-compose file:"
         echo "   wget -O docker-compose.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker/docker-compose.yml"
         echo ""
-        echo "6. Pull the latest image (if using Docker Hub):"
-        echo "   docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p [your-password]"
-        echo "   docker pull ${{ secrets.DOCKERHUB_USERNAME }}/veramon-bot:latest"
+        echo "6. Build or pull the Docker image:"
+        echo "   Option A - Build locally:"
+        echo "   git clone https://github.com/${{ github.repository }}.git /tmp/veramon-clone"
+        echo "   cd /tmp/veramon-clone"
+        echo "   docker build -t veramon-bot:latest -f docker/Dockerfile ."
+        echo ""
+        echo "   Option B - Pull from Docker Hub (if you've pushed it there):"
+        echo "   docker pull your-dockerhub-username/veramon-bot:latest"
         echo ""
         echo "7. Start the bot:"
+        echo "   cd /opt/veramon-bot"
         echo "   docker-compose down || true"
         echo "   docker-compose up -d"
         echo ""
-        echo "===== VERIFICATION STEPS ====="
-        echo "Check if the bot is running:"
-        echo "   docker ps | grep veramon-bot"
+        echo "8. Verify the bot is running:"
+        echo "   docker ps -a"
         echo "   docker logs veramon-bot"
         echo ""
-        
-    - name: Attempt auto deployment
-      continue-on-error: true
-      run: |
-        # Create deployment script with debugging
-        cat > deploy.sh << 'EOF'
-        #!/bin/bash
-        set -x  # Enable command echo for debugging
-        
-        mkdir -p ${{ secrets.DEPLOY_PATH }}
-        cd ${{ secrets.DEPLOY_PATH }}
-        
-        # Create .env file
-        cat > .env << 'ENVEOF'
-        BOT_TOKEN=${{ secrets.BOT_TOKEN }}
-        COMMAND_PREFIX=!
-        DATABASE_PATH=data/veramon_reunited.db
-        DEBUG_MODE=True
-        MAINTENANCE_MODE=False
-        LOG_LEVEL=DEBUG
-        ENVEOF
-        
-        # Create necessary directories
-        mkdir -p data logs battle-system battle-trading factions events quests tournaments
-        chmod -R 777 data logs battle-system battle-trading factions events quests tournaments
-        
-        # Get docker-compose file
-        wget -O docker-compose.yml https://raw.githubusercontent.com/${{ github.repository }}/main/docker/docker-compose.yml
-        echo "Docker compose file contents:"
-        cat docker-compose.yml
-        
-        # Check if Docker image exists
-        echo "Checking if Docker image exists..."
-        if docker pull ${{ secrets.DOCKERHUB_USERNAME }}/veramon-bot:latest; then
-          echo "Docker image found and pulled successfully"
-        else
-          echo "Docker image not found or failed to pull"
-          echo "Attempting to build image locally..."
-          
-          # Try to clone the repo and build image locally
-          cd /tmp
-          git clone https://github.com/${{ github.repository }}.git veramon-clone
-          cd veramon-clone
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/veramon-bot:latest -f docker/Dockerfile .
-          cd ${{ secrets.DEPLOY_PATH }}
-        fi
-        
-        # Restart the container with logs
-        docker-compose down || true
-        docker-compose up -d
-        
-        # Wait for container to start and collect logs
-        sleep 15
-        echo "Container status:"
-        docker ps -a | grep veramon
-        
-        echo "Container logs:"
-        docker logs veramon-bot
-        
-        echo "Deployment completed!"
-        EOF
-        
-        chmod +x deploy.sh
-        
-        # Debug GitHub secrets (without showing their values)
-        echo "Checking if SERVER_HOST is set..."
-        if [ -z "${{ secrets.SERVER_HOST }}" ]; then
-          echo "ERROR: SERVER_HOST is empty!"
-        else
-          echo "SERVER_HOST is set. Attempting SSH connection."
-        fi
-        
-        # Attempt to deploy using password with explicit variables
-        SERVER_HOST="${{ secrets.SERVER_HOST }}"
-        SERVER_USER="${{ secrets.SERVER_USERNAME }}"
-        export SSHPASS="${{ secrets.SERVER_PASSWORD }}"
-        
-        echo "Connecting to $SERVER_USER@$SERVER_HOST..."
-        sshpass -e scp -o StrictHostKeyChecking=no deploy.sh "$SERVER_USER@$SERVER_HOST:/tmp/deploy.sh"
-        sshpass -e ssh -o StrictHostKeyChecking=no "$SERVER_USER@$SERVER_HOST" "cd /tmp && bash deploy.sh"
+        echo "===== FEATURES INCLUDED ====="
+        echo "- Battle System (PvP, PvE, turn-based combat)"
+        echo "- Trading System (secure player-to-player trading)"
+        echo "- Faction System (territories, ranks, faction wars)"
+        echo "- Quest System (achievements, progression)"
+        echo "- Special Events (seasonal content, tournaments)"
+        echo ""
+        echo "If the bot doesn't come online, check the logs with 'docker logs veramon-bot'"
+        echo "The most common issues are invalid bot tokens or Docker image problems."
+        echo ""

@@ -27,3 +27,8 @@ var/
 .installed.cfg
 *.egg
 *.log
+
+# Deployment scripts with sensitive information
+deploy_bot.ps1
+*deploy*.ps1
+*deploy*.sh

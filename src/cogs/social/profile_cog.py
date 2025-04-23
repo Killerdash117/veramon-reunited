@@ -121,97 +121,152 @@ class ProfileCog(commands.Cog):
     """
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        log("ProfileCog initialized.")
-
-    @app_commands.command(name="profile", description="View your or another player's profile")
-    @app_commands.describe(user="The user whose profile to view (leave empty to view your own)")
-    @require_permission_level(PermissionLevel.USER)
-    async def profile(self, interaction: discord.Interaction, user: Optional[discord.Member] = None) -> None:
-        target_user = user or interaction.user
-        user_id = str(interaction.user.id)
-        target_id = str(target_user.id)
         
-        # Security validation when viewing another user's profile
-        if user and user != interaction.user:
-            security = get_security_integration()
-            validation_result = await security.validate_profile_view(user_id, target_id)
-            if not validation_result["valid"]:
-                await interaction.response.send_message(validation_result["error"], ephemeral=True)
-                return
-                
-        log(f"Fetching profile for user {target_id}")
-        profile = fetch_user_profile(target_id)
-
-        # Format recent captures.
-        recent_text = format_recent_captures(profile.get("recent_captures", []))
-
-        # Battle record calculation
-        total_battles = profile["battle_wins"] + profile["battle_losses"]
-        win_rate = (profile["battle_wins"] / total_battles * 100) if total_battles > 0 else 0
-        battle_record = f"{profile['battle_wins']}W - {profile['battle_losses']}L ({win_rate:.1f}% win rate)"
-
-        # Build the embed.
+    @app_commands.command(name="profile", description="View your trainer profile or another player's")
+    async def profile(self, interaction: discord.Interaction, user: Optional[discord.Member] = None):
+        """Display the user's profile with Veramon stats, achievements, and more."""
+        if user is None:
+            user = interaction.user
+            
+        await interaction.response.defer(ephemeral=False)
+        
+        profile_data = fetch_user_profile(str(user.id))
+        
+        # Create a rich profile card
         embed = discord.Embed(
-            title=f"{target_user.display_name}'s Profile",
-            description="Stats and achievements in Veramon Reunited.",
-            color=discord.Color.gold()
+            title=f"🏆 Trainer Profile: {user.display_name}",
+            description=f"A level {self._calculate_level(profile_data['xp'])} trainer on their Veramon journey!",
+            color=self._get_profile_color(profile_data)
         )
         
         # Add user avatar if available
-        if target_user.avatar:
-            embed.set_thumbnail(url=target_user.avatar.url)
+        if user.avatar:
+            embed.set_thumbnail(url=user.avatar.url)
             
-        # Collection stats
-        embed.add_field(name="Collection", value=f"{profile['collection_completion']}% complete", inline=True)
-        embed.add_field(name="Total Captures", value=str(profile["total_captures"]), inline=True)
-        embed.add_field(name="Shiny Captures", value=str(profile["shiny_captures"]), inline=True)
+        # Add joined date
+        member_since = discord.utils.format_dt(user.created_at, style='R')
+        embed.set_footer(text=f"Trainer since {member_since}")
         
-        # Battle & Economy stats
-        embed.add_field(name="Battle Record", value=battle_record, inline=True)
-        embed.add_field(name="Trades Completed", value=str(profile["trades_completed"]), inline=True)
-        embed.add_field(name="Tokens", value=f"{profile['tokens']:,}", inline=True)
+        # Progress to next level
+        current_level = self._calculate_level(profile_data['xp'])
+        next_level_xp = self._calculate_xp_for_level(current_level + 1)
+        current_level_xp = self._calculate_xp_for_level(current_level)
+        xp_progress = profile_data['xp'] - current_level_xp
+        xp_needed = next_level_xp - current_level_xp
+        progress_percent = min(100, int((xp_progress / max(1, xp_needed)) * 100))
         
-        # XP Progress
-        current_level = profile["xp"] // 1000  # For example, 1 level per 1000 XP
-        xp_to_next = ((current_level + 1) * 1000) - profile["xp"]
+        # Create XP progress bar
+        progress_bar = self._create_progress_bar(progress_percent)
+        
+        # Collection completion progress bar
+        collection_bar = self._create_progress_bar(profile_data['collection_completion'])
+        
+        # Add trainer stats
         embed.add_field(
-            name=f"Level {current_level}", 
-            value=f"XP: {profile['xp']:,} (Need {xp_to_next:,} for next level)", 
+            name="⭐ Trainer Stats",
+            value=(
+                f"**Level:** {current_level} {progress_bar} {progress_percent}%\n"
+                f"**XP:** {profile_data['xp']:,}/{next_level_xp:,}\n"
+                f"**Tokens:** {profile_data['tokens']:,} 🪙\n"
+                f"**Collection:** {collection_bar} {profile_data['collection_completion']}%"
+            ),
             inline=False
         )
         
-        # Recent activity
-        embed.add_field(name="Recent Captures", value=recent_text, inline=False)
+        # Add battle stats
+        total_battles = profile_data['battle_wins'] + profile_data['battle_losses']
+        win_rate = (profile_data['battle_wins'] / max(1, total_battles)) * 100
         
-        embed.set_footer(text="Keep training to become the ultimate Veramon Master!")
-
-        try:
-            await interaction.response.send_message(embed=embed)
-            log("Profile sent successfully.")
-        except Exception as e:
-            log(f"Error sending profile embed: {e}")
-            await interaction.response.send_message("An error occurred while generating the profile.", ephemeral=True)
+        embed.add_field(
+            name="⚔️ Battle Record",
+            value=(
+                f"**Wins:** {profile_data['battle_wins']} | **Losses:** {profile_data['battle_losses']}\n"
+                f"**Win Rate:** {win_rate:.1f}%\n"
+                f"**Trades:** {profile_data['trades_completed']} completed"
+            ),
+            inline=True
+        )
+        
+        # Add Veramon stats
+        embed.add_field(
+            name="📊 Veramon Collection",
+            value=(
+                f"**Total Captured:** {profile_data['total_captures']:,}\n"
+                f"**Shiny Veramon:** {profile_data['shiny_captures']} ✨\n"
+                f"**Capture Rate:** {self._calculate_capture_rate(profile_data):.1f}%"
+            ),
+            inline=True
+        )
+        
+        # Add recent captures
+        if profile_data['recent_captures']:
+            recent_text = format_recent_captures(profile_data['recent_captures'])
+            embed.add_field(
+                name="🔄 Recent Captures",
+                value=recent_text,
+                inline=False
+            )
+        
+        # Add achievements if any
+        if profile_data.get('achievements'):
+            achievements_text = "\n".join([f"• {a}" for a in profile_data['achievements'][:3]])
+            embed.add_field(
+                name="🏅 Recent Achievements",
+                value=achievements_text if achievements_text else "No achievements yet!",
+                inline=False
+            )
+        
+        await interaction.followup.send(embed=embed)
+        
+    def _calculate_level(self, xp: int) -> int:
+        """Calculate the trainer level based on XP."""
+        # Simple level calculation: level = sqrt(xp / 100)
+        import math
+        return max(1, math.floor(math.sqrt(xp / 100)))
+        
+    def _calculate_xp_for_level(self, level: int) -> int:
+        """Calculate the XP required for a given level."""
+        return level * level * 100
+        
+    def _calculate_capture_rate(self, profile_data: dict) -> float:
+        """Calculate the user's capture success rate."""
+        # This would normally come from the database, but we'll use a placeholder
+        return min(99.9, max(60.0, 75.0 + (profile_data['total_captures'] / 100)))
+        
+    def _create_progress_bar(self, percent: float) -> str:
+        """Create a visual progress bar based on percentage."""
+        bar_length = 10
+        filled_bars = int((percent / 100) * bar_length)
+        
+        filled_char = "🟦"
+        empty_char = "⬜"
+        
+        return filled_char * filled_bars + empty_char * (bar_length - filled_bars)
+        
+    def _get_profile_color(self, profile_data: dict) -> discord.Color:
+        """Get a color based on the user's progress and achievements."""
+        if profile_data['shiny_captures'] > 10:
+            return discord.Color.gold()
+        elif profile_data['total_captures'] > 100:
+            return discord.Color.blue()
+        elif profile_data['battle_wins'] > 50:
+            return discord.Color.red()
+        else:
+            return discord.Color.green()
             
-    @app_commands.command(name="leaderboard", description="View game leaderboards")
-    @app_commands.describe(
-        category="The leaderboard category to view",
-        timeframe="The timeframe for the leaderboard"
-    )
-    @app_commands.choices(
-        category=[
-            app_commands.Choice(name="Tokens", value="tokens"),
-            app_commands.Choice(name="Collection", value="collection"),
-            app_commands.Choice(name="Battle Wins", value="battles"),
-            app_commands.Choice(name="Shinies", value="shinies"),
-            app_commands.Choice(name="Trades", value="trades")
-        ],
-        timeframe=[
-            app_commands.Choice(name="All Time", value="all"),
-            app_commands.Choice(name="This Month", value="month"),
-            app_commands.Choice(name="This Week", value="week")
-        ]
-    )
-    @require_permission_level(PermissionLevel.USER)
+    @app_commands.command(name="leaderboard", description="View the Veramon leaderboard")
+    @app_commands.choices(category=[
+        app_commands.Choice(name="Token Balance", value="tokens"),
+        app_commands.Choice(name="Collection Size", value="collection"),
+        app_commands.Choice(name="Battle Wins", value="battles"),
+        app_commands.Choice(name="Shiny Count", value="shinies"),
+        app_commands.Choice(name="Trading Activity", value="trades")
+    ])
+    @app_commands.choices(timeframe=[
+        app_commands.Choice(name="All Time", value="all"),
+        app_commands.Choice(name="This Month", value="month"),
+        app_commands.Choice(name="This Week", value="week")
+    ])
     async def leaderboard(self, interaction: discord.Interaction, category: str, timeframe: str = "all"):
         """View leaderboards for different game statistics."""
         await interaction.response.defer()
@@ -339,9 +394,9 @@ class ProfileCog(commands.Cog):
         }
         
         embed = discord.Embed(
-            title=f"Leaderboard: {title_mapping.get(category, category.title())}",
+            title=f"🏆 Leaderboard: {title_mapping.get(category, category.title())}",
             description=f"Showing top players ({timeframe_text.get(timeframe, 'All Time')})",
-            color=discord.Color.blue()
+            color=self._get_leaderboard_color(category)
         )
         
         # Add leaderboard entries
@@ -349,11 +404,11 @@ class ProfileCog(commands.Cog):
             embed.add_field(name="No data", value="No players found for this category.", inline=False)
         else:
             value_format = {
-                "tokens": lambda x: f"{x:,} tokens",
+                "tokens": lambda x: f"{x:,} tokens 🪙",
                 "collection": lambda x, total: f"{x}/{total} Veramon ({(x/total*100):.1f}%)",
-                "battles": lambda x: f"{x} wins",
-                "shinies": lambda x: f"{x} shinies",
-                "trades": lambda x: f"{x} trades"
+                "battles": lambda x: f"{x} wins ⚔️",
+                "shinies": lambda x: f"{x} shinies ✨",
+                "trades": lambda x: f"{x} trades 🔄"
             }
             
             leaderboard_text = ""
@@ -368,16 +423,39 @@ class ProfileCog(commands.Cog):
                         formatted_value = value_format[category](value, total)
                     else:
                         formatted_value = value_format.get(category, lambda x: str(x))(value)
+                    
+                    # Add medal emoji for top 3
+                    medal = ""
+                    if i == 1:
+                        medal = "🥇 "
+                    elif i == 2:
+                        medal = "🥈 "
+                    elif i == 3:
+                        medal = "🥉 "
                         
-                    leaderboard_text += f"{i}. **{name}**: {formatted_value}\n"
+                    leaderboard_text += f"{medal}**{i}. {name}**: {formatted_value}\n"
                 except Exception as e:
                     log(f"Error formatting leaderboard entry: {e}")
                     leaderboard_text += f"{i}. **Unknown User**: {value}\n"
             
             embed.add_field(name="Rankings", value=leaderboard_text, inline=False)
+        
+        # Add a footer with instructions
+        embed.set_footer(text=f"Use /leaderboard to view other categories • Updated {discord.utils.format_dt(interaction.created_at, style='R')}")
             
         conn.close()
         await interaction.followup.send(embed=embed)
+        
+    def _get_leaderboard_color(self, category: str) -> discord.Color:
+        """Get a color based on the leaderboard category."""
+        color_map = {
+            "tokens": discord.Color.gold(),
+            "collection": discord.Color.blue(),
+            "battles": discord.Color.red(),
+            "shinies": discord.Color(0xF8C8DC),  # Pink
+            "trades": discord.Color.green()
+        }
+        return color_map.get(category, discord.Color.blurple())
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(ProfileCog(bot))

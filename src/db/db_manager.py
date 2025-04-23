@@ -218,18 +218,136 @@ class DatabaseManager:
         """Initialize the database with all required tables."""
         logger.info("Initializing database...")
         
+        conn = get_connection()
+        self.cursor = conn.cursor()
+        
         # Create tables for all game systems
-        self._initialize_core_tables()
-        self._initialize_veramon_tables()
-        self._initialize_user_tables()
-        self._initialize_battle_tables()
-        self._initialize_trading_tables()
-        self._initialize_faction_tables()
-        self._initialize_quest_tables()
-        self._initialize_security_tables()
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                user_id TEXT PRIMARY KEY,
+                username TEXT NOT NULL,
+                tokens INTEGER DEFAULT 0,
+                xp INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                last_daily TIMESTAMP,
+                last_explore TIMESTAMP
+            )
+        """)
+        
+        # Create developers table for admin permissions
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS developers (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT UNIQUE NOT NULL,
+                permission_level TEXT NOT NULL,
+                added_at TIMESTAMP NOT NULL,
+                added_by TEXT NOT NULL,
+                notes TEXT
+            )
+        """)
+        
+        # Create the bot owner as a developer with OWNER permission level if not exists
+        self.cursor.execute("""
+            INSERT OR IGNORE INTO developers (user_id, permission_level, added_at, added_by, notes)
+            VALUES (?, 'OWNER', datetime('now'), 'SYSTEM', 'Bot owner, automatically added during initialization')
+        """, (self.get_bot_owner_id(),))
+        
+        # Create veramon_data table to store all veramon species data
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS veramon_data (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT UNIQUE NOT NULL,
+                types TEXT NOT NULL,
+                description TEXT,
+                abilities TEXT,
+                evolution_level INTEGER,
+                evolution_target TEXT,
+                rarity TEXT DEFAULT 'common',
+                base_hp INTEGER DEFAULT 100,
+                base_attack INTEGER DEFAULT 50,
+                base_defense INTEGER DEFAULT 50,
+                base_special_attack INTEGER DEFAULT 50,
+                base_special_defense INTEGER DEFAULT 50,
+                base_speed INTEGER DEFAULT 50,
+                catch_rate REAL DEFAULT 0.2,
+                image_url TEXT
+            )
+        """)
+        
+        # Create captures table to store user captures
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS captures (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT NOT NULL,
+                veramon_name TEXT NOT NULL,
+                nickname TEXT,
+                level INTEGER DEFAULT 1,
+                xp INTEGER DEFAULT 0,
+                hp INTEGER,
+                attack INTEGER,
+                defense INTEGER,
+                special_attack INTEGER,
+                special_defense INTEGER,
+                speed INTEGER,
+                nature TEXT,
+                caught_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                shiny BOOLEAN DEFAULT 0,
+                form TEXT DEFAULT 'normal',
+                biome TEXT,
+                favorite BOOLEAN DEFAULT 0,
+                moves TEXT,
+                FOREIGN KEY (user_id) REFERENCES users(user_id),
+                FOREIGN KEY (veramon_name) REFERENCES veramon_data(name)
+            )
+        """)
+        
+        # Create teams table for battle teams
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS teams (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT NOT NULL,
+                team_name TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(user_id, team_name),
+                FOREIGN KEY (user_id) REFERENCES users(user_id)
+            )
+        """)
+        
+        # Create team_members table to link teams and captures
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS team_members (
+                team_id INTEGER NOT NULL,
+                capture_id INTEGER NOT NULL,
+                position INTEGER NOT NULL,
+                PRIMARY KEY (team_id, position),
+                FOREIGN KEY (team_id) REFERENCES teams(id),
+                FOREIGN KEY (capture_id) REFERENCES captures(id)
+            )
+        """)
+        
+        # Create battles table
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS battles (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                battle_type TEXT NOT NULL,
+                participant1_id TEXT NOT NULL,
+                participant2_id TEXT,
+                started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                ended_at TIMESTAMP,
+                winner_id TEXT,
+                status TEXT DEFAULT 'pending',
+                log TEXT,
+                FOREIGN KEY (participant1_id) REFERENCES users(user_id),
+                FOREIGN KEY (participant2_id) REFERENCES users(user_id),
+                FOREIGN KEY (winner_id) REFERENCES users(user_id)
+            )
+        """)
         
         # Set database version
         self._set_db_version(CURRENT_DB_VERSION)
+        
+        conn.commit()
+        conn.close()
         
         logger.info("Database initialization complete.")
     
@@ -763,379 +881,46 @@ class DatabaseManager:
         finally:
             conn.close()
     
-    def _initialize_core_tables(self) -> None:
-        """Initialize core database tables."""
-        conn = get_connection()
-        cursor = conn.cursor()
+    def get_bot_owner_id(self):
+        """Get the bot owner's user ID from environment variables or config.
+        If not found, return a placeholder that will be updated later.
+        """
+        import os
+        from dotenv import load_dotenv
         
-        # Metadata table for database versioning and configuration
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS db_metadata (
-                key TEXT PRIMARY KEY,
-                value TEXT NOT NULL,
-                updated_at TEXT NOT NULL
-            )
-        """)
+        # Try to load from .env file
+        load_dotenv()
         
-        # Create directories needed for data
-        os.makedirs("data", exist_ok=True)
+        # Get owner ID from environment variable
+        owner_id = os.getenv("BOT_OWNER_ID") 
         
-        conn.commit()
-        conn.close()
-    
-    def _initialize_user_tables(self) -> None:
-        """Initialize user-related tables."""
-        conn = get_connection()
-        cursor = conn.cursor()
+        if not owner_id:
+            # Use your user ID as a fallback
+            owner_id = "killerdash117"
+            print(f"⚠️ BOT_OWNER_ID not found in environment variables. Using {owner_id} as placeholder.")
         
-        # Users table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS users (
-                user_id TEXT PRIMARY KEY,
-                username TEXT,
-                tokens INTEGER DEFAULT 0,
-                last_daily_claim REAL DEFAULT 0,
-                daily_streak INTEGER DEFAULT 0,
-                is_vip INTEGER DEFAULT 0,
-                settings TEXT
-            )
-        """)
-        
-        # Inventory table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS inventory (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id TEXT NOT NULL,
-                item_id TEXT NOT NULL,
-                quantity INTEGER NOT NULL,
-                acquired_at TEXT NOT NULL,
-                UNIQUE(user_id, item_id)
-            )
-        """)
-        
-        # User settings and preferences
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS user_settings (
-                user_id TEXT PRIMARY KEY,
-                theme TEXT DEFAULT 'default',
-                notifications INTEGER DEFAULT 1,
-                privacy_level INTEGER DEFAULT 0,
-                ui_settings TEXT,
-                last_updated TEXT NOT NULL
-            )
-        """)
-        
-        # Create indices for performance
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_inventory_user_id ON inventory(user_id)")
-        
-        conn.commit()
-        conn.close()
-    
-    def _initialize_veramon_tables(self) -> None:
-        """Initialize Veramon-related tables."""
-        conn = get_connection()
-        cursor = conn.cursor()
-        
-        # Captures table for Veramon owned by players
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS captures (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id TEXT NOT NULL,
-                veramon_name TEXT NOT NULL,
-                nickname TEXT,
-                level INTEGER NOT NULL DEFAULT 1,
-                xp INTEGER NOT NULL DEFAULT 0,
-                shiny INTEGER NOT NULL DEFAULT 0,
-                caught_at TEXT NOT NULL,
-                biome TEXT NOT NULL,
-                stats TEXT NOT NULL,
-                moves TEXT NOT NULL,
-                active_form TEXT DEFAULT 'normal'
-            )
-        """)
-        
-        # Veramon forms table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS veramon_forms (
-                capture_id INTEGER NOT NULL,
-                form_name TEXT NOT NULL,
-                unlocked_at TEXT NOT NULL,
-                form_stats TEXT NOT NULL,
-                PRIMARY KEY (capture_id, form_name),
-                FOREIGN KEY (capture_id) REFERENCES captures(id) ON DELETE CASCADE
-            )
-        """)
-        
-        # Create indices for performance
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_captures_user_id ON captures(user_id)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_captures_veramon_name ON captures(veramon_name)")
-        
-        conn.commit()
-        conn.close()
-    
-    def _initialize_battle_tables(self) -> None:
-        """Initialize battle-related tables."""
-        conn = get_connection()
-        cursor = conn.cursor()
-        
-        # Battles table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS battles (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                battle_type TEXT NOT NULL,
-                status TEXT NOT NULL,
-                participant1_id TEXT NOT NULL,
-                participant2_id TEXT,
-                winner_id TEXT,
-                started_at TEXT NOT NULL,
-                ended_at TEXT,
-                battle_data TEXT,
-                current_turn INTEGER DEFAULT 1,
-                last_action_at TEXT NOT NULL
-            )
-        """)
-        
-        # Battle participants
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS battle_participants (
-                battle_id INTEGER NOT NULL,
-                user_id TEXT NOT NULL,
-                team_id INTEGER,
-                ready INTEGER DEFAULT 0,
-                PRIMARY KEY (battle_id, user_id),
-                FOREIGN KEY (battle_id) REFERENCES battles(id) ON DELETE CASCADE
-            )
-        """)
-        
-        # Teams table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS teams (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id TEXT NOT NULL,
-                team_name TEXT NOT NULL,
-                created_at TEXT NOT NULL,
-                last_modified TEXT NOT NULL,
-                UNIQUE(user_id, team_name)
-            )
-        """)
-        
-        # Team members
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS team_members (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                team_id INTEGER NOT NULL,
-                capture_id INTEGER NOT NULL,
-                position INTEGER NOT NULL,
-                FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE,
-                UNIQUE(team_id, position)
-            )
-        """)
-        
-        # Battle logs
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS battle_logs (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                battle_id INTEGER NOT NULL,
-                log_type TEXT NOT NULL,
-                turn INTEGER NOT NULL,
-                actor_id TEXT,
-                action TEXT NOT NULL,
-                details TEXT,
-                timestamp TEXT NOT NULL,
-                FOREIGN KEY (battle_id) REFERENCES battles(id) ON DELETE CASCADE
-            )
-        """)
-        
-        # Create indices for performance
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_battles_participant1 ON battles(participant1_id)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_battles_participant2 ON battles(participant2_id)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_battles_status ON battles(status)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_team_members_team_id ON team_members(team_id)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_battle_logs_battle_id ON battle_logs(battle_id)")
-        
-        conn.commit()
-        conn.close()
-    
-    def _initialize_trading_tables(self) -> None:
-        """Initialize trading-related tables."""
-        conn = get_connection()
-        cursor = conn.cursor()
-        
-        # Trades table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS trades (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                initiator_id TEXT NOT NULL,
-                recipient_id TEXT NOT NULL,
-                status TEXT NOT NULL,
-                created_at TEXT NOT NULL,
-                updated_at TEXT NOT NULL,
-                completed_at TEXT,
-                message TEXT
-            )
-        """)
-        
-        # Trade Items
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS trade_items (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                trade_id INTEGER NOT NULL,
-                user_id TEXT NOT NULL,
-                item_type TEXT NOT NULL,
-                item_id INTEGER NOT NULL,
-                added_at TEXT NOT NULL,
-                FOREIGN KEY (trade_id) REFERENCES trades(id) ON DELETE CASCADE
-            )
-        """)
-        
-        # Create indices for performance
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_trades_initiator ON trades(initiator_id)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_trades_recipient ON trades(recipient_id)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_trades_status ON trades(status)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_trade_items_trade_id ON trade_items(trade_id)")
-        
-        conn.commit()
-        conn.close()
-    
-    def _initialize_faction_tables(self) -> None:
-        """Initialize faction-related tables."""
-        conn = get_connection()
-        cursor = conn.cursor()
-        
-        # Factions table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS factions (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL UNIQUE,
-                description TEXT,
-                leader_id TEXT NOT NULL,
-                created_at TEXT NOT NULL,
-                level INTEGER DEFAULT 1,
-                xp INTEGER DEFAULT 0,
-                treasury INTEGER DEFAULT 0,
-                banner_url TEXT,
-                settings TEXT
-            )
-        """)
-        
-        # Faction members
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS faction_members (
-                faction_id INTEGER NOT NULL,
-                user_id TEXT NOT NULL PRIMARY KEY,
-                rank TEXT NOT NULL,
-                joined_at TEXT NOT NULL,
-                permissions TEXT,
-                contribution INTEGER DEFAULT 0,
-                FOREIGN KEY (faction_id) REFERENCES factions(id) ON DELETE CASCADE
-            )
-        """)
-        
-        # Faction buffs
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS faction_buffs (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                faction_id INTEGER NOT NULL,
-                buff_id TEXT NOT NULL,
-                level INTEGER DEFAULT 1,
-                started_at TEXT NOT NULL,
-                expires_at TEXT NOT NULL,
-                FOREIGN KEY (faction_id) REFERENCES factions(id) ON DELETE CASCADE
-            )
-        """)
-        
-        # Create indices for performance
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_faction_members_faction_id ON faction_members(faction_id)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_faction_buffs_faction_id ON faction_buffs(faction_id)")
-        
-        conn.commit()
-        conn.close()
-    
-    def _initialize_quest_tables(self) -> None:
-        """Initialize quest-related tables."""
-        conn = get_connection()
-        cursor = conn.cursor()
-        
-        # User quests
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS user_quests (
-                user_id TEXT NOT NULL,
-                quest_id TEXT NOT NULL,
-                progress INTEGER DEFAULT 0,
-                completed INTEGER DEFAULT 0,
-                completed_at TEXT,
-                started_at TEXT NOT NULL,
-                PRIMARY KEY (user_id, quest_id)
-            )
-        """)
-        
-        # User achievements
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS user_achievements (
-                user_id TEXT NOT NULL,
-                achievement_id TEXT NOT NULL,
-                unlocked_at TEXT NOT NULL,
-                PRIMARY KEY (user_id, achievement_id)
-            )
-        """)
-        
-        # Create indices for performance
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_user_quests_user_id ON user_quests(user_id)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_user_achievements_user_id ON user_achievements(user_id)")
-        
-        conn.commit()
-        conn.close()
-    
-    def _initialize_security_tables(self) -> None:
-        """Initialize security-related tables."""
-        conn = get_connection()
-        cursor = conn.cursor()
-        
-        # Security events table for logging
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS security_events (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id TEXT NOT NULL,
-                event_type TEXT NOT NULL,
-                details TEXT,
-                severity TEXT NOT NULL,
-                timestamp TEXT NOT NULL,
-                ip_address TEXT
-            )
-        """)
-        
-        # Rate limiting table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS rate_limits (
-                user_id TEXT NOT NULL,
-                action_type TEXT NOT NULL,
-                last_action_time REAL NOT NULL,
-                action_count INTEGER DEFAULT 1,
-                PRIMARY KEY (user_id, action_type)
-            )
-        """)
-        
-        # Token transactions
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS token_transactions (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                sender_id TEXT,
-                recipient_id TEXT,
-                amount INTEGER,
-                transaction_time TEXT,
-                message TEXT,
-                transaction_type TEXT
-            )
-        """)
-        
-        # Create indices for performance
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_security_events_user_id ON security_events(user_id)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_security_events_type ON security_events(event_type)")
-        cursor.execute("CREATE INDEX IF NOT EXISTS idx_security_events_timestamp ON security_events(timestamp)")
-        
-        conn.commit()
-        conn.close()
+        return owner_id
 
+    def add_server_owner_as_developer(self, owner_id, owner_name):
+        """Add a server owner as a developer with ADMIN permissions."""
+        try:
+            # Check if owner is already a developer
+            self.cursor.execute("SELECT * FROM developers WHERE user_id = ?", (owner_id,))
+            existing = self.cursor.fetchone()
+            
+            if not existing:
+                self.cursor.execute("""
+                    INSERT INTO developers (user_id, permission_level, added_at, added_by, notes)
+                    VALUES (?, 'ADMIN', datetime('now'), 'SYSTEM', ?)
+                """, (owner_id, f"Server owner {owner_name}, automatically added"))
+                
+                self.conn.commit()
+                return True
+            return False
+        except Exception as e:
+            print(f"Error adding server owner as developer: {e}")
+            return False
+    
     def execute_query(self, query: str, params: Tuple = None, fetch: str = "all", 
                       cacheable: bool = False, tables: List[str] = None,
                       ttl: int = None) -> Any:

@@ -60,10 +60,46 @@ TYPE_EFFECTIVENESS = {
 }
 
 class BattleMoveButton(discord.ui.Button):
-    def __init__(self, move_name: str, row: int = 0):
+    def __init__(self, move_name: str, move_type: str = "Normal", row: int = 0):
+        # Color coding based on move type
+        style_map = {
+            "Fire": discord.ButtonStyle.danger,
+            "Water": discord.ButtonStyle.primary,
+            "Grass": discord.ButtonStyle.success,
+            "Electric": discord.ButtonStyle.primary,
+            "Normal": discord.ButtonStyle.secondary,
+            "Fighting": discord.ButtonStyle.danger,
+            "Psychic": discord.ButtonStyle.secondary,
+            "Dark": discord.ButtonStyle.secondary,
+            "Ghost": discord.ButtonStyle.secondary,
+            "Ice": discord.ButtonStyle.primary,
+        }
+        
+        emoji_map = {
+            "Fire": "🔥",
+            "Water": "💧",
+            "Grass": "🌿",
+            "Electric": "⚡",
+            "Normal": "⚪",
+            "Fighting": "👊",
+            "Psychic": "🔮",
+            "Dark": "🌑",
+            "Ghost": "👻",
+            "Ice": "❄️",
+            "Ground": "🌋",
+            "Rock": "🗿",
+            "Flying": "🦅",
+            "Bug": "🐛",
+            "Poison": "☠️",
+            "Steel": "⚙️",
+            "Dragon": "🐉",
+            "Fairy": "✨",
+        }
+        
         super().__init__(
-            style=discord.ButtonStyle.primary,
+            style=style_map.get(move_type, discord.ButtonStyle.secondary),
             label=move_name,
+            emoji=emoji_map.get(move_type, None),
             row=row
         )
         self.move_name = move_name
@@ -72,33 +108,52 @@ class BattleMoveButton(discord.ui.Button):
         await self.view.on_move_selected(interaction, self.move_name)
 
 class BattleVeramonButton(discord.ui.Button):
-    def __init__(self, veramon_name: str, slot: int, is_active: bool = False, is_fainted: bool = False):
+    def __init__(self, veramon_name: str, slot: int, is_active: bool = False, is_fainted: bool = False, hp_percent: int = 100):
         style = discord.ButtonStyle.success if is_active else discord.ButtonStyle.secondary
         if is_fainted:
             style = discord.ButtonStyle.danger
+        
+        # Add HP indicator to label if not fainted
+        label = veramon_name
+        if not is_fainted:
+            hp_bar = self._create_hp_bar(hp_percent)
+            label = f"{veramon_name} {hp_bar}"
             
         super().__init__(
             style=style,
-            label=veramon_name,
+            label=label,
             disabled=is_fainted,
             row=1
         )
         self.slot = slot
+    
+    def _create_hp_bar(self, hp_percent: int) -> str:
+        if hp_percent > 75:
+            return "🟩"
+        elif hp_percent > 50:
+            return "🟨"
+        elif hp_percent > 25:
+            return "🟧"
+        else:
+            return "🟥"
 
     async def callback(self, interaction: discord.Interaction):
         await self.view.on_veramon_selected(interaction, self.slot)
 
 class BattleActionButton(discord.ui.Button):
-    def __init__(self, action_type: str, label: str, row: int = 2):
+    def __init__(self, action_type: str, label: str, emoji: str = None, row: int = 2):
         style = discord.ButtonStyle.secondary
         if action_type == "flee":
             style = discord.ButtonStyle.danger
         elif action_type == "item":
             style = discord.ButtonStyle.success
+        elif action_type == "moves":
+            style = discord.ButtonStyle.primary
             
         super().__init__(
             style=style,
             label=label,
+            emoji=emoji,
             row=row
         )
         self.action_type = action_type
@@ -210,28 +265,124 @@ class BattleView(discord.ui.View):
         user_veramon = battle_data.get("veramon", {}).get(user_id_str, [])
         active_veramon_slot = battle_data.get("active_veramon", {}).get(user_id_str)
         
-        # Main battle menu
+        # Create a rich embed for battle status
+        embed = discord.Embed(
+            title="⚔️ Veramon Battle",
+            description=f"Battle ID: {self.battle_id}",
+            color=discord.Color.gold()
+        )
+        
+        # Add battle info based on mode
         if self.mode == "main":
-            # Add action buttons
-            self.add_item(BattleActionButton("moves", "Moves"))
-            self.add_item(BattleActionButton("switch", "Switch"))
-            self.add_item(BattleActionButton("item", "Item"))
-            if battle_data.get("battle_type") == "pve":
-                self.add_item(BattleActionButton("flee", "Flee"))
-                
+            if active_veramon_slot is not None and active_veramon_slot < len(user_veramon):
+                active_mon = user_veramon[active_veramon_slot]
+                if active_mon:
+                    # Show active Veramon info
+                    current_hp = active_mon.get("current_hp", 0)
+                    max_hp = active_mon.get("max_hp", 100)
+                    hp_percent = int((current_hp / max_hp) * 100) if max_hp > 0 else 0
+                    
+                    # Create HP bar
+                    hp_bar = self._create_visual_hp_bar(hp_percent)
+                    
+                    embed.add_field(
+                        name=f"Your Active Veramon: {active_mon.get('display_name', active_mon.get('name', 'Unknown'))}",
+                        value=f"**HP:** {current_hp}/{max_hp} {hp_bar}\n**Type:** {active_mon.get('type', 'Normal')}\n**Level:** {active_mon.get('level', 1)}",
+                        inline=False
+                    )
+                    
+                    # Add opponent info
+                    for pid, participant in battle_data.get("participants", {}).items():
+                        if pid != user_id_str and participant.get("status") == "joined":
+                            opponent_slot = battle_data.get("active_veramon", {}).get(pid)
+                            if opponent_slot is not None and pid in battle_data.get("veramon", {}) and opponent_slot < len(battle_data.get("veramon", {}).get(pid, [])):
+                                opponent_mon = battle_data.get("veramon", {}).get(pid, [])[opponent_slot]
+                                if opponent_mon:
+                                    # Show opponent Veramon info
+                                    opp_current_hp = opponent_mon.get("current_hp", 0)
+                                    opp_max_hp = opponent_mon.get("max_hp", 100)
+                                    opp_hp_percent = int((opp_current_hp / opp_max_hp) * 100) if opp_max_hp > 0 else 0
+                                    
+                                    # Create opponent HP bar
+                                    opp_hp_bar = self._create_visual_hp_bar(opp_hp_percent)
+                                    
+                                    embed.add_field(
+                                        name=f"Opponent Veramon: {opponent_mon.get('display_name', opponent_mon.get('name', 'Unknown'))}",
+                                        value=f"**HP:** {opp_current_hp}/{opp_max_hp} {opp_hp_bar}\n**Type:** {opponent_mon.get('type', 'Normal')}\n**Level:** {opponent_mon.get('level', 1)}",
+                                        inline=False
+                                    )
+                    
+                    # Add battle log
+                    if "log" in battle_data and battle_data["log"]:
+                        # Get last 3 log entries
+                        log_entries = battle_data["log"][-3:]
+                        log_text = "\n".join(log_entries)
+                        embed.add_field(
+                            name="📜 Battle Log",
+                            value=log_text if log_text else "Battle just started!",
+                            inline=False
+                        )
+                    
+                    # Add action buttons
+                    self.add_item(BattleActionButton("moves", "Moves", emoji="⚔️"))
+                    self.add_item(BattleActionButton("switch", "Switch", emoji="🔄"))
+                    self.add_item(BattleActionButton("item", "Item", emoji="🎒"))
+                    if battle_data.get("battle_type") == "pve":
+                        self.add_item(BattleActionButton("flee", "Flee", emoji="🏃"))
+            
+            # Send the embed with the view
+            try:
+                await interaction.response.edit_message(embed=embed, view=self)
+            except:
+                await interaction.followup.send(embed=embed, view=self)
+            return
+
         # Moves selection
         elif self.mode == "moves":
+            embed.title = "⚔️ Select a Move"
+            
             # Get active Veramon's moves
             if active_veramon_slot is not None and active_veramon_slot < len(user_veramon):
                 veramon = user_veramon[active_veramon_slot]
                 if veramon:
                     moves = veramon.get("moves", [])
+                    move_types = veramon.get("move_types", ["Normal"] * len(moves))
+                    
+                    # Add move descriptions to embed
+                    move_descriptions = []
                     for i, move in enumerate(moves):
-                        self.add_item(BattleMoveButton(move, row=0))
+                        move_type = move_types[i] if i < len(move_types) else "Normal"
+                        move_info = ABILITIES_DATA.get(move, {})
+                        power = move_info.get("power", "?")
+                        accuracy = move_info.get("accuracy", "?")
+                        
+                        emoji_map = {
+                            "Fire": "🔥",
+                            "Water": "💧",
+                            "Grass": "🌿",
+                            "Electric": "⚡",
+                            "Normal": "⚪",
+                            # Add more as needed
+                        }
+                        
+                        move_emoji = emoji_map.get(move_type, "⚪")
+                        move_descriptions.append(f"{move_emoji} **{move}** - Type: {move_type}, Power: {power}, Accuracy: {accuracy}")
+                        
+                        # Add move button
+                        self.add_item(BattleMoveButton(move, move_type, row=i % 2))
+                    
+                    embed.description = "\n".join(move_descriptions)
             
             # Add back button
-            self.add_item(BattleActionButton("back", "Back", row=2))
+            self.add_item(BattleActionButton("back", "Back", emoji="↩️", row=2))
             
+            # Send the embed with the view
+            try:
+                await interaction.response.edit_message(embed=embed, view=self)
+            except:
+                await interaction.followup.send(embed=embed, view=self)
+            return
+        
         # Switch Veramon
         elif self.mode == "switch":
             # Add buttons for each Veramon
@@ -240,10 +391,18 @@ class BattleView(discord.ui.View):
                     is_active = i == active_veramon_slot
                     is_fainted = veramon.get("current_hp", 0) <= 0
                     name = veramon.get("display_name", veramon.get("name", f"Veramon {i+1}"))
-                    self.add_item(BattleVeramonButton(name, i, is_active, is_fainted))
+                    hp_percent = int((veramon.get("current_hp", 0) / veramon.get("max_hp", 100)) * 100) if veramon.get("max_hp", 100) > 0 else 0
+                    self.add_item(BattleVeramonButton(name, i, is_active, is_fainted, hp_percent))
             
             # Add back button
-            self.add_item(BattleActionButton("back", "Back", row=2))
+            self.add_item(BattleActionButton("back", "Back", emoji="↩️", row=2))
+            
+            # Send the embed with the view
+            try:
+                await interaction.response.edit_message(embed=embed, view=self)
+            except:
+                await interaction.followup.send(embed=embed, view=self)
+            return
             
         # Target selection
         elif self.mode == "target":
@@ -258,13 +417,34 @@ class BattleView(discord.ui.View):
                             name = veramon.get("display_name", veramon.get("name", "Opponent"))
                             # If it's the user's Veramon, mark as active
                             is_active = pid == user_id_str
-                            self.add_item(BattleVeramonButton(name, int(pid), is_active))
+                            hp_percent = int((veramon.get("current_hp", 0) / veramon.get("max_hp", 100)) * 100) if veramon.get("max_hp", 100) > 0 else 0
+                            self.add_item(BattleVeramonButton(name, int(pid), is_active, veramon.get("current_hp", 0) <= 0, hp_percent))
             
             # Add back button
-            self.add_item(BattleActionButton("back", "Back", row=2))
+            self.add_item(BattleActionButton("back", "Back", emoji="↩️", row=2))
+            
+            # Send the embed with the view
+            try:
+                await interaction.response.edit_message(embed=embed, view=self)
+            except:
+                await interaction.followup.send(embed=embed, view=self)
+            return
         
-        # Update the message
-        await interaction.response.edit_message(view=self)
+    def _create_visual_hp_bar(self, percent: int) -> str:
+        """Create a visual HP bar based on percentage."""
+        bar_length = 10
+        filled_bars = int((percent / 100) * bar_length)
+        
+        if percent > 50:
+            filled_char = "🟩"
+        elif percent > 25:
+            filled_char = "🟨"
+        else:
+            filled_char = "🟥"
+            
+        empty_char = "⬜"
+        
+        return filled_char * filled_bars + empty_char * (bar_length - filled_bars)
 
 class BattleInviteView(discord.ui.View):
     def __init__(self, cog, battle_id: int, host_id: str, target_id: str):

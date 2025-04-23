@@ -1,0 +1,93 @@
+name: Simple Deploy Instructions
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  generate_instructions:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Run tests
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+        if [ -d tests ]; then pytest -v; fi
+        
+    - name: Display deployment instructions
+      run: |
+        echo "==================================================================="
+        echo "               VERAMON REUNITED DEPLOYMENT GUIDE                   "
+        echo "==================================================================="
+        echo ""
+        echo "Since GitHub Actions restrictions prevent using certain actions,"
+        echo "follow these manual steps to deploy your Veramon bot:"
+        echo ""
+        echo "Step 1: Build the Docker image locally"
+        echo "----------------------------------------"
+        echo "# Clone the repository if you haven't already"
+        echo "git clone https://github.com/${{ github.repository }}.git"
+        echo "cd $(echo '${{ github.repository }}' | cut -d'/' -f2)"
+        echo ""
+        echo "# Build the Docker image"
+        echo "docker build -t veramon-bot:latest -f docker/Dockerfile ."
+        echo ""
+        echo "Step 2: Deploy to your server"
+        echo "----------------------------------------"
+        echo "# Save the image to a tarball"
+        echo "docker save veramon-bot:latest > veramon-bot.tar"
+        echo ""
+        echo "# Transfer the Docker image and needed files to your server"
+        echo "scp veramon-bot.tar root@193.33.195.164:/tmp/"
+        echo "scp docker/docker-compose.yml root@193.33.195.164:/tmp/"
+        echo ""
+        echo "# SSH into your server"
+        echo "ssh root@193.33.195.164"
+        echo ""
+        echo "# On the server"
+        echo "mkdir -p /opt/veramon-bot"
+        echo "cd /opt/veramon-bot"
+        echo ""
+        echo "# Load the Docker image"
+        echo "docker load < /tmp/veramon-bot.tar"
+        echo "mv /tmp/docker-compose.yml ."
+        echo ""
+        echo "# Create necessary directories for all systems"
+        echo "mkdir -p data logs battle-system battle-trading factions events quests tournaments"
+        echo "chmod -R 777 data logs battle-system battle-trading factions events quests tournaments"
+        echo ""
+        echo "# Create .env file"
+        echo "cat > .env << EOF"
+        echo "BOT_TOKEN=YOUR_DISCORD_BOT_TOKEN_HERE"
+        echo "COMMAND_PREFIX=!"
+        echo "DATABASE_PATH=data/veramon_reunited.db"
+        echo "DEBUG_MODE=False"
+        echo "MAINTENANCE_MODE=False"
+        echo "LOG_LEVEL=INFO"
+        echo "EOF"
+        echo ""
+        echo "# Start the bot"
+        echo "docker-compose up -d"
+        echo ""
+        echo "# Verify it's running"
+        echo "docker ps | grep veramon-bot"
+        echo ""
+        echo "Step 3: Join the bot to your Discord server"
+        echo "----------------------------------------"
+        echo "Use this invite link:"
+        echo "https://discord.com/api/oauth2/authorize?client_id=1364427978175418428&permissions=534723950656&scope=bot%20applications.commands"
+        echo ""
+        echo "==================================================================="
+        echo "COPY THESE INSTRUCTIONS FOR FUTURE REFERENCE"
+        echo "==================================================================="

@@ -11,7 +11,7 @@ import random
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.models.veramon import Veramon
-from src.cogs.catching_cog import CatchingCog, WeatherType, TimeOfDay
+from src.cogs.gameplay.catching_cog import CatchingCog, WeatherType, TimeOfDay
 
 class TestSystemPerformance(unittest.TestCase):
     """Performance and stress tests for the Veramon Reunited system."""
@@ -26,9 +26,9 @@ class TestSystemPerformance(unittest.TestCase):
             self.test_veramon_data = {"Eledragon": json.loads(f.read())}
         
         # Create a test instance of CatchingCog
-        with patch('src.cogs.catching_cog.load_all_veramon_data', return_value=self.test_veramon_data), \
-             patch('src.cogs.catching_cog.load_items_data', return_value={}), \
-             patch('src.cogs.catching_cog.load_biomes_data', return_value=self.get_test_biomes()):
+        with patch('src.cogs.gameplay.catching_cog.load_all_veramon_data', return_value=self.test_veramon_data), \
+             patch('src.cogs.gameplay.catching_cog.load_items_data', return_value={}), \
+             patch('src.cogs.gameplay.catching_cog.load_biomes_data', return_value=self.get_test_biomes()):
             self.cog = CatchingCog(self.mock_bot)
     
     def get_test_biomes(self):
@@ -292,7 +292,7 @@ class TestSystemPerformance(unittest.TestCase):
             }
         
         # Time setup would be part of a real test
-        with patch('src.cogs.catching_cog.TimeOfDay') as mock_time:
+        with patch('src.cogs.gameplay.catching_cog.TimeOfDay') as mock_time:
             mock_time.MORNING = TimeOfDay.MORNING
             mock_time.DAY = TimeOfDay.DAY
             mock_time.EVENING = TimeOfDay.EVENING

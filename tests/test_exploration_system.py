@@ -8,7 +8,7 @@ from datetime import datetime
 # Add the src directory to the system path for imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.cogs.catching_cog import CatchingCog, WeatherType, TimeOfDay
+from src.cogs.gameplay.catching_cog import CatchingCog, WeatherType, TimeOfDay
 
 
 class TestExplorationSystem(unittest.TestCase):
@@ -34,9 +34,9 @@ class TestExplorationSystem(unittest.TestCase):
         self.mock_bot = MagicMock()
         
         # Create a test instance of CatchingCog
-        with patch('src.cogs.catching_cog.load_all_veramon_data', return_value={}), \
-             patch('src.cogs.catching_cog.load_items_data', return_value={}), \
-             patch('src.cogs.catching_cog.load_biomes_data', return_value=self.get_test_biomes()):
+        with patch('src.cogs.gameplay.catching_cog.load_all_veramon_data', return_value={}), \
+             patch('src.cogs.gameplay.catching_cog.load_items_data', return_value={}), \
+             patch('src.cogs.gameplay.catching_cog.load_biomes_data', return_value=self.get_test_biomes()):
             self.cog = CatchingCog(self.mock_bot)
         
     def get_test_biomes(self):
@@ -138,7 +138,7 @@ class TestExplorationSystem(unittest.TestCase):
         - Night is correctly identified (10 PM-5 AM)
         """
         # Mock datetime.now() to return a fixed time for testing
-        with patch('src.cogs.catching_cog.datetime') as mock_datetime:
+        with patch('src.cogs.gameplay.catching_cog.datetime') as mock_datetime:
             # Test morning (8 AM)
             mock_time = MagicMock()
             mock_time.hour = 8
@@ -187,7 +187,7 @@ class TestExplorationSystem(unittest.TestCase):
             self.assertTrue(self.cog._can_access_special_area("user123", "test_biome", "test_special_area"),
                            "User with achievement should access special area")
     
-    @patch('src.cogs.catching_cog.weighted_choice')
+    @patch('src.cogs.gameplay.catching_cog.weighted_choice')
     def test_weather_effects_on_spawns(self, mock_weighted_choice):
         """
         Test that weather effects modify spawn rates appropriately.
@@ -224,7 +224,7 @@ class TestExplorationSystem(unittest.TestCase):
         # In a real test, we'd check that WaterMon has higher weight in rainy weather
         mock_weighted_choice.assert_called()
     
-    @patch('src.cogs.catching_cog.random')
+    @patch('src.cogs.gameplay.catching_cog.random')
     def test_weather_affects_shiny_chance(self, mock_random):
         """
         Test that thunderstorm weather increases shiny chance.
@@ -292,12 +292,12 @@ class TestIntegrationWithBattleAndTrading(unittest.TestCase):
         }.get(cog_name)
         
         # Create a test instance of CatchingCog with mock data
-        with patch('src.cogs.catching_cog.load_all_veramon_data', return_value={}), \
-             patch('src.cogs.catching_cog.load_items_data', return_value={}), \
-             patch('src.cogs.catching_cog.load_biomes_data', return_value={}):
+        with patch('src.cogs.gameplay.catching_cog.load_all_veramon_data', return_value={}), \
+             patch('src.cogs.gameplay.catching_cog.load_items_data', return_value={}), \
+             patch('src.cogs.gameplay.catching_cog.load_biomes_data', return_value={}):
             self.cog = CatchingCog(self.mock_bot)
     
-    @patch('src.cogs.catching_cog.get_connection')
+    @patch('src.cogs.gameplay.catching_cog.get_connection')
     def test_catch_triggers_quest_progress(self, mock_get_connection):
         """
         Test that catching a Veramon triggers quest progress updates.

@@ -71,9 +71,9 @@ def load_env_config() -> Dict[str, Any]:
     
     return _env_config
 
-def get_env(key: str, default: Any = None) -> Any:
+def get_env_config(key: str, default: Any = None) -> Any:
     """
-    Get environment configuration value.
+    Get a configuration value from the environment configuration
     
     Args:
         key: Configuration key
@@ -82,12 +82,10 @@ def get_env(key: str, default: Any = None) -> Any:
     Returns:
         Any: Configuration value or default if not found
     """
-    global _env_config
-    
-    if _env_config is None:
+    if globals()['_env_config'] is None:
         load_env_config()
     
-    return _env_config.get(key, default)
+    return globals()['_env_config'].get(key, default)
 
 def is_developer(user_id: int) -> bool:
     """
@@ -99,7 +97,7 @@ def is_developer(user_id: int) -> bool:
     Returns:
         bool: True if user is a developer, False otherwise
     """
-    return user_id in get_env('DEVELOPER_IDS', [])
+    return user_id in get_env_config('DEVELOPER_IDS', [])
 
 def is_maintenance_mode() -> bool:
     """
@@ -108,7 +106,7 @@ def is_maintenance_mode() -> bool:
     Returns:
         bool: True if in maintenance mode, False otherwise
     """
-    return get_env('MAINTENANCE_MODE', False)
+    return get_env_config('MAINTENANCE_MODE', False)
 
 def is_debug_mode() -> bool:
     """
@@ -117,7 +115,7 @@ def is_debug_mode() -> bool:
     Returns:
         bool: True if in debug mode, False otherwise
     """
-    return get_env('DEBUG_MODE', False)
+    return get_env_config('DEBUG_MODE', False)
 
 def get_connection_pool_size() -> int:
     """
@@ -126,7 +124,7 @@ def get_connection_pool_size() -> int:
     Returns:
         int: Connection pool size
     """
-    return get_env('CONNECTION_POOL_SIZE', 10)
+    return get_env_config('CONNECTION_POOL_SIZE', 10)
 
 def get_cache_ttl() -> int:
     """
@@ -135,7 +133,7 @@ def get_cache_ttl() -> int:
     Returns:
         int: Cache TTL in seconds
     """
-    return get_env('CACHE_TTL', 300)
+    return get_env_config('CACHE_TTL', 300)
 
 # Initialize by loading environment config
 try:

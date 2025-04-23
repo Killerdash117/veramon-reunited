@@ -154,6 +154,7 @@ def save_config() -> bool:
     
     if _config_cache is None:
         logger.error("Cannot save config - no configuration loaded")
+        _config_cache = {}  
         return False
     
     try:

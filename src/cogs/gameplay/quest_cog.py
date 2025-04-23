@@ -1,3 +1,4 @@
+﻿import discord
 import discord
 from discord.ext import commands, tasks
 from discord import app_commands
@@ -86,11 +87,11 @@ class QuestView(discord.ui.View):
             
             # Create a new embed
             embed = self.quest.create_embed(self.user_progress)
-            embed.title = f"📋 Quest Accepted: {self.quest.title}"
+            embed.title = f"ðŸ“‹ Quest Accepted: {self.quest.title}"
             
             # Add narrative if available
             if self.quest.narrative:
-                embed.add_field(name="📜 Story", value=self.quest.narrative, inline=False)
+                embed.add_field(name="ðŸ“œ Story", value=self.quest.narrative, inline=False)
                 
             # Update buttons
             self.clear_items()
@@ -211,7 +212,7 @@ class QuestView(discord.ui.View):
             # Create a new embed
             embed = create_themed_embed(
                 self.user_id,
-                title="🎁 Rewards Claimed!",
+                title="ðŸŽ Rewards Claimed!",
                 description=f"You have claimed the rewards for **{self.quest.title}**.",
                 color_type=ThemeColorType.SUCCESS
             )
@@ -223,9 +224,9 @@ class QuestView(discord.ui.View):
                 amount = reward.get('amount', 1)
                 item = reward.get('item', '')
                 if item:
-                    rewards_text += f"• {amount}x {reward.get('description', f'{item}')}\n"
+                    rewards_text += f"â€¢ {amount}x {reward.get('description', f'{item}')}\n"
                 else:
-                    rewards_text += f"• {amount}x {reward.get('description', reward_type)}\n"
+                    rewards_text += f"â€¢ {amount}x {reward.get('description', reward_type)}\n"
                     
             embed.add_field(name="Rewards", value=rewards_text, inline=False)
             
@@ -289,7 +290,7 @@ class QuestView(discord.ui.View):
             
             # Create a new embed
             embed = self.quest.create_embed(self.user_progress)
-            embed.title = f"📋 Quest Accepted Again: {self.quest.title}"
+            embed.title = f"ðŸ“‹ Quest Accepted Again: {self.quest.title}"
             
             # Update buttons
             self.clear_items()
@@ -402,7 +403,7 @@ class QuestListView(NavigationView):
             
         embed = create_themed_embed(
             self.user_id,
-            title=f"📋 {title}",
+            title=f"ðŸ“‹ {title}",
             description="Select a quest to view details and manage it.",
             color_type=ThemeColorType.PRIMARY
         )

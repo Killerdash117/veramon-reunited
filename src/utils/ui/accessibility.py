@@ -256,14 +256,12 @@ class AccessibilityManager:
         self.save_settings()
         return self.settings[user_id]
 
-# Create global instance
+# Global instance
 accessibility_manager = AccessibilityManager()
 
 def get_accessibility_manager() -> AccessibilityManager:
     """Get the global accessibility manager instance."""
-    global accessibility_manager
     return accessibility_manager
-
 
 # Helper functions for UI components
 

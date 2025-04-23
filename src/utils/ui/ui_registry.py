@@ -294,5 +294,4 @@ ui_registry = UIRegistry()
 
 def get_ui_registry() -> UIRegistry:
     """Get the global UI registry instance."""
-    global ui_registry
     return ui_registry

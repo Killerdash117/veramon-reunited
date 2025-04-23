@@ -8,6 +8,10 @@ import json
 from src.utils.ui_theme import theme_manager, ThemeColorType, create_themed_embed
 from src.utils.user_settings import get_user_settings
 from src.utils.interactive_ui import InteractiveView, NavigableView, NavigationType
+from src.utils.ui.battle_menu import BattleMenuView
+from src.utils.ui.trade_menu import TradeMenuView
+from src.utils.ui.collection_menu import CollectionView
+from src.utils.ui.settings_menu import SettingsView
 
 class MainMenuView(NavigableView):
     """

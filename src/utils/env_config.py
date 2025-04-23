@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 logger = logging.getLogger(__name__)
 
 # Global environment config cache
-_env_config = {}
+_env_config = None
 
 def load_env_config() -> Dict[str, Any]:
     """
@@ -28,6 +28,9 @@ def load_env_config() -> Dict[str, Any]:
     
     # Load .env file if it exists
     load_dotenv()
+    
+    # Create a new config dictionary
+    _env_config = {}
     
     # Discord Bot Configuration
     _env_config['BOT_TOKEN'] = os.getenv('BOT_TOKEN')
@@ -81,7 +84,7 @@ def get_env(key: str, default: Any = None) -> Any:
     """
     global _env_config
     
-    if not _env_config:
+    if _env_config is None:
         load_env_config()
     
     return _env_config.get(key, default)

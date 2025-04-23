@@ -462,5 +462,4 @@ theme_manager = ThemeManager()
 
 def get_theme_manager() -> ThemeManager:
     """Get the global theme manager instance."""
-    global theme_manager
     return theme_manager

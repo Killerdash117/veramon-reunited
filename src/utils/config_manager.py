@@ -160,17 +160,17 @@ def save_config() -> bool:
         # Create data directory if it doesn't exist
         os.makedirs(os.path.dirname(_config_path), exist_ok=True)
         
-        # Save with pretty formatting
-        with open(_config_path, 'w') as f:
-            json.dump(_config_cache, f, indent=2)
+        # First create a backup of the current config
+        backup_config()
         
-        # Print debug info if in debug mode
-        if is_debug_mode():
-            logger.debug(f"Configuration saved to {_config_path}")
-            
+        # Then save the current config
+        with open(_config_path, 'w', encoding='utf-8') as f:
+            json.dump(_config_cache, f, indent=4)
+        
+        logger.info(f"Configuration saved to {_config_path}")
         return True
     except Exception as e:
-        logger.error(f"Error saving configuration: {e}")
+        logger.error(f"Failed to save configuration: {str(e)}")
         return False
 
 def reset_config_cache():
